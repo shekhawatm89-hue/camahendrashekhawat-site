@@ -88,7 +88,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .field:first-of-type{border-top:0}
 .field>label,.field>.lbl{font-weight:700;font-size:1.02rem}
 .req{color:var(--margin)}
-.fhelp{font-size:.92rem;color:var(--muted);margin-top:-4px}
+.fhelp{font-size:.92rem;color:var(--muted);margin-top:-4px;white-space:pre-line}
 .err{color:var(--bad);font-size:.93rem;font-weight:600}
 input[type=text],input[type=tel],input[type=email],input[type=date],input[type=time],select,textarea{
   font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--rule-strong);border-radius:10px;padding:10px 12px;width:100%}
@@ -387,9 +387,11 @@ const SECTIONS = [
   {id:'career',l:'Plans after Class 12',type:'multi',opts:['CA','CS','CMA','B.Com (Hons) through CUET','BBA / BMS','Economics (Hons)','Law (CLAT)','Not sure yet'],req:1},
   {id:'cuet',l:'Will you appear for CUET 2027?',type:'choice',opts:['Yes','No','Not sure'],req:1},
   {id:'caReg',l:'CA Foundation',type:'choice',opts:['Already registered','Plan to register after boards','Not planning CA','Not sure'],req:1}]},
- {t:'Parent details', h:'A short progress report goes to your parent every Sunday. Ask your parent for these, or fill them yourself.', f:[
+ {t:'Parent details', h:'Your parent gets a progress report every Sunday, and you choose how much it shows. Ask your parent for these details, or fill them yourself.', f:[
   {id:'parentName',l:'Parent / guardian name',type:'text',req:1},
   {id:'parentPhone',l:'Parent WhatsApp number',type:'tel',req:1},
+  {id:'reportType',l:'What should the weekly report to your parent show?',type:'choice',opts:['Full report','Short report'],req:1,
+   help:'Full report: hours studied, targets done, and chapters still pending.\nShort report: only hours studied, check-in days, and your status (on track or behind).\nIn both, your doubts, what you write in check-ins, and your photos never go to your parent. Only Mahendra Sir sees them.\nIf you miss check-ins 3 days in a row, or stay far behind for 2 weeks, your parent gets a one-line note even with the short report.'},
   {id:'reportLang',l:'Report language',type:'choice',opts:['English','Hindi','Hinglish'],req:1},
   {id:'parentSession',l:'Can a parent join a 20-minute online parents\' call once a month?',type:'choice',opts:['Yes','Sometimes','No'],req:1},
   {id:'parentWorry',l:'Anything your parent wants Mahendra Sir to know? (optional)',type:'textarea'}]},
@@ -429,7 +431,7 @@ function sampleAnswers(){
     revise:'I re-read my notes', papers:'1-2', writing:'Sometimes', stress:'4', sleepHrs:'6-7',
     wantMentor:'Check my answers and tell me exactly what to study each day.',
     career:['CA','B.Com (Hons) through CUET'], cuet:'Yes', caReg:'Plan to register after boards',
-    parentName:'Sunita Mehta', parentPhone:'9876500001', reportLang:'Hinglish', parentSession:'Yes',
+    parentName:'Sunita Mehta', parentPhone:'9876500001', reportLang:'Hinglish', reportType:'Full report', parentSession:'Yes',
     parentWorry:'He studies late at night on the phone and we never know what he actually finished.',
     commit:last.f[0].opts.slice(), consent:last.f[1].opts.slice(),
     _start: ymd(addDays(today0(),-6)),
@@ -1122,27 +1124,43 @@ function renderMentor(){
         <span class="meta"><span>This week ${fmtH(r.ws.done)} / ${fmtH(r.ws.planned)}</span>
           <span class="${r.streak>=3?'bad':''}">${r.streak ? r.streak+' day'+(r.streak>1?'s':'')+' without check-in'+(r.streak>=3?' · call today':'') : 'Checked in yesterday'}</span>
           <span>${r.lab.f && r.lab.f.date ? (r.lab.f.after ? 'Syllabus not done before boards' : 'Syllabus by '+fmt(r.lab.f.date)) : r.lab.f && r.lab.f.done ? 'Syllabus done' : ''}</span>
-          <span>${esc(r.m.phone)}</span></span></button>`).join('') || '<p class="muted">No students in this group.</p>'}</div>
+          <span>${reportTypeOf(r.m)} report</span><span>${esc(r.m.phone)}</span></span></button>`).join('') || '<p class="muted">No students in this group.</p>'}</div>
     ${IS_LIVE ? '' : '<div class="actions"><button class="btn" type="button" id="toGate2">Back to start page</button></div>'}
   </div>`;
   scr.querySelectorAll('[data-fl]').forEach(b => b.addEventListener('click', () => { V.filter = b.dataset.fl; renderMentor(); }));
   scr.querySelectorAll('[data-st]').forEach(b => b.addEventListener('click', () => go('mentorStudent', {mPhone: b.dataset.st, wk: today0()})));
   on('toGate2', () => go('gate'));
 }
+// The student picks a full or short parent report in the joining form. Doubts, check-in notes and
+// photos never go into either. Students who joined before the choice existed get the full report.
+const reportTypeOf = m => m.a.reportType==='Short report' ? 'Short' : 'Full';
+// Parent gets a one-line note even on the short report: 3 missed check-ins in a row, or far behind for 2 weeks.
+function needsParentNote(m){
+  if (missedStreak(m) >= 3) return true;
+  if (daysBetween(m.joined, m.t) < 14 || statusLabel(m).k !== 'red') return false;
+  const from = addDays(m.t,-14), its = m.items.filter(i => i.d>=from && i.d<m.t);
+  const p = its.reduce((x,i)=>x+i.min,0), d = its.filter(i=>i.done).reduce((x,i)=>x+i.min,0);
+  return !p || d/p < .5;
+}
 function parentReport(m){
   const wk = m.t.getDay()===0 ? weekOf(addDays(m.t,-1), m.joined) : weekOf(m.t, m.joined), ws = weekStats(m, wk);
   const doneCh = [...new Set(ws.its.filter(i => i.done && i.chapter).map(i => i.chapter))];
   const pend = [...new Set(ws.its.filter(i => !i.done && i.chapter && i.d < m.t).map(i => i.chapter))].filter(c => !doneCh.includes(c));
   const pct = ws.planned ? Math.round(ws.done/ws.planned*100) : 0, lab = statusLabel(m);
+  const head = `Weekly report: ${m.name} (${fmt(wk.start)} to ${fmt(wk.end)})\nStatus: ${lab.text}`;
+  const note = needsParentNote(m) ? `\n\nNote: ${m.name.split(' ')[0]} has not been regular with the plan lately. Mahendra Sir will speak with you and the student this week.` : '';
+  if (reportTypeOf(m)==='Short') return `${head}
+
+- Studied: ${fmtH(ws.done)}${ws.planned ? ` of ${fmtH(ws.planned)} planned` : ''}
+- Check-in filled: ${ws.ci} of ${ws.past.length} days${note}
+
+- Mahendra Sir`;
   const well = [], bad = [];
   if (ws.ci >= Math.min(6, ws.past.length)) well.push(`Check-in filled ${ws.ci} of ${ws.past.length} days`); else bad.push(`Check-in filled only ${ws.ci} of ${ws.past.length} days`);
   if (ws.planned){ if (pct >= 80) well.push(`${fmtH(ws.done)} studied, ${pct}% of the plan`); else bad.push(`${fmtH(ws.done)} of ${fmtH(ws.planned)} planned (${pct}%)`); }
   if (doneCh.length) well.push('Worked on: '+doneCh.slice(0,4).join(', '));
   if (pend.length) bad.push('Pending: '+pend.slice(0,4).join(', '));
-  const reasons = [...new Set(m.checkins.filter(c => c.date>=ymd(wk.start) && c.date<=ymd(wk.end) && c.reason).map(c => c.reason))];
-  if (reasons.length) bad.push('Reasons given: '+reasons.slice(0,2).join('; '));
-  return `Weekly report: ${m.name} (${fmt(wk.start)} to ${fmt(wk.end)})
-Status: ${lab.text}
+  return `${head}${note}
 
 What went well:
 - ${well.join('\n- ') || '[add one honest positive]'}
@@ -1165,7 +1183,7 @@ function renderMentorStudent(){
     ['Free hours', `${a.weekdayHrs} h school days · ${a.satHrs} h Sat · ${a.sunHrs} h Sun`],
     ['Teacher / batch', a.teacher], ['Problems', (a.problems||[]).join(', ')], ['Phone use', a.phoneUse], ['Stress (1-5)', a.stress],
     ['Sleep', a.sleepHrs], ['Worried about', [a['fear_Accountancy'], a['fear_Business Studies'], a['fear_Economics']].filter(Boolean).join(' | ')],
-    ['Wants from Sir', a.wantMentor], ['Parent', `${a.parentName||'–'} · ${a.parentPhone||'–'} · report in ${a.reportLang||'English'}`], ['Parent says', a.parentWorry],
+    ['Wants from Sir', a.wantMentor], ['Parent', `${a.parentName||'–'} · ${a.parentPhone||'–'} · ${reportTypeOf(m).toLowerCase()} report in ${a.reportLang||'English'}`], ['Parent says', a.parentWorry],
     ['After Class 12', (a.career||[]).join(', ')],
   ].filter(x => x[1]);
   const doubts = m.checkins.filter(c => c.doubt).sort((x,y) => y.date.localeCompare(x.date)).slice(0,6);
@@ -1173,7 +1191,7 @@ function renderMentorStudent(){
     <div class="hero" style="padding-bottom:0"><div class="eyebrow">Mentor view · joined ${fmt(m.joined)}</div><h1>${esc(m.name)}</h1>
       <p class="mono muted">${esc(m.phone)}</p>
       <p style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${labelChip(lab)}<span class="muted" style="font-size:.95rem">${esc(lab.why)}</span></p></div>
-    <div class="card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px"><h3>Sunday report for the parent</h3><button class="btn small" type="button" id="copyRep">Copy</button></div>
+    <div class="card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px"><h3>Sunday report for the parent (${reportTypeOf(m).toLowerCase()})</h3><button class="btn small" type="button" id="copyRep">Copy</button></div>
       <div class="report" id="rep" tabindex="0">${esc(report)}</div><p class="muted" style="font-size:.9rem;margin-top:8px">Edit the [brackets], then send it on WhatsApp to ${esc(a.parentPhone||'the parent')}.</p></div>
     <div class="card"><h3 style="margin-bottom:6px">Doubts asked</h3>${doubts.length ? doubts.map(c => `<div class="log"><b>${fmt(D(c.date))}</b> · ${esc(c.doubt)}</div>`).join('') : '<p class="muted">No doubts yet.</p>'}</div>
     <div style="display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap"><h2>Week ${fmt(wk.start)} – ${fmt(wk.end)}</h2>
