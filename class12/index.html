@@ -101,6 +101,8 @@ input[type=text],input[type=tel],input[type=password],select{font:inherit;color:
 .slot-ctl{display:inline-flex;align-items:center;gap:6px}
 .hsel{width:auto;min-height:40px;padding:6px 8px}
 .x{border:0;background:none;color:var(--muted);font-size:1.2rem;padding:4px 8px;min-height:40px}
+.hrs-edit{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.hrs-edit label{display:flex;align-items:center;gap:8px;font-weight:600}
 .slot.adder{border-left-color:var(--accent)}
 .st-done{color:var(--good)} .st-partly{color:var(--warn)} .st-not{color:var(--bad)}
 .day-card.is-today{border-color:var(--accent)}
@@ -123,6 +125,52 @@ input[type=text],input[type=tel],input[type=password],select{font:inherit;color:
 .fb-in{background:var(--sheet);border-radius:16px;padding:18px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:10px}
 .fb-in textarea{font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--rule-strong);border-radius:12px;padding:10px;min-height:110px;width:100%}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:10px;font-weight:600;z-index:30;max-width:calc(100% - 32px)}
+
+/* Teacher dashboard */
+.wrap:has(.dash){max-width:1040px}
+.dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:720px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.kpi span{font-size:.85rem;color:var(--muted);font-weight:600}
+.kpi b{font-size:1.8rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi b small{font-size:1rem;color:var(--muted);font-weight:600}
+.kpi em{font-style:normal;font-size:.8rem;color:var(--muted)}
+.kpi.warnk{border-color:var(--bad)} .kpi.warnk b{color:var(--bad)}
+.chart{width:100%;height:auto;display:block;margin:6px 0}
+.chart .grid{stroke:var(--rule);stroke-width:1}
+.chart .ax{fill:var(--muted);font-size:11px;font-family:var(--font)}
+.chart .bar{fill:var(--accent);opacity:.55}
+.chart .bar.today{opacity:1}
+.chart g:hover .bar{opacity:1}
+.fchip{border:1.5px solid var(--rule-strong);background:var(--sheet);border-radius:999px;padding:8px 12px;font-size:.9rem;font-weight:600;min-height:40px}
+.fchip b{color:var(--muted);margin-left:2px}
+.fchip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)} .fchip.on b{color:var(--paper)}
+.srows{display:flex;flex-direction:column;margin-top:10px}
+.srow{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1.1fr) minmax(0,.8fr) minmax(0,.7fr) minmax(0,.9fr) minmax(0,1.3fr);gap:8px;align-items:center;text-align:left;width:100%;background:none;border:0;border-top:1px solid var(--rule);padding:12px 4px;font-size:.95rem}
+.srow:hover,.srow.open{background:var(--paper)}
+.srow.shead{font-size:.8rem;color:var(--muted);font-weight:700;border-top:0;cursor:default;background:none}
+.srow .nm{display:flex;flex-direction:column;min-width:0}
+.srow .nm small{color:var(--muted);font-size:.8rem}
+.srow em{font-style:normal}
+.lbl-m{display:none;font-style:normal;color:var(--muted);font-size:.8rem}
+@media (max-width:720px){
+  .srow{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 10px}
+  .srow.shead{display:none}
+  .srow .nm{grid-column:1/-1}
+  .lbl-m{display:inline}
+}
+.stchip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 9px;font-size:.8rem;font-weight:700;white-space:nowrap}
+.st-risk{background:var(--bad-soft);color:var(--bad)} .st-slow{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)} .st-ok{background:var(--good-soft);color:var(--good)}
+.st-new{background:var(--accent-soft);color:var(--accent)} .st-noplan{background:var(--rule);color:var(--ink)} .st-stuck{background:var(--all-soft);color:var(--all)}
+.sdetail{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:12px 8px 16px;background:var(--paper);border-radius:0 0 10px 10px}
+.dots7{display:flex;gap:4px;margin-top:4px}
+.dot7{width:26px;height:26px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;background:var(--rule);color:var(--ink)}
+.dot7.yes{background:var(--good);color:var(--sheet)} .dot7.no{background:var(--bad);color:var(--sheet)} .dot7.open{outline:2px solid var(--accent)} .dot7.pre{opacity:.35}
+.admin{grid-column:1/-1;border-top:1px dashed var(--rule-strong);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.admin details summary{cursor:pointer;display:inline-block}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:var(--sheet)}
+details.card summary{cursor:pointer;list-style:none}
 a{color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -378,14 +426,21 @@ const Mock = (() => {
   return {
     register({answers, pin}){ load(); if (db.students.some(s => s.phone===answers.phone)) throw new Error('This number has already joined. Log in with your PIN.');
       const s = {phone:answers.phone, name:answers.name, pin, token:uid(), joined:ymd(today0()), answers, items:[], checkins:[]}; db.students.push(s); persist(); return {token:s.token, state:pub(s)}; },
-    login({phone, pin}){ load(); const s = db.students.find(x => x.phone===phone); if (!s || s.pin!==pin) throw new Error('WhatsApp number or PIN is wrong.'); return {token:s.token, state:pub(s)}; },
+    login({phone, pin}){ load(); const s = db.students.find(x => x.phone===phone); if (s && !s.pin && /^\d{4}$/.test(pin)) s.pin = pin; if (!s || s.pin!==pin) throw new Error('WhatsApp number or PIN is wrong.'); return {token:s.token, state:pub(s)}; },
     resume({token}){ return {state:pub(byTok(token))}; },
     savePlan({token, start, end, items}){ const s = byTok(token); s.items = s.items.filter(i => i.date<start || i.date>end).concat(items); persist(); return {state:pub(s)}; },
     checkin({token, date, status, data, photos}){ const s = byTok(token);
       s.items.forEach(i => { if (i.date===date && status[i.id]) i.done = status[i.id]==='done' ? true : status[i.id]==='partly' ? 'partly' : false; });
       s.checkins = s.checkins.filter(c => c.date!==date).concat([Object.assign({date}, data, {photos:(photos||[]).map(p => '(preview) '+p.name)})]); persist(); return {state:pub(s)}; },
     feedback(){ return {ok:true}; },
-    mentorAll(){ load(); return {students: db.students.map(pub)}; },
+    updateHours({token, weekdayHrs, sunHrs}){ const s = byTok(token); s.answers.weekdayHrs = String(weekdayHrs); s.answers.sunHrs = String(sunHrs); persist(); return {state:pub(s)}; },
+    mentorAll(){ load(); return {students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; })}; },
+    adminAction({phone, action, value, confirmName}){ load(); const s = db.students.find(x => x.phone===phone); if (!s) throw new Error('Student not found.');
+      if (action==='pause' || action==='resume') s.status = action==='pause' ? 'Paused' : 'Active';
+      else if (action==='resetPin') s.pin = '';
+      else if (action==='setParent'){ if (!/^[6-9]\d{9}$/.test(value||'')) throw new Error('Enter a valid 10-digit parent number.'); s.answers.parentPhone = value; }
+      else if (action==='remove'){ if (String(confirmName||'').trim().toLowerCase() !== s.name.trim().toLowerCase()) throw new Error('The name typed does not match. Nothing was removed.'); db.students = db.students.filter(x => x !== s); }
+      persist(); return {ok:true}; },
     reset(){ db = seed(); persist(); },
   };
 })();
@@ -394,7 +449,7 @@ const Mock = (() => {
 // App shell
 // =====================================================================
 const scr = document.getElementById('screen');
-let TOKEN = null, ST = null, M = null, MENTOR = null;
+let TOKEN = null, ST = null, M = null, MENTOR = null, MENTOR_KEY = '';
 const V = {screen:'gate', step:0};
 const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch(e){} } };
 const setState = s => { ST = s; M = buildModel(s); };
@@ -438,7 +493,7 @@ function renderGate(){
     <ol class="steps3"><li><b>1</b>Join once (5 minutes)</li><li><b>2</b>Every Sunday: plan your week</li><li><b>3</b>Every day: check in before 10 pm</li></ol>
     <form class="card" id="loginForm" novalidate>
       <h2>Log in</h2>
-      <div class="field"><label for="lg_phone">WhatsApp number</label><input id="lg_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel"></div>
+      <div class="field"><label for="lg_phone">WhatsApp number</label><input id="lg_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel" value="${esc(V.prefillPhone||'')}"></div>${V.prefillPhone ? '<p class="muted tiny">This number has already joined. Enter your PIN to open your plan. Forgot the PIN? Ask Mahendra Sir to reset it.</p>' : ''}
       <div class="field"><label for="lg_pin">PIN</label><input id="lg_pin" class="big pinbox" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"></div>
       <p class="err" id="lg_err" hidden></p>
       <button class="btn primary big wide" type="submit" id="lgBtn">Log in</button>
@@ -509,7 +564,16 @@ function renderForm(){
     API('register', {answers, pin}).then(r => {
       TOKEN = r.token; store.set('c12.token', TOKEN); store.set('c12.answers', null); store.set('c12.step', null); FA = {};
       setState(r.state); go('week', {first:true});
-    }).catch(x => { const el = document.getElementById('formErr'); el.textContent = x.message; el.hidden = false; b.disabled = false; b.textContent = 'Join'; });
+    }).catch(x => {
+      const el = document.getElementById('formErr'); el.textContent = x.message; el.hidden = false; b.disabled = false; b.textContent = 'Join';
+      // Number already joined (often a first tap that went through on a slow network): offer the two ways out.
+      if (/already/i.test(x.message)){
+        const old = document.getElementById('dupActs'); if (old) old.remove();
+        el.insertAdjacentHTML('afterend', `<div class="actions" id="dupActs"><button class="btn primary" type="button" id="dupLogin">Log in with this number</button><button class="btn" type="button" id="dupChange">Change my number</button></div>`);
+        on('dupLogin', () => go('gate', {prefillPhone: FA.phone}));
+        on('dupChange', () => { V.step = 0; errors = {phone: 'Enter the correct WhatsApp number.'}; saveDraft(); renderForm(); window.scrollTo(0,0); });
+      }
+    });
   });
 }
 function onFormInput(e){
@@ -590,6 +654,12 @@ function renderWeek(){
   scr.innerHTML = `<div class="narrow stack">
     <div><h1>My week</h1><p class="muted" style="margin:0">${fmt(wk.start)} – ${fmt(wk.end)}</p>
       <p class="finish ${f.late||f.after?'late':'ok'}" style="margin-top:8px">${esc(finishText(f))}</p></div>
+    <div class="card"><div class="lbl">Your study hours</div>
+      ${V.editHrs ? `<div class="hrs-edit"><label>School day <select id="eh_wd" class="hsel">${hrs(.5,10).map(h => `<option ${+h===M.wd?'selected':''}>${h}</option>`).join('')}</select> h</label>
+        <label>Sunday <select id="eh_sun" class="hsel">${hrs(0,10).map(h => `<option ${+h===M.sun?'selected':''}>${h}</option>`).join('')}</select> h</label>
+        <div class="actions"><button class="btn primary small" type="button" id="ehSave">Save</button><button class="btn small" type="button" id="ehCancel">Cancel</button></div>
+        <p class="muted tiny">Sir's slots from today onwards that are not done yet will be made again with the new hours.</p><p class="err" id="ehErr" hidden></p></div>`
+        : `<p style="margin:4px 0 0">School day <b>${M.wd} h</b> · Sunday <b>${M.sun} h</b> <button class="linkbtn" type="button" id="ehOpen">Change</button></p>`}</div>
     <div class="card"><div class="lbl" style="margin-bottom:8px">Who makes your timetable?</div>
       ${chipGroup('ttm', ["Mahendra Sir", "Me"], 'radio', o => (o==='Me') === (mode==='own'), 'data-ttm="1"')}
       <p class="muted tiny" style="margin-top:8px">${mode==='own' ? 'Add your own slots for each day: subject and hours. We suggest the chapter, you can change it.' : (V.first ? 'Welcome! Your slots are ready. ' : '') + 'Slots are ready. Change the chapter or kind of study if you want.'}</p>
@@ -601,7 +671,25 @@ function renderWeek(){
         ${!past && mode==='own' ? (V.addDay===k ? slotAdder(k) : `<button class="linkbtn" type="button" data-add="${k}">+ Add slot</button>`) : ''}</section>`; }).join('')}
     <div class="savebar" role="status"><span id="saveMsg">Changes save automatically</span><button class="btn small" type="button" id="doneBtn">Done</button></div>
   </div>`;
-  on('doneBtn', () => go('home', {first:false, addDay:null}));
+  on('doneBtn', () => go('home', {first:false, addDay:null, editHrs:false}));
+  on('ehOpen', () => { V.editHrs = true; renderWeek(); });
+  on('ehCancel', () => { V.editHrs = false; renderWeek(); });
+  on('ehSave', () => {
+    const wd = +document.getElementById('eh_wd').value, sun = +document.getElementById('eh_sun').value, b = document.getElementById('ehSave');
+    b.disabled = true; b.textContent = 'Saving…';
+    API('updateHours', {token:TOKEN, weekdayHrs:wd, sunHrs:sun}).then(r => {
+      setState(r.state); V.editHrs = false;
+      if (ttMode()==='sir'){
+        // Rebuild Sir's untouched future slots with the new hours.
+        const todayDone = M.checkins.some(c => c.date===ymd(M.t));
+        WEEK.items = WEEK.items.filter(i => !(i.sugg && !i.done && (i.d || D(i.date)) >= (todayDone ? addDays(M.t,1) : M.t)));
+        const e = eachDay(WEEK.wk.start > M.t ? WEEK.wk.start : M.t, WEEK.wk.end).filter(d => !WEEK.items.some(i => i.date===ymd(d)));
+        if (e.length) WEEK.items = WEEK.items.concat(suggestDays(M, e, WEEK.items));
+        saveWeek();
+      }
+      renderWeek(); toast('Study hours updated');
+    }).catch(x => { const e2 = document.getElementById('ehErr'); e2.textContent = x.message; e2.hidden = false; b.disabled = false; b.textContent = 'Save'; });
+  });
   on('nextWk', () => { V.wkDate = addDays(cur.end,1); WEEK = null; renderWeek(); });
   on('thisWk', () => { V.wkDate = M.t; WEEK = null; renderWeek(); });
   on('fillSir', () => { WEEK.items = WEEK.items.concat(suggestDays(M, empty, WEEK.items)); saveWeek(); renderWeek(); toast("Sir's plan added to empty days"); });
@@ -710,6 +798,7 @@ function renderCiDone(){
 // Teacher dashboard (only for Sir): who has not checked in today + Sunday parent lines
 // =====================================================================
 function openMentor(key){
+  MENTOR_KEY = key;
   scr.innerHTML = '<div class="narrow card"><p class="muted">Loading students…</p></div>';
   API('mentorAll', {key}).then(r => { MENTOR = r.students.map(buildModel); go('mentor'); })
     .catch(x => { scr.innerHTML = `<div class="narrow card"><h2>Teacher dashboard</h2><p class="err">${esc(x.message)}</p></div>`; });
@@ -751,27 +840,129 @@ function parentMessage(m, lang, comment){
   return `${head}\n${lines.filter(Boolean).join('\n')}${sign}`;
 }
 const getLang = phone => store.get('c12.lang.'+phone) || 'hi';
+// Teacher dashboard: summary numbers, 14-day check-in chart, one row per student with a status, filters,
+// tap a row for details, and the weekly parent messages at the bottom.
+const STATUS_INFO = {
+  risk:  {label:'At risk', icon:'●', cls:'st-risk'},
+  slow:  {label:'Slow', icon:'●', cls:'st-slow'},
+  ok:    {label:'On track', icon:'●', cls:'st-ok'},
+  fresh: {label:'New', icon:'●', cls:'st-new'},
+  noplan:{label:'Week not planned', icon:'○', cls:'st-noplan'},
+};
+function studentRow(m){
+  const t = m.t, k = ymd(t), days = daysBetween(m.joined, t) + 1;
+  const wk = weekOf(t, m.joined);
+  const weekItems = m.items.filter(i => i.d>=wk.start && i.d<=wk.end);
+  const from7 = new Date(Math.max(addDays(t,-7), m.joined));
+  const past7 = m.items.filter(i => i.d>=from7 && i.d<t && i.min>0);
+  const plan7 = past7.reduce((x,i)=>x+i.min,0), done7 = past7.reduce((x,i)=>x+i.min*doneFrac(i),0);
+  const ratio7 = plan7 ? done7/plan7 : null;
+  const doneW = weekItems.filter(i => i.d<=t && i.done===true).length, totalW = weekItems.filter(i => i.d<=t).length;
+  const streak = missedStreak(m), f = finishInfo(m), checkedToday = m.checkins.some(c => c.date===k);
+  const ciDates = m.checkins.map(c => c.date).sort(), last = ciDates[ciDates.length-1];
+  const stuck = m.checkins.filter(c => c.reason==='Stuck' && c.date>=ymd(from7)).sort((a,b)=>b.date.localeCompare(a.date));
+  let st;
+  if (!weekItems.length) st = 'noplan';
+  else if (streak >= 3 || (days >= 7 && (f.after || (ratio7 !== null && ratio7 < .4)))) st = 'risk';
+  else if (days <= 3) st = streak >= 2 ? 'risk' : 'fresh';
+  else if (streak === 2 || f.late || (ratio7 !== null && ratio7 < .7)) st = 'slow';
+  else st = 'ok';
+  const lastTxt = !last ? 'Never' : last===k ? 'Today' : last===ymd(addDays(t,-1)) ? 'Yesterday' : daysBetween(D(last), t) + ' days ago';
+  return {m, st, streak, f, checkedToday, lastTxt, doneW, totalW, stuck, days};
+}
+let DASH = {filter:'all', q:'', open:null};
 function renderMentor(){
-  const k = ymd(today0());
-  const rows = MENTOR.map(m => ({m, checked: m.checkins.some(c => c.date===k), streak: missedStreak(m)}));
-  const missing = rows.filter(r => !r.checked).sort((a,b) => b.streak - a.streak);
-  scr.innerHTML = `<div class="stack">
-    <div><p class="muted" style="margin:0">Teacher dashboard · ${fmtY(today0())}</p><h1>Checked in today: ${rows.length - missing.length}/${rows.length}</h1></div>
-    <section class="card"><h2>Not checked in today (${missing.length})</h2>
-      ${missing.length ? missing.map(r => `<div class="mrow2"><b>${esc(r.m.name)}</b><span class="mono">${esc(r.m.phone)}</span><span class="${r.streak>=2?'late':'muted'}">${r.streak ? 'also missed '+r.streak+' day'+(r.streak>1?'s':'')+' before' : 'first miss'}</span></div>`).join('') : '<p class="muted">Everyone has checked in.</p>'}
-      <p class="muted tiny">Students have until 10 pm.</p></section>
-    <section class="card"><h2>Weekly parent messages</h2><p class="muted tiny">Nothing is sent automatically. Pick the language, add your line if you want, then tap "WhatsApp par bhejo" and press Send in WhatsApp.</p>
+  const t = today0(), k = ymd(t);
+  const ALL = MENTOR.map(studentRow), isPaused = r => r.m.state.profile.status === 'Paused';
+  const R = ALL.filter(r => !isPaused(r)), PAUSED = ALL.filter(isPaused);
+  const n = R.length, inToday = R.filter(r => r.checkedToday).length;
+  // Check-in rate over the last 7 finished days: check-ins / students who had joined by that day.
+  let num = 0, den = 0;
+  for (let i = 1; i <= 7; i++){ const d = addDays(t,-i), dk = ymd(d); R.forEach(r => { if (r.m.joined <= d){ den++; if (r.m.checkins.some(c => c.date===dk)) num++; } }); }
+  const rate7 = den ? Math.round(num/den*100) : null;
+  const count = s => R.filter(r => r.st===s).length;
+  const attention = count('risk') + count('noplan');
+  const avgSyl = n ? Math.round(R.reduce((x,r)=>x+r.f.pct,0)/n) : 0;
+
+  // 14-day chart data
+  const days = []; for (let i = 13; i >= 0; i--){ const d = addDays(t,-i), dk = ymd(d); const joined = R.filter(r => r.m.joined <= d).length; days.push({d, dk, joined, ci: R.filter(r => r.m.checkins.some(c => c.date===dk)).length}); }
+  const maxY = Math.max(1, ...days.map(x => x.joined));
+  const W = 640, H = 170, padL = 30, padB = 26, padT = 10, bw = (W - padL - 8) / 14;
+  const y = v => padT + (H - padT - padB) * (1 - v/maxY);
+  const ticks = [0, Math.round(maxY/2), maxY].filter((v,i,a) => a.indexOf(v)===i);
+  const chart = `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="Check-ins per day for the last 14 days">
+    ${ticks.map(v => `<line x1="${padL}" x2="${W-4}" y1="${y(v)}" y2="${y(v)}" class="grid"/><text x="${padL-6}" y="${y(v)+4}" class="ax" text-anchor="end">${v}</text>`).join('')}
+    ${days.map((x,i) => { const bx = padL + i*bw + 3, h = y(0) - y(x.ci);
+      return `<g><title>${fmt(x.d)}: ${x.ci} of ${x.joined} checked in${x.dk===k ? ' (today, until 10 pm)' : ''}</title>
+        <rect x="${bx}" y="${y(0) - Math.max(h, x.ci ? 2 : 0)}" width="${bw-6}" height="${Math.max(h, x.ci ? 2 : 0)}" rx="3" class="${x.dk===k ? 'bar today' : 'bar'}"/>
+        <rect x="${bx-2}" y="${padT}" width="${bw-2}" height="${H-padT-padB}" fill="transparent"/>
+        ${i % 2 === 1 || x.dk===k ? `<text x="${bx + (bw-6)/2}" y="${H-8}" class="ax" text-anchor="middle">${x.dk===k ? 'Today' : x.d.getDate()+' '+MON[x.d.getMonth()]}</text>` : ''}</g>`; }).join('')}
+  </svg>`;
+
+  const filters = [['all','All',n],['notin','Not checked in today',n-inToday],['risk','At risk',count('risk')],['slow','Slow',count('slow')],['stuck','Stuck this week',R.filter(r=>r.stuck.length).length],['noplan','Week not planned',count('noplan')],['paused','Paused',PAUSED.length]];
+  const order = {risk:0, noplan:1, slow:2, fresh:3, ok:4};
+  const q = DASH.q.trim().toLowerCase();
+  const shown = (DASH.filter==='paused' ? PAUSED : R).filter(r => DASH.filter==='all' || DASH.filter==='paused' || (DASH.filter==='notin' ? !r.checkedToday : DASH.filter==='stuck' ? r.stuck.length : r.st===DASH.filter))
+    .filter(r => !q || r.m.name.toLowerCase().includes(q) || (r.m.phone||'').includes(q))
+    .sort((a,b) => order[a.st]-order[b.st] || b.streak-a.streak || a.m.name.localeCompare(b.m.name));
+
+  scr.innerHTML = `<div class="stack dash">
+    <div class="dash-head"><div><p class="muted" style="margin:0">Teacher dashboard · ${DAY[t.getDay()]} ${fmtY(t)}</p><h1>How the batch is doing</h1></div>
+      <button class="btn small" type="button" id="dRefresh">Refresh</button></div>
+    <div class="kpis">
+      <div class="kpi"><span>Students joined</span><b>${n}</b></div>
+      <div class="kpi"><span>Checked in today</span><b>${inToday}<small>/${n}</small></b><em>${t.getHours() < 22 ? 'open till 10 pm' : 'day closed'}</em></div>
+      <div class="kpi"><span>Check-in rate, last 7 days</span><b>${rate7===null ? '–' : rate7+'%'}</b></div>
+      <div class="kpi ${attention ? 'warnk' : ''}"><span>Need your attention</span><b>${attention}</b><em>at risk or week not planned</em></div>
+    </div>
+    <section class="card"><h2>Check-ins per day</h2><p class="muted tiny">Bar = how many students checked in that day. Hover or tap a bar for the exact number.</p>${chart}
+      <p class="muted tiny">Average syllabus done: <b>${avgSyl}%</b></p></section>
+    <section class="card">
+      <div class="dash-head"><h2>Students</h2><input class="big" type="search" id="dSearch" placeholder="Search name or number" value="${esc(DASH.q)}" style="max-width:260px"></div>
+      <div class="chips" role="group" aria-label="Filter students">${filters.map(([id,l,c]) => `<button type="button" class="fchip ${DASH.filter===id?'on':''}" data-df="${id}">${l} <b>${c}</b></button>`).join('')}</div>
+      <div class="srows">
+        <div class="srow shead" aria-hidden="true"><span>Student</span><span>Last check-in</span><span>Tasks this week</span><span>Syllabus</span><span>Finishes</span><span>Status</span></div>
+        ${shown.map(r => { const s = STATUS_INFO[r.st], open = DASH.open===r.m.phone;
+          return `<button type="button" class="srow ${open?'open':''}" data-open="${esc(r.m.phone)}" aria-expanded="${open}">
+            <span class="nm"><b>${esc(r.m.name)}</b><small class="mono">${esc(r.m.phone)}</small></span>
+            <span><i class="lbl-m">Last check-in </i>${r.lastTxt}${r.streak>=2 ? ` <em class="late">· missed ${r.streak}</em>` : ''}</span>
+            <span><i class="lbl-m">Tasks </i>${r.totalW ? r.doneW+'/'+r.totalW : '–'}</span>
+            <span><i class="lbl-m">Syllabus </i>${r.f.pct}%</span>
+            <span><i class="lbl-m">Finishes </i>${r.f.done ? 'Done' : r.f.none ? '–' : r.f.after ? '<em class="late">After boards</em>' : `<span class="${r.f.late?'late':''}">${fmt(r.f.date)}</span>`}</span>
+            <span>${isPaused(r) ? '<span class="stchip st-noplan">⏸ Paused</span>' : `<span class="stchip ${s.cls}">${s.icon} ${s.label}</span>`}${r.stuck.length ? ' <span class="stchip st-stuck">Stuck</span>' : ''}</span>
+          </button>${open ? studentDetail(r) : ''}`; }).join('') || '<p class="muted">No students in this group.</p>'}
+      </div>
+      <p class="muted tiny">Status: <b>At risk</b> = missed 3+ days, or less than 40% of last week's work, or won't finish before boards. <b>Slow</b> = missed 2 days, under 70% of work, or finishing after 30 Nov. <b>New</b> = joined in the last 3 days.</p>
+    </section>
+    <details class="card"><summary><h2 style="display:inline">Weekly parent messages</h2></summary>
+      <p class="muted tiny">Nothing is sent automatically. Pick the language, add your line if you want, then tap "WhatsApp par bhejo" and press Send in WhatsApp.</p>
       ${MENTOR.map((m,i) => { const lang = getLang(m.phone);
         return `<div class="pl"><div class="pl-top"><b>${esc(m.name)}</b><span class="mono muted">Parent: ${esc(m.parentPhone||'—')}</span></div>
         ${chipGroup('lg_'+i, ['Hinglish','English'], 'radio', o => (o==='English') === (lang==='en'), `data-lang="${i}"`)}
         <p class="pl-text" id="pl_${i}">${esc(parentMessage(m, lang, ''))}</p>
         <input class="big" type="text" id="pc_${i}" data-cmt="${i}" placeholder="Your line (optional)">
-        <div class="actions">${m.parentPhone ? `<a class="btn primary small" id="wa_${i}" href="https://wa.me/91${esc(m.parentPhone)}?text=${encodeURIComponent(parentMessage(m, lang, ''))}" target="_blank" rel="noopener">WhatsApp par bhejo</a>` : ''}<button class="btn small" type="button" data-copy="${i}">Copy</button></div></div>`; }).join('')}</section>
+        <div class="actions">${m.parentPhone ? `<a class="btn primary small" id="wa_${i}" href="https://wa.me/91${esc(m.parentPhone)}?text=${encodeURIComponent(parentMessage(m, lang, ''))}" target="_blank" rel="noopener">WhatsApp par bhejo</a>` : ''}<button class="btn small" type="button" data-copy="${i}">Copy</button></div></div>`; }).join('')}
+    </details>
     ${IS_LIVE ? '' : '<button class="btn" type="button" id="toGate2">Back to start</button>'}
   </div>`;
   on('toGate2', () => go('gate'));
+  on('dRefresh', () => openMentor(MENTOR_KEY));
+  const search = document.getElementById('dSearch');
+  search.addEventListener('input', () => { DASH.q = search.value; clearTimeout(DASH.t); DASH.t = setTimeout(() => { renderMentor(); const s2 = document.getElementById('dSearch'); s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }, 250); });
+  scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; renderMentor(); }));
+  scr.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => { DASH.open = DASH.open===b.dataset.open ? null : b.dataset.open; renderMentor(); }));
+  scr.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => {
+    const ph = b.dataset.ph, act = b.dataset.act, err = document.getElementById('adm_'+ph);
+    const args = {key:MENTOR_KEY, phone:ph, action:act};
+    if (act==='setParent') args.value = document.getElementById('pp_'+ph).value.trim();
+    if (act==='remove') args.confirmName = document.getElementById('rm_'+ph).value;
+    const done = {pause:'Paused', resume:'Resumed', resetPin:'PIN reset. The student can log in with a new PIN.', setParent:'Parent number saved', remove:'Student removed'}[act];
+    b.disabled = true; err.hidden = true;
+    API('adminAction', args).then(() => { toast(done); if (act==='remove') DASH.open = null; openMentor(MENTOR_KEY); })
+      .catch(x => { err.textContent = x.message; err.hidden = false; b.disabled = false; });
+  }));
   const msgFor = i => parentMessage(MENTOR[i], getLang(MENTOR[i].phone), document.getElementById('pc_'+i).value.trim());
-  const refresh = i => { const t = msgFor(i); document.getElementById('pl_'+i).textContent = t; const a = document.getElementById('wa_'+i); if (a) a.href = `https://wa.me/91${MENTOR[i].parentPhone}?text=${encodeURIComponent(t)}`; };
+  const refresh = i => { const tx = msgFor(i); document.getElementById('pl_'+i).textContent = tx; const a = document.getElementById('wa_'+i); if (a) a.href = `https://wa.me/91${MENTOR[i].parentPhone}?text=${encodeURIComponent(tx)}`; };
   scr.querySelectorAll('[data-lang]').forEach(r => r.addEventListener('change', () => { store.set('c12.lang.'+MENTOR[r.dataset.lang].phone, r.value==='English' ? 'en' : 'hi'); refresh(r.dataset.lang); }));
   scr.querySelectorAll('[data-cmt]').forEach(inp => inp.addEventListener('input', () => refresh(inp.dataset.cmt)));
   scr.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
@@ -779,6 +970,31 @@ function renderMentor(){
     const fallback = () => { const r = document.createRange(); r.selectNodeContents(document.getElementById('pl_'+i)); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast('Selected. Press Copy on your keyboard.'); };
     try { navigator.clipboard.writeText(text).then(() => toast('Copied'), fallback); } catch(e){ fallback(); }
   }));
+}
+function studentDetail(r){
+  const m = r.m, t = m.t;
+  const dots = []; for (let i = 6; i >= 0; i--){ const d = addDays(t,-i), dk = ymd(d), before = d < m.joined, has = m.checkins.some(c => c.date===dk);
+    dots.push(`<span class="dot7 ${before ? 'pre' : has ? 'yes' : dk===ymd(t) ? 'open' : 'no'}" title="${fmt(d)}: ${before ? 'before joining' : has ? 'checked in' : dk===ymd(t) ? 'not yet' : 'missed'}">${DAY[d.getDay()][0]}</span>`); }
+  const todays = m.items.filter(i => i.date===ymd(t));
+  return `<div class="sdetail">
+    <div><b>Last 7 days</b><div class="dots7">${dots.join('')}</div></div>
+    <div><b>Today</b>${todays.length ? todays.map(i => `<div class="tiny">${esc(short(i.subject))} · ${esc(i.chapter||'—')} · ${fmtH(i.min)}${i.done===true ? ' · <span class="st-done">Done</span>' : i.done==='partly' ? ' · <span class="st-partly">Partly</span>' : ''}</div>`).join('') : '<div class="tiny muted">No slots today</div>'}</div>
+    <div><b>Stuck notes (7 days)</b>${r.stuck.length ? r.stuck.map(c => `<div class="tiny">${fmt(D(c.date))}: ${esc(c.doubt || 'stuck, no note')}</div>`).join('') : '<div class="tiny muted">None</div>'}</div>
+    <div class="actions">${m.phone ? `<a class="btn small" href="https://wa.me/91${esc(m.phone)}" target="_blank" rel="noopener">WhatsApp student</a>` : ''}${m.parentPhone ? `<a class="btn small" href="https://wa.me/91${esc(m.parentPhone)}" target="_blank" rel="noopener">WhatsApp parent</a>` : ''}</div>
+    <div class="admin"><b>Manage</b>
+      <div class="actions">
+        ${m.state.profile.status === 'Paused'
+          ? `<button class="btn small" type="button" data-act="resume" data-ph="${esc(m.phone)}">▶ Resume</button>`
+          : `<button class="btn small" type="button" data-act="pause" data-ph="${esc(m.phone)}">⏸ Pause</button>`}
+        <button class="btn small" type="button" data-act="resetPin" data-ph="${esc(m.phone)}">🔑 Reset PIN</button>
+      </div>
+      <div class="actions"><label class="sr-only" for="pp_${esc(m.phone)}">Parent WhatsApp</label><input id="pp_${esc(m.phone)}" class="big" type="tel" inputmode="numeric" maxlength="10" value="${esc(m.parentPhone||'')}" style="max-width:170px"><button class="btn small" type="button" data-act="setParent" data-ph="${esc(m.phone)}">Save parent number</button></div>
+      <details><summary class="linkbtn">🗑 Remove student</summary>
+        <p class="tiny">This deletes ${esc(m.name)} and all plans and check-ins for good. Type the name to confirm: <b>${esc(m.name.trim())}</b></p>
+        <div class="actions"><label class="sr-only" for="rm_${esc(m.phone)}">Type the name</label><input id="rm_${esc(m.phone)}" class="big" type="text" style="max-width:220px"><button class="btn small danger" type="button" data-act="remove" data-ph="${esc(m.phone)}">Remove</button></div></details>
+      <p class="err" id="adm_${esc(m.phone)}" hidden></p>
+    </div>
+  </div>`;
 }
 
 // =====================================================================
@@ -793,7 +1009,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791782883653';
+const BUILD = '1791822990615';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
