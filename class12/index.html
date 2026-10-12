@@ -689,6 +689,10 @@ function parentMessage(m, lang, comment){
   // Short lines, one fact each, so a parent can read it at a glance on WhatsApp.
   const p = parentFacts(m), f = p.f, sign = (comment ? '\n💬 ' + comment : '') + '\n– Mahendra Sir';
   const en = lang==='en';
+  // A student in the first few days has nothing fair to report yet.
+  if (p.days < 4) return en
+    ? `Namaste 🙏\n${p.name} joined Mahendra Sir's Board Plan on ${longDate(m.joined)}. The daily plan has started. You will get the first weekly report next Sunday.${sign}`
+    : `Namaste 🙏\n${p.name} ne ${longDate(m.joined)} ko Mahendra Sir ka Board Plan join kiya hai. Roz ka plan shuru ho gaya hai. Pehli hafte ki report agle Sunday aayegi.${sign}`;
   const head = en ? `Namaste 🙏\n${p.name}'s report for this week:` : `Namaste 🙏\n${p.name} ki is hafte ki report:`;
   if (p.tone==='weak') return en
     ? `${head}\n⚠️ Studied on only ${p.ci} of ${p.days} days\n⚠️ Finished ${p.done} of ${p.total} tasks\nI will talk to ${p.name} this week. Please also ask at home how studies are going.${sign}`
