@@ -171,6 +171,45 @@ input[type=text],input[type=tel],input[type=password],select{font:inherit;color:
 .admin details summary{cursor:pointer;display:inline-block}
 .btn.danger{background:var(--bad);border-color:var(--bad);color:var(--sheet)}
 details.card summary{cursor:pointer;list-style:none}
+
+/* Clean CRM look */
+.kbtn{font:inherit;color:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.kbtn:hover{border-color:var(--accent)} .kbtn.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.khint{font-style:normal;font-size:.78rem;color:var(--accent);font-weight:700;margin-top:4px}
+.kpanel h2{margin-bottom:2px}
+.hrow{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 36px;align-items:center;gap:10px;width:100%;background:none;border:0;border-radius:8px;padding:8px 6px;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.hrow:hover{background:var(--accent-soft)} .hrow.on{background:var(--accent-soft);font-weight:700}
+.hrow b{text-align:right;font-variant-numeric:tabular-nums}
+.hbar{height:10px;background:var(--rule);border-radius:5px;overflow:hidden}
+.hbar span{display:block;height:100%;border-radius:5px}
+.d7{display:block;font-size:.78rem}
+@media (max-width:720px){.hrow{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 30px}}
+
+body:has(.dash) header.bar{max-width:1040px}
+.crm .kpi em.up{color:var(--good);font-weight:700} .crm .kpi em.down{color:var(--bad);font-weight:700}
+.crm .spark polyline{fill:none;stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.crm .spark circle{fill:var(--accent)}
+.crm-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:900px){.crm-row{grid-template-columns:minmax(0,1fr)}}
+.crm-side{display:flex;flex-direction:column;gap:14px}
+.crm .card{padding-left:18px} .crm .card::before{display:none}
+.crm .srow{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,.6fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,.9fr)}
+.crm .dash-head{align-items:center}
+@media (max-width:720px){.crm .srow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.crm .nm{flex-direction:row;align-items:center;gap:10px}
+.nm-t{display:flex;flex-direction:column;min-width:0}
+.av{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;flex:none}
+.av-ok{background:var(--good-soft);color:var(--good)} .av-slow{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.av-risk{background:var(--bad-soft);color:var(--bad)} .av-fresh{background:var(--accent-soft);color:var(--accent)} .av-noplan{background:var(--rule);color:var(--ink)}
+.syl{display:flex;align-items:center;gap:6px}
+.pbar{height:6px;background:var(--rule);border-radius:3px;width:40px;display:inline-block;overflow:hidden;flex:none}
+.pbar span{display:block;height:100%;background:var(--accent);border-radius:3px}
+.donut{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.donut-n{font-size:9px;font-weight:800;fill:var(--ink);font-family:var(--font)}
+.leg{display:flex;flex-direction:column;gap:2px}
+.leg-i{background:none;border:0;display:flex;align-items:center;gap:8px;padding:4px 2px;font-size:.92rem;text-align:left}
+.leg-i i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.leg-i b{margin-left:auto;padding-left:10px}
 a{color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -870,7 +909,7 @@ function studentRow(m){
   const lastTxt = !last ? 'Never' : last===k ? 'Today' : last===ymd(addDays(t,-1)) ? 'Yesterday' : daysBetween(D(last), t) + ' days ago';
   return {m, st, streak, f, checkedToday, lastTxt, doneW, totalW, stuck, days};
 }
-let DASH = {filter:'all', q:'', open:null};
+let DASH = {filter:'all', q:'', open:null, panel:null, jump:false};
 function renderMentor(){
   const t = today0(), k = ymd(t);
   const ALL = MENTOR.map(studentRow), isPaused = r => r.m.state.profile.status === 'Paused';
@@ -887,7 +926,7 @@ function renderMentor(){
   // 14-day chart data
   const days = []; for (let i = 13; i >= 0; i--){ const d = addDays(t,-i), dk = ymd(d); const joined = R.filter(r => r.m.joined <= d).length; days.push({d, dk, joined, ci: R.filter(r => r.m.checkins.some(c => c.date===dk)).length}); }
   const maxY = Math.max(1, ...days.map(x => x.joined));
-  const W = 640, H = 170, padL = 30, padB = 26, padT = 10, bw = (W - padL - 8) / 14;
+  const W = 340, H = 180, padL = 26, padB = 26, padT = 10, bw = (W - padL - 8) / 14;
   const y = v => padT + (H - padT - padB) * (1 - v/maxY);
   const ticks = [0, Math.round(maxY/2), maxY].filter((v,i,a) => a.indexOf(v)===i);
   const chart = `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="Check-ins per day for the last 14 days">
@@ -896,44 +935,100 @@ function renderMentor(){
       return `<g><title>${fmt(x.d)}: ${x.ci} of ${x.joined} checked in${x.dk===k ? ' (today, until 10 pm)' : ''}</title>
         <rect x="${bx}" y="${y(0) - Math.max(h, x.ci ? 2 : 0)}" width="${bw-6}" height="${Math.max(h, x.ci ? 2 : 0)}" rx="3" class="${x.dk===k ? 'bar today' : 'bar'}"/>
         <rect x="${bx-2}" y="${padT}" width="${bw-2}" height="${H-padT-padB}" fill="transparent"/>
-        ${i % 2 === 1 || x.dk===k ? `<text x="${bx + (bw-6)/2}" y="${H-8}" class="ax" text-anchor="middle">${x.dk===k ? 'Today' : x.d.getDate()+' '+MON[x.d.getMonth()]}</text>` : ''}</g>`; }).join('')}
+        ${(13-i) % 3 === 0 && x.dk!==k || x.dk===k ? `<text x="${bx + (bw-6)/2}" y="${H-8}" class="ax" text-anchor="middle">${x.dk===k ? 'Today' : x.d.getDate()+' '+MON[x.d.getMonth()]}</text>` : ''}</g>`; }).join('')}
   </svg>`;
 
   const filters = [['all','All',n],['notin','Not checked in today',n-inToday],['risk','At risk',count('risk')],['slow','Slow',count('slow')],['stuck','Stuck this week',R.filter(r=>r.stuck.length).length],['noplan','Week not planned',count('noplan')],['paused','Paused',PAUSED.length]];
+  R.concat(PAUSED).forEach(r => { let c = 0, p = 0; for (let i = 1; i <= 7; i++){ const d = addDays(t,-i), dk = ymd(d); if (r.m.joined <= d){ p++; if (r.m.checkins.some(x => x.date===dk)) c++; } } r.d7 = c; r.p7 = p; });
+  const SYLB = [['s3','50% or more',50,1e9],['s2','25% to 50%',25,50],['s1','10% to 25%',10,25],['s0','Under 10%',0,10]];
+  const EXTRA = {in:'Checked in today', d7new:'Joined less than 7 days ago', after:'Finishing after boards'};
+  for (let i = 0; i <= 7; i++) EXTRA['d7_'+i] = i+' of last 7 days';
+  SYLB.forEach(b => EXTRA[b[0]] = 'Syllabus ' + b[1].toLowerCase());
+  const match = r => { const f = DASH.filter;
+    if (f==='all' || f==='paused') return true;
+    if (f==='notin') return !r.checkedToday;
+    if (f==='in') return r.checkedToday;
+    if (f==='stuck') return r.stuck.length;
+    if (f==='d7new') return r.p7 < 7;
+    if (f.startsWith('d7_')) return r.p7===7 && r.d7===+f.slice(3);
+    if (f==='after') return !r.f.done && r.f.after;
+    const b = SYLB.find(x => x[0]===f); if (b) return r.f.pct >= b[2] && r.f.pct < b[3];
+    return r.st===f; };
+  const hrow = (id, label, c, max, color) => `<button type="button" class="hrow ${DASH.filter===id?'on':''}" data-df="${id}" data-jump="1"><span>${label}</span><span class="hbar"><span style="width:${max ? Math.round(c/max*100) : 0}%;background:${color}"></span></span><b>${c}</b></button>`;
+  let panel = '';
+  if (DASH.panel==='today'){
+    panel = `<h2>Today's check-in</h2><p class="muted tiny">Tap a row to see those students.</p>${hrow('in','Checked in',inToday,n,'var(--good)')}${hrow('notin','Not yet',n-inToday,n,'var(--bad)')}`;
+  } else if (DASH.panel==='rate'){
+    const full = R.filter(r => r.p7===7), cnt = i => full.filter(r => r.d7===i).length, mx = Math.max(1, n);
+    panel = `<h2>How many days each student checked in (last 7 days)</h2><p class="muted tiny">Today is not counted. Tap a row to see those students.</p>`
+      + [7,6,5,4,3,2,1,0].map(i => hrow('d7_'+i, i+' of 7 days', cnt(i), mx, i >= 6 ? 'var(--good)' : i >= 4 ? 'var(--warn)' : 'var(--bad)')).join('')
+      + hrow('d7new','Joined less than 7 days ago', R.filter(r => r.p7 < 7).length, mx, 'var(--accent)');
+  } else if (DASH.panel==='syl'){
+    const cnt = b => R.filter(r => r.f.pct >= b[2] && r.f.pct < b[3]).length, mx = Math.max(1, n);
+    panel = `<h2>How much syllabus is done</h2><p class="muted tiny">Tap a row to see those students.</p>`
+      + SYLB.map(b => hrow(b[0], b[1], cnt(b), mx, 'var(--accent)')).join('')
+      + hrow('after','Finishing after boards', R.filter(r => !r.f.done && r.f.after).length, mx, 'var(--bad)');
+  }
   const order = {risk:0, noplan:1, slow:2, fresh:3, ok:4};
   const q = DASH.q.trim().toLowerCase();
-  const shown = (DASH.filter==='paused' ? PAUSED : R).filter(r => DASH.filter==='all' || DASH.filter==='paused' || (DASH.filter==='notin' ? !r.checkedToday : DASH.filter==='stuck' ? r.stuck.length : r.st===DASH.filter))
+  const shown = (DASH.filter==='paused' ? PAUSED : R).filter(match)
     .filter(r => !q || r.m.name.toLowerCase().includes(q) || (r.m.phone||'').includes(q))
     .sort((a,b) => order[a.st]-order[b.st] || b.streak-a.streak || a.m.name.localeCompare(b.m.name));
 
-  scr.innerHTML = `<div class="stack dash">
-    <div class="dash-head"><div><p class="muted" style="margin:0">Teacher dashboard · ${DAY[t.getDay()]} ${fmtY(t)}</p><h1>How the batch is doing</h1></div>
+  // Clean CRM look: greeting, four number cards with trends, student table + status donut + 14-day chart.
+  const hr = new Date().getHours(), greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+  const newThisWeek = R.filter(r => r.m.joined >= sundayOf(t)).length;
+  let pn = 0, pd = 0;
+  for (let i = 8; i <= 14; i++){ const d = addDays(t,-i), dk = ymd(d); R.forEach(r => { if (r.m.joined <= d){ pd++; if (r.m.checkins.some(c => c.date===dk)) pn++; } }); }
+  const ratePrev = pd ? Math.round(pn/pd*100) : null, delta = rate7!==null && ratePrev!==null ? rate7 - ratePrev : null;
+  const dated = R.filter(r => r.f.date && !r.f.after), avgFinish = dated.length ? new Date(dated.reduce((x,r)=>x+r.f.date.getTime(),0)/dated.length) : null;
+  const spark = days.slice(-7), sMax = Math.max(1, ...spark.map(x => x.ci));
+  const sparkPts = spark.map((x,i) => `${(i*150/6).toFixed(1)},${(26 - x.ci/sMax*22).toFixed(1)}`).join(' ');
+  const last = spark[spark.length-1];
+  const segs = [['ok','On track','var(--good)'],['slow','Slow','var(--warn)'],['risk','At risk','var(--bad)'],['fresh','New','var(--accent)'],['noplan','Week not planned','var(--muted)']].map(([id,l,c]) => ({id,l,c,v:count(id)}));
+  const tot = Math.max(1, segs.reduce((x,g)=>x+g.v,0));
+  let acc = 0;
+  const donut = `<svg width="132" height="132" viewBox="0 0 42 42" role="img" aria-label="Status of the batch">
+    <circle cx="21" cy="21" r="15.915" fill="none" stroke="var(--rule)" stroke-width="6"/>
+    ${segs.filter(g => g.v).map(g => { const len = g.v/tot*100, gap = segs.filter(x=>x.v).length > 1 ? .8 : 0, el = `<circle cx="21" cy="21" r="15.915" fill="none" stroke="${g.c}" stroke-width="6" stroke-dasharray="${Math.max(len-gap,0)} ${100-Math.max(len-gap,0)}" stroke-dashoffset="${25-acc}"><title>${g.l}: ${g.v}</title></circle>`; acc += len; return el; }).join('')}
+    <text x="21" y="22.5" text-anchor="middle" class="donut-n">${n}</text></svg>`;
+  const initials = nm => nm.replace(/\(.*\)/,'').trim().split(/\s+/).slice(0,2).map(w => w[0]||'').join('').toUpperCase();
+
+  scr.innerHTML = `<div class="stack dash crm">
+    <div class="dash-head"><div><h1>${greet}, Mahendra Sir</h1><p class="muted" style="margin:2px 0 0">${DAY[t.getDay()]} ${fmtY(t)} · check-ins ${hr < 22 ? 'open till 10 pm' : 'closed for today'}</p></div>
       <button class="btn small" type="button" id="dRefresh">Refresh</button></div>
     <div class="kpis">
-      <div class="kpi"><span>Students joined</span><b>${n}</b></div>
-      <div class="kpi"><span>Checked in today</span><b>${inToday}<small>/${n}</small></b><em>${t.getHours() < 22 ? 'open till 10 pm' : 'day closed'}</em></div>
-      <div class="kpi"><span>Check-in rate, last 7 days</span><b>${rate7===null ? '–' : rate7+'%'}</b></div>
-      <div class="kpi ${attention ? 'warnk' : ''}"><span>Need your attention</span><b>${attention}</b><em>at risk or week not planned</em></div>
+      <button type="button" class="kpi kbtn ${DASH.filter==='all' && !DASH.panel ? '' : ''}" data-kpi="all"><span>Students</span><b>${n}</b><em class="up">${newThisWeek ? '+'+newThisWeek+' this week' : 'no new this week'}</em><i class="khint">See all ›</i></button>
+      <button type="button" class="kpi kbtn ${DASH.panel==='today'?'on':''}" data-kpi="today" aria-expanded="${DASH.panel==='today'}"><span>Checked in today</span><b>${inToday}<small> / ${n}</small></b>
+        <svg width="100%" height="30" viewBox="0 -2 156 32" preserveAspectRatio="none" class="spark" aria-hidden="true"><polyline points="${sparkPts}"/><circle cx="150" cy="${(26 - last.ci/sMax*22).toFixed(1)}" r="3"/></svg><i class="khint">${DASH.panel==='today' ? 'Close ▴' : 'Who? ▾'}</i></button>
+      <button type="button" class="kpi kbtn ${DASH.panel==='rate'?'on':''}" data-kpi="rate" aria-expanded="${DASH.panel==='rate'}"><span>7-day check-in rate</span><b>${rate7===null ? '–' : rate7+'%'}</b><em class="${delta===null ? '' : delta >= 0 ? 'up' : 'down'}">${delta===null ? 'first week' : (delta >= 0 ? '+' : '−') + Math.abs(delta) + '% vs last week'}</em><i class="khint">${DASH.panel==='rate' ? 'Close ▴' : '7 of 7, 6 of 7… ▾'}</i></button>
+      <button type="button" class="kpi kbtn ${DASH.panel==='syl'?'on':''}" data-kpi="syl" aria-expanded="${DASH.panel==='syl'}"><span>Avg syllabus done</span><b>${avgSyl}%</b><em>${avgFinish ? 'On pace for ' + fmt(avgFinish) : ''}</em><i class="khint">${DASH.panel==='syl' ? 'Close ▴' : 'Break up ▾'}</i></button>
     </div>
-    <section class="card"><h2>Check-ins per day</h2><p class="muted tiny">Bar = how many students checked in that day. Hover or tap a bar for the exact number.</p>${chart}
-      <p class="muted tiny">Average syllabus done: <b>${avgSyl}%</b></p></section>
-    <section class="card">
-      <div class="dash-head"><h2>Students</h2><input class="big" type="search" id="dSearch" placeholder="Search name or number" value="${esc(DASH.q)}" style="max-width:260px"></div>
-      <div class="chips" role="group" aria-label="Filter students">${filters.map(([id,l,c]) => `<button type="button" class="fchip ${DASH.filter===id?'on':''}" data-df="${id}">${l} <b>${c}</b></button>`).join('')}</div>
-      <div class="srows">
-        <div class="srow shead" aria-hidden="true"><span>Student</span><span>Last check-in</span><span>Tasks this week</span><span>Syllabus</span><span>Finishes</span><span>Status</span></div>
-        ${shown.map(r => { const s = STATUS_INFO[r.st], open = DASH.open===r.m.phone;
-          return `<button type="button" class="srow ${open?'open':''}" data-open="${esc(r.m.phone)}" aria-expanded="${open}">
-            <span class="nm"><b>${esc(r.m.name)}</b><small class="mono">${esc(r.m.phone)}</small></span>
-            <span><i class="lbl-m">Last check-in </i>${r.lastTxt}${r.streak>=2 ? ` <em class="late">· missed ${r.streak}</em>` : ''}</span>
-            <span><i class="lbl-m">Tasks </i>${r.totalW ? r.doneW+'/'+r.totalW : '–'}</span>
-            <span><i class="lbl-m">Syllabus </i>${r.f.pct}%</span>
-            <span><i class="lbl-m">Finishes </i>${r.f.done ? 'Done' : r.f.none ? '–' : r.f.after ? '<em class="late">After boards</em>' : `<span class="${r.f.late?'late':''}">${fmt(r.f.date)}</span>`}</span>
-            <span>${isPaused(r) ? '<span class="stchip st-noplan">⏸ Paused</span>' : `<span class="stchip ${s.cls}">${s.icon} ${s.label}</span>`}${r.stuck.length ? ' <span class="stchip st-stuck">Stuck</span>' : ''}</span>
-          </button>${open ? studentDetail(r) : ''}`; }).join('') || '<p class="muted">No students in this group.</p>'}
+    ${panel ? `<section class="card kpanel">${panel}</section>` : ''}
+    <div class="crm-row">
+      <section class="card crm-table">
+        <div class="dash-head"><h2>Students</h2><input class="big" type="search" id="dSearch" placeholder="Search name or number" value="${esc(DASH.q)}" style="max-width:240px"></div>
+        <div class="chips" role="group" aria-label="Filter students">${filters.map(([id,l,c]) => `<button type="button" class="fchip ${DASH.filter===id?'on':''}" data-df="${id}">${l} <b>${c}</b></button>`).join('')}${EXTRA[DASH.filter] ? `<button type="button" class="fchip on" data-df="all" aria-label="Clear filter">${EXTRA[DASH.filter]} <b>${shown.length}</b> ✕</button>` : ''}</div>
+        <div class="srows">
+          <div class="srow shead" aria-hidden="true"><span>Student</span><span>Last check-in</span><span>Tasks this week</span><span>Syllabus</span><span>Finishes</span><span>Status</span></div>
+          ${shown.map(r => { const st = STATUS_INFO[r.st], open = DASH.open===r.m.phone, paused = isPaused(r);
+            return `<button type="button" class="srow ${open?'open':''}" data-open="${esc(r.m.phone)}" aria-expanded="${open}">
+              <span class="nm"><span class="av av-${paused ? 'noplan' : r.st}" aria-hidden="true">${esc(initials(r.m.name))}</span><span class="nm-t"><b>${esc(r.m.name)}</b><small class="mono">${esc(r.m.phone)}</small></span></span>
+              <span><i class="lbl-m">Last check-in </i>${r.lastTxt}${r.streak>=2 ? ` <em class="late">· missed ${r.streak}</em>` : ''}<small class="muted d7">${r.d7} of last ${r.p7} days</small></span>
+              <span><i class="lbl-m">Tasks </i>${r.totalW ? r.doneW+'/'+r.totalW : '–'}</span>
+              <span class="syl"><i class="lbl-m">Syllabus </i><span class="pbar" aria-hidden="true"><span style="width:${Math.min(100, r.f.pct)}%"></span></span>${r.f.pct}%</span>
+              <span><i class="lbl-m">Finishes </i>${r.f.done ? 'Done' : r.f.none ? '–' : r.f.after ? '<em class="late">After boards</em>' : `<span class="${r.f.late?'late':''}">${fmt(r.f.date)}</span>`}</span>
+              <span>${paused ? '<span class="stchip st-noplan">⏸ Paused</span>' : `<span class="stchip ${st.cls}">${st.label}</span>`}${r.stuck.length ? ' <span class="stchip st-stuck">Stuck</span>' : ''}</span>
+            </button>${open ? studentDetail(r) : ''}`; }).join('') || '<p class="muted">No students in this group.</p>'}
+        </div>
+        <p class="muted tiny">At risk = missed 3+ days, under 40% of last week's work, or won't finish before boards. Slow = missed 2 days, under 70% of work, or finishing after 30 Nov. New = joined in the last 3 days.</p>
+      </section>
+      <div class="crm-side">
+        <section class="card"><h2>Status of the batch</h2>
+          <div class="donut">${donut}<div class="leg">${segs.map(g => `<button type="button" class="leg-i" data-df="${g.id}"><i style="background:${g.c}"></i>${g.l} <b>${g.v}</b></button>`).join('')}</div></div></section>
+        <section class="card"><h2>Check-ins, last 14 days</h2>${chart}</section>
       </div>
-      <p class="muted tiny">Status: <b>At risk</b> = missed 3+ days, or less than 40% of last week's work, or won't finish before boards. <b>Slow</b> = missed 2 days, under 70% of work, or finishing after 30 Nov. <b>New</b> = joined in the last 3 days.</p>
-    </section>
+    </div>
     <details class="card"><summary><h2 style="display:inline">Weekly parent messages</h2></summary>
       <p class="muted tiny">Nothing is sent automatically. Pick the language, add your line if you want, then tap "WhatsApp par bhejo" and press Send in WhatsApp.</p>
       ${MENTOR.map((m,i) => { const lang = getLang(m.phone);
@@ -949,7 +1044,14 @@ function renderMentor(){
   on('dRefresh', () => openMentor(MENTOR_KEY));
   const search = document.getElementById('dSearch');
   search.addEventListener('input', () => { DASH.q = search.value; clearTimeout(DASH.t); DASH.t = setTimeout(() => { renderMentor(); const s2 = document.getElementById('dSearch'); s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }, 250); });
-  scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; renderMentor(); }));
+  scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; DASH.jump = !!b.dataset.jump; renderMentor(); }));
+  scr.querySelectorAll('[data-kpi]').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.kpi;
+    if (k==='all'){ DASH.filter = 'all'; DASH.panel = null; DASH.jump = true; }
+    else DASH.panel = DASH.panel===k ? null : k;
+    renderMentor();
+  }));
+  if (DASH.jump){ DASH.jump = false; const tb = scr.querySelector('.crm-table'); if (tb) tb.scrollIntoView({behavior:'smooth', block:'start'}); }
   scr.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => { DASH.open = DASH.open===b.dataset.open ? null : b.dataset.open; renderMentor(); }));
   scr.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => {
     const ph = b.dataset.ph, act = b.dataset.act, err = document.getElementById('adm_'+ph);
@@ -1009,7 +1111,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791822990615';
+const BUILD = '1791825611847';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
