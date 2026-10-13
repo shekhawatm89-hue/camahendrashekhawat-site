@@ -218,6 +218,15 @@ body:has(.dash) header.bar{max-width:1040px}
 .leg-i i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .leg-i b{margin-left:auto;padding-left:10px}
 /* Compact layout */
+.ch-line{display:flex;gap:6px;align-items:center} .ch-line select{flex:1;min-width:0}
+.ci-line{display:grid;grid-template-columns:minmax(0,1fr) 72px auto;grid-template-areas:"sub h u" "chap chap chap";gap:6px;align-items:center;padding:8px 0;border-top:1px solid var(--rule)}
+.ci-line .ci-sub{grid-area:sub} .ci-line .ci-h{grid-area:h} .ci-line .tiny{grid-area:u} .ci-line .ci-chap{grid-area:chap}
+.ci-line select{min-width:0;padding-left:8px;padding-right:4px}
+.two-btn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.syl-sub summary{display:flex;align-items:center;gap:10px;cursor:pointer;min-height:40px;flex-wrap:wrap}
+.syl-sub summary .muted{margin-left:auto}
+.syl-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--rule);font-size:.93rem}
+.syl-row span:last-child{white-space:nowrap}
 .badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--bad);color:var(--sheet);font-size:.75rem;font-weight:800}
 .prob{border-top:1px solid var(--rule);padding:12px 0;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .prob.new{background:var(--accent-soft);margin:0 -10px;padding:12px 10px;border-radius:10px}
@@ -397,7 +406,10 @@ const SPLIT = {accountsShare:.5, eco:.6, bs:.4};
 const ACT = {lecture:'Lecture', notes:'Notes', practice:'Questions', revise:'Revision'};
 const PER_Q = (subject, kind) => /^Account/.test(subject) ? 10 : subject==='Quantitative Aptitude' ? 3 : subject==='Business Economics' ? 2 : (subject==='Economics' && kind==='num' ? 6 : 8);
 const CHAP = {}; SYL.forEach(c => CHAP[c.chapter] = c);
-const itemMinutes = it => it.activity==='questions' ? (+it.qty||0)*PER_Q(it.subject,(CHAP[it.chapter]||{}).kind) : it.activity==='answers' ? (+it.qty||0)*8 : (+it.qty||0);
+// A slot can hold several chapters, kept as "Chapter A + Chapter B"; its time is shared equally between them.
+const CH_SEP = ' + ';
+const chs = it => String(it.chapter || '').split(CH_SEP).filter(Boolean);
+const itemMinutes = it => it.activity==='questions' ? (+it.qty||0)*PER_Q(it.subject,(CHAP[chs(it)[0]]||{}).kind) : it.activity==='answers' ? (+it.qty||0)*8 : (+it.qty||0);
 const doneFrac = it => it.done===true ? 1 : it.done==='partly' ? .5 : 0;
 const fmtH = m => { const h = Math.round(m/30)/2; return (h%1 ? h : h.toFixed(0)) + ' h'; };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
@@ -414,7 +426,7 @@ function buildModel(state){
   const a = state.profile.answers || {}, t = today0(), j0 = D(state.profile.joined) || t, joined = j0 > t ? t : j0;
   const marks = {}; SUBJECTS.forEach(s => marks[s] = pctOf((a.latest||{})[s]) ?? 65);
   const items = (state.items||[]).map(it => Object.assign({}, it, {d:D(it.date), min:itemMinutes(it)}));
-  const doneMin = {}; items.forEach(it => { if (it.chapter) doneMin[it.chapter] = (doneMin[it.chapter]||0) + it.min*doneFrac(it); });
+  const doneMin = {}; items.forEach(it => { const cs = chs(it); cs.forEach(ch => doneMin[ch] = (doneMin[ch]||0) + it.min*doneFrac(it)/cs.length); });
   const chapters = SUBJECTS.flatMap(s => chaptersOf(s, a.accOption).map(c => {
     const label = ((a['ch_'+s])||{})[c.chapter] || 'Not started', f = STATUS_FACTOR[label] ?? 1;
     const total = Math.round(c.base*60*f*(marks[s] < 60 ? 1.15 : 1)), done = doneMin[c.chapter]||0;
@@ -493,7 +505,7 @@ function pickContent(m, subject, mins, remLeft){
 // Fills every empty day from `from` to the end of the week with ready slots.
 function suggestDays(m, days, existing){
   const remLeft = {}; m.chapters.forEach(c => remLeft[c.chapter] = c.rem);
-  existing.filter(i => !i.done && i.chapter).forEach(i => remLeft[i.chapter] = (remLeft[i.chapter]||0) - itemMinutes(i));
+  existing.filter(i => !i.done && i.chapter).forEach(i => { const cs = chs(i); cs.forEach(ch => remLeft[ch] = (remLeft[ch]||0) - itemMinutes(i)/cs.length); });
   const out = [];
   days.forEach(d => slotsFor(m, d, remLeft).forEach(s => {
     const c = pickContent(m, s.subject, s.mins, remLeft);
@@ -591,7 +603,7 @@ function render(){
   r.innerHTML = `<button class="linkbtn" type="button" id="fbOpen">Report a problem</button>${ST && !V.screen.startsWith('mentor') ? ' · <button class="linkbtn" type="button" id="logout">Log out</button>' : ''}`;
   on('fbOpen', openFeedback);
   on('logout', () => { store.set('cafc.token', null); store.set('cafc.state', null); TOKEN = null; ST = null; M = null; go('gate'); });
-  ({gate:renderGate, form:renderForm, home:renderHome, week:renderWeek, checkin:renderCheckin, ciDone:renderCiDone, mentor:renderMentor}[V.screen] || renderGate)();
+  ({gate:renderGate, form:renderForm, home:renderHome, week:renderWeek, syl:renderSyl, checkin:renderCheckin, ciDone:renderCiDone, mentor:renderMentor}[V.screen] || renderGate)();
 }
 function openFeedback(){
   if (document.getElementById('fb')) return;
@@ -757,12 +769,25 @@ function renderHome(){
     ${weekEmpty ? `<div class="banner"><span><b>Plan your week.</b> ${ttMode()==='own' ? 'Add your slots for each day.' : 'Your time slots are ready.'}</span><button class="btn primary small" type="button" id="toWeek1">Fill my week</button></div>` : ''}
     <section class="card"><h2>Today</h2>${its.length ? its.map(i => slotRow(i)).join('') : '<p class="muted">Nothing planned for today.</p>'}</section>
     ${checked ? '<p class="done-line">✓ Today\'s check-in is done</p>' : `<button class="btn primary big wide" type="button" id="ciBtn">Today's check-in</button>`}
-    <button class="btn big wide" type="button" id="toWeek">My week</button>
+    <div class="two-btn"><button class="btn big" type="button" id="toWeek">My week</button><button class="btn big" type="button" id="toSyl">My syllabus</button></div>
     <p class="muted tiny">Tip: add this page to your home screen (browser menu → "Add to Home screen") so it opens in one tap.</p>
   </div>`;
   on('ciBtn', () => go('checkin'));
   on('toWeek', () => go('week'));
   on('toWeek1', () => go('week'));
+  on('toSyl', () => go('syl'));
+}
+// My syllabus: each subject is one closed line (done % and hours left); tap to see its chapters.
+function renderSyl(){
+  if (!ST) return go('gate');
+  const f = finishInfo(M);
+  scr.innerHTML = `<div class="narrow stack"><div><h1>My syllabus</h1><p class="muted" style="margin:0">${f.pct}% done · ${esc(finishText(f))}</p></div>
+    ${SUBJECTS.map(sub => { const cs = M.chapters.filter(c => c.subject===sub), tot = cs.reduce((x,c)=>x+c.total,0), rem = cs.reduce((x,c)=>x+Math.max(0,c.rem),0);
+      return `<details class="card syl-sub"><summary><span class="sub ${subCls(sub)}">${esc(short(sub))}</span><b>${tot ? Math.round((1-rem/tot)*100) : 100}% done</b><span class="muted tiny">~${fmtH(rem)} left</span></summary>
+        ${cs.map(c => `<div class="syl-row"><span>${esc(c.chapter)}</span><span class="${c.rem > 0 ? 'muted' : 'st-done'}">${c.rem > 0 ? '~' + fmtH(Math.max(30, c.rem)) : '✓ Done'}</span></div>`).join('')}</details>`; }).join('')}
+    <p class="muted tiny">Hours left are an estimate from your chapter status and the work you have ticked.</p>
+    <button class="btn big wide" type="button" id="sylBack">Back</button></div>`;
+  on('sylBack', () => go('home'));
 }
 
 // =====================================================================
@@ -775,7 +800,7 @@ const ttMode = () => store.get('cafc.tt.'+M.phone) || (M.a.ttMode===TT_OWN ? 'ow
 let WEEK = null, saveTimer = null;
 function weekRemLeft(){
   const remLeft = {}; M.chapters.forEach(c => remLeft[c.chapter] = c.rem);
-  WEEK.items.filter(i => !i.done && i.chapter).forEach(i => remLeft[i.chapter] = (remLeft[i.chapter]||0) - itemMinutes(i));
+  WEEK.items.filter(i => !i.done && i.chapter).forEach(i => { const cs = chs(i); cs.forEach(ch => remLeft[ch] = (remLeft[ch]||0) - itemMinutes(i)/cs.length); });
   return remLeft;
 }
 function renderWeek(){
@@ -809,7 +834,7 @@ function renderWeek(){
       const sum = di.length ? di.map(i => `<span class="sub ${subCls(i.subject)}">${esc(short(i.subject))} ${fmtH(itemMinutes(i))}</span>`).join(' ') + (past ? ` <span class="muted tiny">· ${di.filter(i => i.done===true).length}/${di.length} done</span>` : '') : '<span class="muted tiny">No slot yet</span>';
       return `<section class="card day-card ${k===ymd(M.t)?'is-today':''} ${open?'open':''}"><button type="button" class="day-h" data-day="${k}" aria-expanded="${open}"><span class="day-t">${DAY[d.getDay()]} ${fmt(d)}${k===ymd(M.t)?' · today':''}${d.getDay()===0 && mode==='sir'?' · catch-up':''}</span>${open ? '' : `<span class="day-sum">${sum}</span>`}<span class="chev" aria-hidden="true">${open?'▴':'▾'}</span></button>
         ${open ? `${di.length ? di.map(it => past ? slotRow(it) : slotEditor(it, mode)).join('') : '<p class="muted">No slot yet.</p>'}
-        ${!past && mode==='own' ? (V.addDay===k ? slotAdder(k) : `<button class="linkbtn" type="button" data-add="${k}">+ Add slot</button>`) : ''}` : ''}</section>`; }).join('')}
+        ${!past ? (V.addDay===k ? slotAdder(k) : `<button class="linkbtn" type="button" data-add="${k}">+ Add slot</button>`) : ''}` : ''}</section>`; }).join('')}
     <div class="savebar" role="status"><span id="saveMsg">Changes save automatically</span><button class="btn small" type="button" id="doneBtn">Done</button></div>
   </div>`;
   on('doneBtn', () => go('home', {first:false, addDay:null, editHrs:false, openDay:null}));
@@ -841,6 +866,16 @@ function renderWeek(){
     V.addDay = null; renderWeek();
   }));
   scr.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => { V.addDay = b.dataset.add; renderWeek(); }));
+  scr.querySelectorAll('[data-addch]').forEach(b => b.addEventListener('click', () => {
+    const it = WEEK.items.find(i => i.id===b.dataset.addch); if (!it) return;
+    const cs = chs(it), pool = it.subject==='All' ? M.chapters : M.chapters.filter(c => c.subject===it.subject);
+    const next = pool.find(c => c.rem > 0 && !cs.includes(c.chapter)) || pool.find(c => !cs.includes(c.chapter));
+    if (next){ it.chapter = cs.concat(next.chapter).join(CH_SEP); it.sugg = false; saveWeek(); renderWeek(); }
+  }));
+  scr.querySelectorAll('[data-rmch]').forEach(b => b.addEventListener('click', () => {
+    const it = WEEK.items.find(i => i.id===b.dataset.rmch); if (!it) return;
+    const cs = chs(it); cs.splice(+b.dataset.j, 1); it.chapter = cs.join(CH_SEP); it.sugg = false; saveWeek(); renderWeek();
+  }));
   scr.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => { WEEK.items = WEEK.items.filter(i => i.id!==b.dataset.rm); saveWeek(); renderWeek(); }));
   on('addCancel', () => { V.addDay = null; renderWeek(); });
   on('addOk', () => {
@@ -851,7 +886,7 @@ function renderWeek(){
   });
   scr.querySelectorAll('[data-slot]').forEach(el => el.addEventListener('change', () => {
     const it = WEEK.items.find(i => i.id===el.dataset.slot); if (!it) return;
-    if (el.dataset.k==='chapter') it.chapter = el.value; else if (el.dataset.k==='hours') it.qty = Math.round(+el.value*60); else it.activity = el.value;
+    if (el.dataset.k==='chapter'){ const cs = chs(it); cs[+el.dataset.j || 0] = el.value; it.chapter = [...new Set(cs.filter(Boolean))].join(CH_SEP); } else if (el.dataset.k==='hours') it.qty = Math.round(+el.value*60); else it.activity = el.value;
     it.sugg = false; saveWeek(); renderWeek();
   }));
 }
@@ -862,13 +897,16 @@ function slotAdder(k){
 }
 function slotEditor(it, mode){
   const pool = it.subject==='All' ? M.chapters : M.chapters.filter(c => c.subject===it.subject);
-  const opts = pool.map(c => `<option value="${esc(c.chapter)}" ${c.chapter===it.chapter?'selected':''}>${it.subject==='All' ? short(c.subject)+': ' : ''}${esc(c.chapter)}${c.rem ? '' : ' ✓'}</option>`).join('');
+  const left = c => c.rem > 0 ? ` (~${fmtH(Math.max(30, c.rem))} left)` : ' ✓';
+  const opts = sel => pool.map(c => `<option value="${esc(c.chapter)}" ${c.chapter===sel?'selected':''}>${it.subject==='All' ? short(c.subject)+': ' : ''}${esc(c.chapter)}${left(c)}</option>`).join('');
+  const cur = chs(it).length ? chs(it) : [''];
   const h = String(Math.round(itemMinutes(it)/30)/2);
-  const hoursCtl = mode==='own'
+  const hoursCtl = (mode==='own' || !it.sugg)
     ? `<span class="slot-ctl"><label class="sr-only" for="h_${it.id}">Hours</label><select id="h_${it.id}" class="hsel" data-slot="${it.id}" data-k="hours">${hrs(.5,4).map(x => `<option ${x===h?'selected':''}>${x}</option>`).join('')}</select> h <button class="x" type="button" data-rm="${it.id}" aria-label="Remove this slot">✕</button></span>`
     : `<span class="mono">${fmtH(itemMinutes(it))}</span>`;
   return `<div class="slot ${subCls(it.subject)}"><div class="slot-top"><span class="sub ${subCls(it.subject)}">${esc(short(it.subject))}</span>${hoursCtl}</div>
-    <label class="sr-only" for="c_${it.id}">Chapter</label><select id="c_${it.id}" class="big" data-slot="${it.id}" data-k="chapter">${opts}</select>
+    ${cur.map((ch, j) => `<div class="ch-line"><label class="sr-only" for="c_${it.id}_${j}">Chapter ${j+1}</label><select id="c_${it.id}_${j}" class="big" data-slot="${it.id}" data-k="chapter" data-j="${j}">${opts(ch)}</select>${cur.length > 1 ? `<button class="x" type="button" data-rmch="${it.id}" data-j="${j}" aria-label="Remove this chapter">✕</button>` : ''}</div>`).join('')}
+    ${cur.length < 4 && pool.length > cur.length ? `<button class="linkbtn tiny" type="button" data-addch="${it.id}">+ Add another chapter</button>` : ''}
     ${segGroup('a_'+it.id, Object.values(ACT), o => ACT[it.activity]===o, `data-slot="${it.id}" data-k="activity"`).replace(/value="([^"]+)"/g, (m0, lab) => `value="${Object.keys(ACT).find(k => ACT[k]===lab) || lab}"`)}</div>`;
 }
 function saveWeek(){
@@ -883,45 +921,78 @@ function saveWeek(){
 // =====================================================================
 // Nightly check-in: 3 questions, all taps
 // =====================================================================
+const NO_STUDY = ['School test / exam', 'Unwell', 'Function / travel', 'Too tired', 'Other'];
 function renderCheckin(){
   if (!ST) return go('gate');
   const k = ymd(M.t), its = M.items.filter(i => i.date===k);
   const planned = its.reduce((x,i)=>x+i.min,0)/60;
-  const S = {status:{}, stuck:'No'};
+  const S = {status:{}, stuck:'No', reason:''};
+  // Study lines start from today's slots (one per subject); the student can change hours or add a subject.
+  const firstBy = {}; its.forEach(i => { const sub = i.subject==='All' ? (CHAP[chs(i)[0]]||{}).subject || SUBJECTS[0] : i.subject; if (!firstBy[sub]) firstBy[sub] = {subject:sub, chapter:chs(i)[0]||'', h:0}; firstBy[sub].h += i.min/60; });
+  S.rows = Object.values(firstBy).map(r => Object.assign(r, {h: Math.round(r.h*2)/2}));
+  if (!S.rows.length) S.rows = [{subject:SUBJECTS[0], chapter:'', h:0}];
   scr.innerHTML = `<div class="narrow"><form class="card" id="ciForm" novalidate>
     <h1>Today's check-in</h1><p class="muted">3 taps. Do it before you sleep, even if it is after 12 at night.</p>
     <div class="field"><div class="lbl">1. Today's targets</div>
       ${its.length ? its.map(it => `<div class="ci-row"><div><b>${esc(short(it.subject))}</b> · ${esc(it.chapter||'—')}</div>${chipGroup('st_'+it.id, ['Done','Partly','Not done'], 'radio', () => false, `data-st="${it.id}"`)}</div>`).join('') : '<p class="muted">Nothing was planned today.</p>'}</div>
-    <div class="field"><label class="lbl" for="ci_ch">2. Chapter you studied most</label>
-      <select id="ci_ch" class="big">${M.chapters.map(c => `<option ${its[0] && c.chapter===its[0].chapter ? 'selected':''}>${esc(c.chapter)}</option>`).join('')}<option value="None">Did not study</option></select>
-      <label class="lbl" for="ci_h" style="margin-top:8px">Hours studied</label>
-      <select id="ci_h" class="big">${hrs(0,10).map(h => `<option ${+h===Math.round(planned*2)/2?'selected':''}>${h}</option>`).join('')}</select></div>
+    <div class="field"><div class="lbl">2. What did you study today?</div><p class="fhelp">One line for each subject. Set hours to 0 for anything you did not study.</p>
+      <div id="ci_rows"></div><button class="linkbtn" type="button" id="ciAddRow">+ Add another subject</button>
+      <div id="ci_why" hidden><div class="lbl" style="margin-top:10px">Why could you not study today?</div>${chipGroup('ci_reason', NO_STUDY, 'radio', () => false, '')}
+        <input id="ci_rnote" class="big" type="text" maxlength="120" placeholder="Optional: a few words"></div></div>
     <div class="field"><div class="lbl">3. Stuck anywhere?</div>${chipGroup('ci_stuck', ['No','Yes'], 'radio', o => o==='No', '')}
       <input id="ci_note" class="big" type="text" maxlength="120" placeholder="Optional: where? (one line)" hidden></div>
-    <div class="field"><label class="lbl" for="ci_p">📷 Photo of your work (optional)</label><input id="ci_p" type="file" accept="image/*" multiple></div>
+    <div class="field"><label class="lbl" for="ci_p">📷 Photo or PDF of your work (optional)</label><input id="ci_p" type="file" accept="image/*,application/pdf" multiple><p class="fhelp">Up to 3 files. A PDF can be up to 4 MB.</p></div>
     <p class="err" id="ci_err" hidden></p>
     <div class="form-nav"><button class="btn big" type="button" id="ciBack">Back</button><button class="btn primary big" type="submit" id="ciSend">Submit</button></div>
   </form></div>`;
-  scr.querySelectorAll('input[name^="st_"]').forEach(r => r.addEventListener('change', () => S.status[r.dataset.st] = r.value));
+  scr.querySelectorAll('input[name^="st_"]').forEach(r => r.addEventListener('change', () => { S.status[r.dataset.st] = r.value; const w = document.getElementById('ci_why'); if (w) w.hidden = !noStudy(); }));
+  const rowsHTML = () => S.rows.map((r, j) => {
+    const pool = M.chapters.filter(c => c.subject===r.subject);
+    return `<div class="ci-line"><select class="big ci-sub" data-row="${j}" data-k="subject" aria-label="Subject">${SUBJECTS.map(x => `<option value="${esc(x)}" ${x===r.subject?'selected':''}>${esc(short(x))}</option>`).join('')}</select>
+      <select class="big ci-chap" data-row="${j}" data-k="chapter" aria-label="Chapter">${pool.map(c => `<option ${c.chapter===r.chapter?'selected':''}>${esc(c.chapter)}</option>`).join('')}</select>
+      <select class="hsel ci-h" data-row="${j}" data-k="h" aria-label="Hours">${hrs(0,10).map(h => `<option ${+h===r.h?'selected':''}>${h}</option>`).join('')}</select><span class="muted tiny">h</span></div>`; }).join('');
+  const noStudy = () => S.rows.every(r => !(+r.h)) || (its.length && its.every(i => S.status[i.id]==='Not done'));
+  const drawRows = () => {
+    document.getElementById('ci_rows').innerHTML = rowsHTML();
+    document.getElementById('ci_why').hidden = !noStudy();
+    document.querySelectorAll('#ci_rows select').forEach(el => el.addEventListener('change', () => {
+      const r = S.rows[+el.dataset.row];
+      if (el.dataset.k==='subject'){ r.subject = el.value; r.chapter = (M.chapters.find(c => c.subject===r.subject && c.rem > 0) || M.chapters.find(c => c.subject===r.subject) || {}).chapter || ''; drawRows(); }
+      else if (el.dataset.k==='chapter') r.chapter = el.value;
+      else { r.h = +el.value; document.getElementById('ci_why').hidden = !noStudy(); }
+    }));
+  };
+  drawRows();
+  on('ciAddRow', () => { const used = S.rows.map(r => r.subject), sub = SUBJECTS.find(x => !used.includes(x)) || SUBJECTS[0];
+    S.rows.push({subject:sub, chapter:(M.chapters.find(c => c.subject===sub && c.rem > 0) || {}).chapter || '', h:1}); drawRows(); });
+  scr.querySelectorAll('input[name="ci_reason"]').forEach(r => r.addEventListener('change', () => S.reason = r.value));
   scr.querySelectorAll('input[name="ci_stuck"]').forEach(r => r.addEventListener('change', () => { S.stuck = r.value; document.getElementById('ci_note').hidden = r.value!=='Yes'; }));
   on('ciBack', () => go('home'));
   document.getElementById('ciForm').addEventListener('submit', async e => {
     e.preventDefault();
     const err = document.getElementById('ci_err');
     if (its.some(i => !S.status[i.id])){ err.textContent = 'Tap Done, Partly or Not done for each target.'; err.hidden = false; return; }
+    if (noStudy() && !S.reason){ err.textContent = 'Tap why you could not study today.'; err.hidden = false; return; }
     const map = {}; its.forEach(i => map[i.id] = S.status[i.id]==='Done' ? 'done' : S.status[i.id]==='Partly' ? 'partly' : 'not');
     const vals = Object.values(map), finished = !vals.length ? 'Nothing planned' : vals.every(v => v==='done') ? 'Done' : vals.every(v => v==='not') ? 'Not done' : 'Partly';
     const b = document.getElementById('ciSend'); b.disabled = true; b.textContent = 'Saving…';
     let photos = [];
-    try { photos = await readPhotos(document.getElementById('ci_p').files); } catch(x){ err.textContent = 'Could not read the photo. Try another one.'; err.hidden = false; b.disabled = false; b.textContent = 'Submit'; return; }
-    API('checkin', {token:TOKEN, date:k, status:map, photos, data:{hours:+document.getElementById('ci_h').value, finished, what:document.getElementById('ci_ch').value,
-        reason: S.stuck==='Yes' ? 'Stuck' : '', doubt: S.stuck==='Yes' ? document.getElementById('ci_note').value.trim() : ''}})
+    try { photos = await readPhotos(document.getElementById('ci_p').files); } catch(x){ err.textContent = x && x.message ? x.message : 'Could not read the photo. Try another one.'; err.hidden = false; b.disabled = false; b.textContent = 'Submit'; return; }
+    const studied = S.rows.filter(r => +r.h > 0), ns = noStudy(), rnote = (document.getElementById('ci_rnote')||{}).value || '';
+    const what = studied.length ? studied.map(r => `${short(r.subject)}: ${r.chapter} (${r.h} h)`).join('; ') : 'Did not study';
+    const doubt = [S.stuck==='Yes' ? document.getElementById('ci_note').value.trim() : '', ns && rnote.trim() ? 'Why no study: ' + rnote.trim() : ''].filter(Boolean).join(' | ');
+    API('checkin', {token:TOKEN, date:k, status:map, photos, data:{hours: studied.reduce((x,r)=>x+(+r.h),0), finished, what,
+        reason: S.stuck==='Yes' ? 'Stuck' : ns ? 'No study: ' + S.reason : '', doubt}})
       .then(r => { setState(r.state); go('ciDone', {ciFinished:finished}); })
       .catch(x => { err.textContent = 'Not saved: '+x.message; err.hidden = false; b.disabled = false; b.textContent = 'Submit'; });
   });
 }
 function readPhotos(files){
   return Promise.all([...files].slice(0,3).map(f => new Promise((res, rej) => {
+    if (f.type==='application/pdf' || /\.pdf$/i.test(f.name)){
+      if (f.size > 4*1024*1024) return rej(new Error('This PDF is bigger than 4 MB. Send a smaller one or a photo.'));
+      const fr = new FileReader(); fr.onload = () => res({name:f.name, type:'pdf', b64:String(fr.result).split(',')[1]}); fr.onerror = rej; fr.readAsDataURL(f); return;
+    }
     const img = new Image(), url = URL.createObjectURL(f);
     img.onload = () => { const s = Math.min(1, 1400/Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width*s); c.height = Math.round(img.height*s);
       c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res({name:f.name.replace(/\.[^.]+$/,'')+'.jpg', b64:c.toDataURL('image/jpeg',.72).split(',')[1]}); };
@@ -1056,6 +1127,7 @@ function studentRow(m){
   const streak = missedStreak(m), f = finishInfo(m), checkedToday = m.checkins.some(c => c.date===k);
   const ciDates = m.checkins.map(c => c.date).sort(), last = ciDates[ciDates.length-1];
   const stuck = m.checkins.filter(c => c.reason==='Stuck' && c.date>=ymd(from7)).sort((a,b)=>b.date.localeCompare(a.date));
+  const noStudy = m.checkins.filter(c => /^No study/.test(c.reason||'') && c.date>=ymd(from7)).sort((a,b)=>b.date.localeCompare(a.date));
   let st;
   if (!weekItems.length) st = 'noplan';
   else if (streak >= 3 || (days >= 7 && (f.after || (ratio7 !== null && ratio7 < .4)))) st = 'risk';
@@ -1063,7 +1135,7 @@ function studentRow(m){
   else if (streak === 2 || f.late || (ratio7 !== null && ratio7 < .7)) st = 'slow';
   else st = 'ok';
   const lastTxt = !last ? 'Never' : last===k ? 'Today' : last===ymd(addDays(t,-1)) ? 'Yesterday' : daysBetween(D(last), t) + ' days ago';
-  return {m, st, streak, f, checkedToday, lastTxt, doneW, totalW, stuck, days};
+  return {m, st, streak, f, checkedToday, lastTxt, doneW, totalW, stuck, noStudy, days};
 }
 let DASH = {filter:'all', q:'', open:null, panel:null, jump:false, to:{}, msgOpen:false, tab:'students'};
 function renderMentor(){
@@ -1255,6 +1327,7 @@ function studentDetail(r){
   return `<div class="sdetail">
     <div><b>Last 7 days</b><div class="dots7">${dots.join('')}</div></div>
     <div><b>Today</b>${todays.length ? todays.map(i => `<div class="tiny">${esc(short(i.subject))} · ${esc(i.chapter||'—')} · ${fmtH(i.min)}${i.done===true ? ' · <span class="st-done">Done</span>' : i.done==='partly' ? ' · <span class="st-partly">Partly</span>' : ''}</div>`).join('') : '<div class="tiny muted">No slots today</div>'}</div>
+    ${r.noStudy.length ? `<div><b>Why no study (7 days)</b>${r.noStudy.map(c => `<div class="tiny">${fmt(D(c.date))}: ${esc(c.reason.replace(/^No study: /,''))}${c.doubt ? ' · ' + esc(c.doubt.replace(/^.*Why no study: /,'')) : ''}</div>`).join('')}</div>` : ''}
     <div><b>Stuck notes (7 days)</b>${r.stuck.length ? r.stuck.map(c => `<div class="tiny">${fmt(D(c.date))}: ${esc(c.doubt || 'stuck, no note')}</div>`).join('') : '<div class="tiny muted">None</div>'}</div>
     ${m.phone && reminderKinds(r).length ? `<div class="remind"><b>Send reminder</b><div class="actions">${reminderKinds(r).map(k => `<a class="btn small primary" href="${esc(waLink(m.phone, reminderText(r,k)))}" target="_blank" rel="noopener">📲 ${REMIND_LABEL[k]}</a>`).join('')}</div></div>` : ''}
     <div class="actions">${m.phone ? `<a class="btn small" href="https://wa.me/91${esc(m.phone)}" target="_blank" rel="noopener">WhatsApp student</a>` : ''}${m.parentPhone ? `<a class="btn small" href="https://wa.me/91${esc(m.parentPhone)}" target="_blank" rel="noopener">WhatsApp parent</a>` : ''}</div>
@@ -1290,7 +1363,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791864568466';
+const BUILD = '1791867896630';
 if (REMOTE) {
   const checkUpdate = () => fetch('/cafc/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
