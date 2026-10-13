@@ -14,19 +14,19 @@
 :root{
   --paper:#f3f6fc; --sheet:#ffffff; --ink:#18264a; --muted:#5f6b86; --rule:#e1e7f2; --rule-strong:#c4cee2;
   --accent:#2445a8; --accent-ink:#ffffff; --accent-soft:#e7ecfa; --margin:#d4405a;
-  --acc:#2445a8; --acc-soft:#e6ebfa; --bs:#0f7a6c; --bs-soft:#dff3ef; --eco:#9a5506; --eco-soft:#fbeedc; --all:#5b4fb0; --all-soft:#ece9fb;
+  --acc:#2445a8; --acc-soft:#e6ebfa; --bs:#0f7a6c; --bs-soft:#dff3ef; --eco:#9a5506; --eco-soft:#fbeedc; --all:#5b4fb0; --all-soft:#ece9fb; --qa:#a3317a; --qa-soft:#f9e4f1;
   --good:#1d7a45; --good-soft:#e2f4e8; --warn:#8a5a00; --bad:#b4233c; --bad-soft:#fbe6ea;
   --font:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#0b1120; --sheet:#141c30; --ink:#e4e9f5; --muted:#9aa6c2; --rule:#25304a; --rule-strong:#3a4766;
   --accent:#93a9ff; --accent-ink:#0b1120; --accent-soft:#1e2a4d; --margin:#ff7d93;
-  --acc:#93a9ff; --acc-soft:#1e2a4d; --bs:#5fd0bd; --bs-soft:#123630; --eco:#f0b25c; --eco-soft:#3a2a12; --all:#b9b0ff; --all-soft:#272245;
+  --acc:#93a9ff; --acc-soft:#1e2a4d; --bs:#5fd0bd; --bs-soft:#123630; --eco:#f0b25c; --eco-soft:#3a2a12; --all:#b9b0ff; --all-soft:#272245; --qa:#f28cc8; --qa-soft:#3a1730;
   --good:#6fd697; --good-soft:#143323; --warn:#f2c065; --bad:#ff8fa2; --bad-soft:#3d1820; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#0b1120; --sheet:#141c30; --ink:#e4e9f5; --muted:#9aa6c2; --rule:#25304a; --rule-strong:#3a4766;
   --accent:#93a9ff; --accent-ink:#0b1120; --accent-soft:#1e2a4d; --margin:#ff7d93;
-  --acc:#93a9ff; --acc-soft:#1e2a4d; --bs:#5fd0bd; --bs-soft:#123630; --eco:#f0b25c; --eco-soft:#3a2a12; --all:#b9b0ff; --all-soft:#272245;
+  --acc:#93a9ff; --acc-soft:#1e2a4d; --bs:#5fd0bd; --bs-soft:#123630; --eco:#f0b25c; --eco-soft:#3a2a12; --all:#b9b0ff; --all-soft:#272245; --qa:#f28cc8; --qa-soft:#3a1730;
   --good:#6fd697; --good-soft:#143323; --warn:#f2c065; --bad:#ff8fa2; --bad-soft:#3d1820; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.45;margin:0}
@@ -91,12 +91,12 @@ input[type=text],input[type=tel],input[type=password],select{font:inherit;color:
 .loadbar{height:10px;background:var(--rule);border-radius:5px;overflow:hidden}
 .loadbar span{display:block;height:100%;background:var(--good)}
 .slot{border:1px solid var(--rule);border-left:5px solid var(--acc);border-radius:10px;padding:10px 12px;margin-top:10px;display:flex;flex-direction:column;gap:6px}
-.slot.sub-Business{border-left-color:var(--bs)} .slot.sub-Economics{border-left-color:var(--eco)} .slot.sub-All{border-left-color:var(--all)}
+.slot.sub-Business,.slot.sub-Law{border-left-color:var(--bs)} .slot.sub-QA{border-left-color:var(--qa)} .slot.sub-Economics{border-left-color:var(--eco)} .slot.sub-All{border-left-color:var(--all)}
 .slot-top{display:flex;justify-content:space-between;align-items:center}
 .slot-main{font-weight:700}
 .slot-sub{color:var(--muted);font-size:.93rem}
 .sub{font-size:.78rem;font-weight:700;border-radius:4px;padding:2px 8px}
-.sub.sub-Accountancy{background:var(--acc-soft);color:var(--acc)} .sub.sub-Business{background:var(--bs-soft);color:var(--bs)}
+.sub.sub-Accountancy{background:var(--acc-soft);color:var(--acc)} .sub.sub-Business,.sub.sub-Law{background:var(--bs-soft);color:var(--bs)} .sub.sub-QA{background:var(--qa-soft);color:var(--qa)}
 .sub.sub-Economics{background:var(--eco-soft);color:var(--eco)} .sub.sub-All{background:var(--all-soft);color:var(--all)}
 .slot-ctl{display:inline-flex;align-items:center;gap:6px}
 .hsel{width:auto;min-height:40px;padding:6px 8px}
@@ -173,6 +173,12 @@ input[type=text],input[type=tel],input[type=password],select{font:inherit;color:
 details.card summary{cursor:pointer;list-style:none}
 
 /* Clean CRM look */
+.remind{grid-column:1/-1;background:var(--accent-soft);border-radius:10px;padding:10px 12px}
+.remind-all{margin:4px 0 8px;border:1px solid var(--rule);border-radius:10px;padding:8px 12px;background:var(--sheet)}
+.remind-all summary{font-weight:700;cursor:pointer;min-height:32px;display:flex;align-items:center}
+.rem-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--rule)}
+.rem-row span{flex:1 1 140px;font-weight:600}
+.rem-row a{text-decoration:none}
 .cls-sw{display:flex;gap:8px} .cls-sw a{text-decoration:none;color:inherit;display:inline-flex;align-items:center}
 .kbtn{font:inherit;color:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .kbtn:hover{border-color:var(--accent)} .kbtn.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
@@ -211,6 +217,30 @@ body:has(.dash) header.bar{max-width:1040px}
 .leg-i{background:none;border:0;display:flex;align-items:center;gap:8px;padding:4px 2px;font-size:.92rem;text-align:left}
 .leg-i i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .leg-i b{margin-left:auto;padding-left:10px}
+/* Compact layout */
+.sync{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+[hidden]{display:none!important}
+.segs{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:0;max-width:440px}
+.segs .chip{display:flex} .segs .chip span{width:100%;justify-content:center;text-align:center;border-radius:0;margin-left:-1.5px;padding:6px 4px;min-height:38px;font-size:.86rem;line-height:1.15}
+.segs .chip:first-child span{border-radius:10px 0 0 10px;margin-left:0} .segs .chip:last-child span{border-radius:0 10px 10px 0}
+.g-seg{gap:6px;padding:8px 0} .g-seg .rl{font-size:.95rem}
+.day-card{padding-top:0;padding-bottom:0} .day-card.open{padding-bottom:14px}
+.day-h{width:100%;background:none;border:0;font:inherit;color:inherit;text-align:left;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:14px 0;cursor:pointer;min-height:48px}
+.day-t{font-weight:700;font-size:1.02rem} .day-sum{display:flex;flex-wrap:wrap;gap:4px;align-items:center;flex:1 1 160px} .day-sum .sub{font-size:.75rem}
+.chev{margin-left:auto;color:var(--muted)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--rule);overflow-x:auto}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font:inherit;font-weight:700;color:var(--muted);white-space:nowrap;cursor:pointer;min-height:44px}
+.tab.on{color:var(--ink);border-bottom-color:var(--accent)}
+.crm-row{display:block} .crm-side:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:720px){.crm-side:not([hidden]){grid-template-columns:minmax(0,1fr)}}
+.msgs .pl{padding:12px 0} .pl-ctl{display:flex;flex-wrap:wrap;gap:8px} .pl-ctl .segs{width:auto;min-width:180px;flex:1 1 180px}
+.pl-more summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:.9rem;min-height:36px;display:flex;align-items:center}
+@media (max-width:720px){
+  .crm .srow{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:4px 8px;font-size:.88rem;padding:10px 6px}
+  .crm .srow>span:nth-child(1){grid-column:1/3} .crm .srow>span:nth-child(6){grid-column:3;grid-row:1;justify-self:end;text-align:right}
+  .crm .srow>span:nth-child(3){display:none} .crm .srow .lbl-m{display:block;font-size:.72rem;font-style:normal;color:var(--muted)}
+  .crm .srow .d7{display:none} .crm .pbar{display:none} .crm .syl{display:block}
+}
 a{color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -263,6 +293,15 @@ const FACTOR = [1,.75,.55,.35,.15];
 const BANDS = ['90+','80-89','70-79','60-69','50-59','Below 50'];
 const BANDV = {'90+':95,'80-89':85,'70-79':75,'60-69':65,'50-59':55,'Below 50':40};
 const CFG = {coverageEnd:'2026-11-30', revisionEnd:'2026-12-31', boardStart:'2027-02-15'};
+// ---------------- Program settings (Class 11/12 here; the CA Foundation build swaps this block) ----------------
+const PROGRAM = {
+  ratio: null,            // null = school rule (Accounts daily + Eco:BS 6:4). Otherwise a => {subject: weight}.
+  examFor: a => CFG,      // class-end date (coverageEnd) and exam start (boardStart) for this student
+  dayWord: 'School day',
+  extraFields: [],        // more joining-form questions, shown after the marks
+  sample: {},
+};
+// ---------------- end of program settings ----------------
 const HOLIDAYS = {'2026-11-08':{f:.5,r:'Diwali'},'2026-11-11':{f:.5,r:'Bhai Dooj'},'2027-01-01':{f:.5,r:'New Year'}};
 
 // ---------------- Dates ----------------
@@ -275,7 +314,9 @@ const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return
 const fmt = d => d ? d.getDate()+' '+MON[d.getMonth()] : '–';
 const fmtY = d => d ? d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear() : '–';
 const monday = d => { const x=new Date(d); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; };
-const today0 = () => { const t=new Date(); return new Date(t.getFullYear(),t.getMonth(),t.getDate()); };
+// The study day runs till 5 am: a check-in at 12-1 at night still counts for the day before.
+const DAY_ENDS_AT = 5;
+const today0 = () => { const t=new Date(Date.now() - DAY_ENDS_AT*3600e3); return new Date(t.getFullYear(),t.getMonth(),t.getDate()); };
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const hrs = (a,b) => { const o=[]; for(let h=a;h<=b+1e-9;h+=.5) o.push(String(h)); return o; };
 
@@ -294,13 +335,12 @@ const SECTIONS = [
   {id:'school',l:'School name',type:'text',req:1}]},
  {t:'Marks and study time', h:'', f:[
   {id:'latest',l:'Marks in your last test',type:'marks',rows:SUBJECTS,req:1,help:'Marks you got, out of the total of that paper.'},
+  ...PROGRAM.extraFields,
   {id:'weekdayHrs',l:'Self-study hours on a school day',type:'select',opts:hrs(1,8),req:1,help:'Not counting school, coaching or travel.'},
   {id:'sunHrs',l:'Self-study hours on Sunday',type:'select',opts:hrs(0,10),req:1},
   {id:'ttMode',l:'Who should make your daily timetable?',type:'choice',opts:['Mahendra Sir makes it','I will make my own'],req:1,help:'You can change this any time in My week.'}]},
- {t:'Chapters', h:'Tap one for each chapter.', f:[
-  {id:'ch_Accountancy',l:'Accountancy',type:'chapters',subject:'Accountancy',req:1},
-  {id:'ch_Business Studies',l:'Business Studies',type:'chapters',subject:'Business Studies',req:1},
-  {id:'ch_Economics',l:'Economics',type:'chapters',subject:'Economics',req:1},
+ {t:'Chapters', h:'Tap one for each chapter. Done once = completed once · Revised = revision done · Final = final touch done.', f:[
+  ...SUBJECTS.map(s => ({id:'ch_'+s, l:s, type:'chapters', subject:s, req:1})),
   {id:'pin',l:'Make a 4-digit PIN',type:'pin',req:1,help:'You will log in with your WhatsApp number and this PIN.'},
   {id:'consent',l:'Consent',type:'multi',req:1,help:'Details: camahendrashekhawat.com/privacy',
    opts:['I agree that Mahendra Sir stores my answers and sends a weekly progress line to my parent']}]},
@@ -309,8 +349,9 @@ const chaptersOf = (s, acc) => SYL.filter(c => c.subject===s && (c.applies==='Al
 
 function sampleAnswers(){
   const a = {name:'Aarav Mehta (sample)', phone:'9876500000', parentPhone:'9876500001', school:'Delhi Public School',
-    latest:{'Accountancy':{s:'28',o:'50'},'Business Studies':{s:'31',o:'40'},'Economics':{s:'52',o:'80'}},
-    weekdayHrs:'3', sunHrs:'4', ttMode:'Mahendra Sir makes it', consent:[SECTIONS[2].f[4].opts[0]]};
+    latest:Object.fromEntries(SUBJECTS.map((s,i) => [s, {s:String([28,31,52,60][i]), o:String([50,40,80,100][i])}])),
+    weekdayHrs:'3', sunHrs:'4', ttMode:'Mahendra Sir makes it', consent:[SECTIONS[2].f.find(f => f.id==='consent').opts[0]]};
+  Object.assign(a, PROGRAM.sample);
   SUBJECTS.forEach(s => { a['ch_'+s] = {}; chaptersOf(s,'').forEach((c,i) => a['ch_'+s][c.chapter] = CH_STATUS[i < 1 ? 2 : i < 5 ? 1 : 0]); });
   return a;
 }
@@ -324,7 +365,7 @@ function sampleAnswers(){
 // =====================================================================
 const SPLIT = {accountsShare:.5, eco:.6, bs:.4};
 const ACT = {lecture:'Lecture', notes:'Notes', practice:'Questions', revise:'Revision'};
-const PER_Q = (subject, kind) => subject==='Accountancy' ? 10 : (subject==='Economics' && kind==='num' ? 6 : 8);
+const PER_Q = (subject, kind) => /^Account/.test(subject) ? 10 : subject==='Quantitative Aptitude' ? 3 : subject==='Business Economics' ? 2 : (subject==='Economics' && kind==='num' ? 6 : 8);
 const CHAP = {}; SYL.forEach(c => CHAP[c.chapter] = c);
 const itemMinutes = it => it.activity==='questions' ? (+it.qty||0)*PER_Q(it.subject,(CHAP[it.chapter]||{}).kind) : it.activity==='answers' ? (+it.qty||0)*8 : (+it.qty||0);
 const doneFrac = it => it.done===true ? 1 : it.done==='partly' ? .5 : 0;
@@ -334,11 +375,13 @@ const sundayOf = d => addDays(d, -d.getDay());
 const daysBetween = (a,b) => Math.round((b - a) / 864e5);
 const eachDay = (a,b) => { const out = []; for (let d = new Date(a); d <= b; d = addDays(d,1)) out.push(new Date(d)); return out; };
 const weekOf = (d, joined) => { const s = sundayOf(d); return {start: s < joined ? new Date(joined) : s, end: addDays(s,6), key: ymd(s)}; };
-const short = s => s==='Business Studies' ? 'BS' : s==='Economics' ? 'Eco' : s==='Accountancy' ? 'Accounts' : 'Catch-up';
-const subCls = s => 'sub-' + (s==='All' ? 'All' : s.split(' ')[0]);
+const SHORT = {'Accountancy':'Accounts','Business Studies':'BS','Economics':'Eco','Accounting':'Accounts','Business Laws':'Law','Quantitative Aptitude':'QA','Business Economics':'Eco'};
+const short = s => SHORT[s] || 'Catch-up';
+const SUBCLS = {'Accountancy':'Accountancy','Business Studies':'Business','Economics':'Economics','Accounting':'Accountancy','Business Laws':'Law','Quantitative Aptitude':'QA','Business Economics':'Economics'};
+const subCls = s => 'sub-' + (SUBCLS[s] || 'All');
 
 function buildModel(state){
-  const a = state.profile.answers || {}, t = today0(), joined = D(state.profile.joined) || t;
+  const a = state.profile.answers || {}, t = today0(), j0 = D(state.profile.joined) || t, joined = j0 > t ? t : j0;
   const marks = {}; SUBJECTS.forEach(s => marks[s] = pctOf((a.latest||{})[s]) ?? 65);
   const items = (state.items||[]).map(it => Object.assign({}, it, {d:D(it.date), min:itemMinutes(it)}));
   const doneMin = {}; items.forEach(it => { if (it.chapter) doneMin[it.chapter] = (doneMin[it.chapter]||0) + it.min*doneFrac(it); });
@@ -361,11 +404,11 @@ function finishInfo(m){
   const from = addDays(m.t,-14 < -days ? -days : -14), span = Math.max(1, daysBetween(from, m.t));
   const real = m.items.filter(i => i.d>=from && i.d<m.t).reduce((x,i)=>x+i.min*doneFrac(i),0) / span;
   const planned = (m.wd*6 + m.sun)*60/7;
-  const useReal = days >= 7, perDay = useReal ? real : planned, board = D(CFG.boardStart);
+  const E = PROGRAM.examFor(m.a), useReal = days >= 7, perDay = useReal ? real : planned, board = D(E.boardStart);
   if (rem <= 0) return {pct, done:true, basis:'done'};
   if (!perDay) return {pct, none:true, basis: useReal ? 'pace' : 'hours'};
   const n = Math.ceil(rem/perDay), date = addDays(m.t, n);
-  return {pct, date, after: date >= board, late: date > D(CFG.coverageEnd), basis: useReal ? 'pace' : 'hours'};
+  return {pct, date, after: date >= board, late: date > D(E.coverageEnd), basis: useReal ? 'pace' : 'hours'};
 }
 const finishText = f => f.done ? 'Syllabus first round done' : f.none ? 'Syllabus finish date: start ticking targets to see it' :
   'Syllabus finishes on: ' + (f.after ? 'after the annual exams' : fmtY(f.date));
@@ -376,9 +419,30 @@ function secondSubject(m, d){
   for (let x = new Date(m.joined); x < d; x = addDays(x,1)) { if (x.getDay()===0) continue; if (e/SPLIT.eco <= b/SPLIT.bs) e++; else b++; }
   return e/SPLIT.eco <= b/SPLIT.bs ? 'Economics' : 'Business Studies';
 }
+// Ratio rule (CA Foundation): a weekday has 1-4 slots by hours; each slot goes to the subject furthest behind its
+// share of time since joining, one slot per subject per day. Finished subjects drop out and their time moves to the rest.
+function ratioDay(w, H, subs){
+  const n = Math.min(subs.length, H < 120 ? 1 : H <= 270 ? 2 : H <= 450 ? 3 : 4);
+  const base = Math.floor(H/30/n), extra = H/30 - base*n;
+  return Array.from({length:n}, (_, i) => (base + (i < extra ? 1 : 0)) * 30);
+}
+function ratioSlots(m, d, left){
+  const w = PROGRAM.ratio(m.a), subs = SUBJECTS.filter(s => w[s]), tot = subs.reduce((x,s)=>x+w[s],0), H = Math.round(m.wd*2)*30;
+  const given = {}; subs.forEach(s => given[s] = 0); let all = 0;
+  const pick = (cands, k) => cands.slice().sort((a,b) => (w[b]/tot*all - given[b]) - (w[a]/tot*all - given[a]) || subs.indexOf(a)-subs.indexOf(b)).slice(0, k);
+  for (let x = new Date(m.joined); x < d; x = addDays(x,1)){
+    if (x.getDay()===0) continue;
+    const mins = ratioDay(w, H, subs); pick(subs, mins.length).forEach((s,i) => { given[s] += mins[i]; }); all += H;
+  }
+  const open = subs.filter(s => left(s));
+  if (!open.length) return [{subject:'All', mins:H}];
+  const mins = ratioDay(w, H, open);
+  return pick(open, mins.length).map((s,i) => ({subject:s, mins:mins[i]}));
+}
 function slotsFor(m, d, remLeft){
   const left = s => SUBJECTS.includes(s) ? chaptersOf(s, m.a.accOption).reduce((x,c)=>x+Math.max(0,remLeft[c.chapter]),0) : 1;
   if (d.getDay()===0) return m.sun > 0 ? [{subject:'All', mins:Math.round(m.sun*2)*30}] : [];
+  if (PROGRAM.ratio) return ratioSlots(m, d, left);
   const H = Math.round(m.wd*2)*30;
   let first = 'Accountancy', second = secondSubject(m, d);
   if (!left(second)) second = second==='Economics' ? 'Business Studies' : 'Economics';
@@ -487,7 +551,7 @@ const scr = document.getElementById('screen');
 let TOKEN = null, ST = null, M = null, MENTOR = null, MENTOR_KEY = '';
 const V = {screen:'gate', step:0};
 const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch(e){} } };
-const setState = s => { ST = s; M = buildModel(s); };
+const setState = s => { ST = s; M = buildModel(s); try { store.set('c11.state', JSON.stringify(s)); } catch(e){} };
 const on = (id, fn) => { const el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
 let toastT;
 function toast(msg){ let el = document.querySelector('.toast'); if (!el){ el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role','status'); document.body.appendChild(el); } el.textContent = msg; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => el.hidden = true, 2600); }
@@ -496,7 +560,7 @@ function render(){
   const r = document.getElementById('barR');
   r.innerHTML = `<button class="linkbtn" type="button" id="fbOpen">Report a problem</button>${ST && !V.screen.startsWith('mentor') ? ' · <button class="linkbtn" type="button" id="logout">Log out</button>' : ''}`;
   on('fbOpen', openFeedback);
-  on('logout', () => { store.set('c11.token', null); TOKEN = null; ST = null; M = null; go('gate'); });
+  on('logout', () => { store.set('c11.token', null); store.set('c11.state', null); TOKEN = null; ST = null; M = null; go('gate'); });
   ({gate:renderGate, form:renderForm, home:renderHome, week:renderWeek, checkin:renderCheckin, ciDone:renderCiDone, mentor:renderMentor}[V.screen] || renderGate)();
 }
 function openFeedback(){
@@ -525,7 +589,7 @@ function openFeedback(){
 function renderGate(){
   scr.innerHTML = `<div class="narrow stack">
     <h1 style="margin-top:8px">Mahendra Sir's Class 11 Plan</h1>
-    <ol class="steps3"><li><b>1</b>Join once (5 minutes)</li><li><b>2</b>Every Sunday: plan your week</li><li><b>3</b>Every day: check in before 10 pm</li></ol>
+    <ol class="steps3"><li><b>1</b>Join once (5 minutes)</li><li><b>2</b>Every Sunday: plan your week</li><li><b>3</b>Every day: check in before you sleep</li></ol>
     <form class="card" id="loginForm" novalidate>
       <h2>Log in</h2>
       <div class="field"><label for="lg_phone">WhatsApp number</label><input id="lg_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel" value="${esc(V.prefillPhone||'')}"></div>${V.prefillPhone ? '<p class="muted tiny">This number has already joined. Enter your PIN to open your plan. Forgot the PIN? Ask Mahendra Sir to reset it.</p>' : ''}
@@ -559,6 +623,10 @@ let FA = (() => { try { return JSON.parse(store.get('c11.answers')) || {}; } cat
 let errors = {};
 const saveDraft = () => { const c = Object.assign({}, FA); delete c.pin; store.set('c11.answers', JSON.stringify(c)); store.set('c11.step', String(V.step||0)); };
 const chipGroup = (name, opts, type, checkedFn, attrs) => `<div class="chips" role="${type==='radio'?'radiogroup':'group'}">${opts.map(o=>`<label class="chip"><input type="${type}" name="${esc(name)}" value="${esc(o)}" ${attrs||''} ${checkedFn(o)?'checked':''}><span>${esc(o)}</span></label>`).join('')}</div>`;
+// One row of small equal buttons; labels can be shortened for the eye while values stay the same.
+const SEG_LABEL = {'Not started':'Not yet','Completed once':'Done once','Revision done':'Revised','Final touch done':'Final'};
+const segGroup = (name, opts, checkedFn, attrs) => chipGroup(name, opts, 'radio', checkedFn, attrs)
+  .replace('class="chips"', `class="chips segs" style="--n:${opts.length}"`).replace(/<span>([^<]*)<\/span>/g, (m0, t) => `<span>${SEG_LABEL[t] || t}</span>`);
 function fieldHTML(f){
   const v = FA[f.id], id = 'f_'+f.id.replace(/\W/g,'_'), da = `data-f="${esc(f.id)}"`;
   const lab = `${esc(f.l)}${f.req?' <span class="req" aria-hidden="true">*</span>':''}`;
@@ -571,7 +639,7 @@ function fieldHTML(f){
   else if (f.type==='choice') body = chipGroup(id, f.opts, 'radio', o => v===o, da);
   else if (f.type==='marks') body = f.rows.map(r => { const mk = (v||{})[r] || {}, p = pctOf(mk);
     return `<div class="mrow"><span class="rl">${esc(short(r))}</span><span class="mins"><input type="text" inputmode="decimal" aria-label="${esc(r)} marks you got" placeholder="Got" ${da} data-r="${esc(r)}" data-part="s" value="${esc(mk.s||'')}"><span class="muted">out of</span><input type="text" inputmode="numeric" aria-label="${esc(r)} total marks" placeholder="Total" ${da} data-r="${esc(r)}" data-part="o" value="${esc(mk.o||'')}"><span class="pct mono">${p!=null&&p<=100?'= '+p+'%':''}</span></span></div>`; }).join('');
-  else if (f.type==='chapters') body = chaptersOf(f.subject, '').map((c,i) => `<div class="grow"><div class="rl" id="${id}_${i}">${esc(c.chapter)}</div>${chipGroup(id+'_'+i, CH_STATUS, 'radio', o => ((v||{})[c.chapter])===o, `${da} data-r="${esc(c.chapter)}" aria-labelledby="${id}_${i}"`)}</div>`).join('');
+  else if (f.type==='chapters') body = `<button type="button" class="linkbtn tiny" data-allns="${esc(f.id)}">Mark the rest "Not yet", then change only the ones you have done</button>` + chaptersOf(f.subject, '').map((c,i) => `<div class="grow g-seg"><div class="rl" id="${id}_${i}">${esc(c.chapter)}</div>${segGroup(id+'_'+i, CH_STATUS, o => ((v||{})[c.chapter])===o, `${da} data-r="${esc(c.chapter)}" aria-labelledby="${id}_${i}"`)}</div>`).join('');
   return `<div class="field"><div class="lbl">${lab}</div>${help}${body}${err}</div>`;
 }
 function renderForm(){
@@ -587,6 +655,11 @@ function renderForm(){
     </form></div>`;
   const form = document.getElementById('dform');
   form.addEventListener('input', onFormInput); form.addEventListener('change', onFormInput);
+  scr.querySelectorAll('[data-allns]').forEach(b => b.addEventListener('click', () => {
+    const fid = b.dataset.allns, f = SECTIONS.flatMap(x => x.f).find(x => x.id===fid);
+    FA[fid] = FA[fid] || {}; chaptersOf(f.subject, '').forEach(c => { if (!FA[fid][c.chapter]) FA[fid][c.chapter] = CH_STATUS[0]; });
+    saveDraft(); renderForm();
+  }));
   on('fillEx', () => { FA = Object.assign(sampleAnswers(), {name:'Test Student', phone:'9'+String(Date.now()).slice(-9), pin:''}); saveDraft(); renderForm(); });
   on('prev', () => { errors = {}; if (i===0) return go('gate'); V.step = i-1; saveDraft(); renderForm(); window.scrollTo(0,0); });
   form.addEventListener('submit', e => {
@@ -625,7 +698,7 @@ function validate(sec){
   sec.f.forEach(f => {
     const v = FA[f.id];
     const filled = f.type==='marks' ? f.rows.every(r => v && v[r] && v[r].s && v[r].o) : f.type==='chapters' ? chaptersOf(f.subject,'').every(c => v && v[c.chapter]) : f.type==='multi' ? (v||[]).length>0 : v!==undefined && String(v).trim()!=='';
-    if (f.req && !filled) e[f.id] = f.type==='marks' ? 'Fill marks and total for all three subjects.' : f.type==='chapters' ? 'Tap one option for every chapter.' : 'Please answer this.';
+    if (f.req && !filled) e[f.id] = f.type==='marks' ? 'Fill marks and total for every subject.' : f.type==='chapters' ? 'Tap one option for every chapter.' : 'Please answer this.';
     else if (f.type==='marks'){ const bad = f.rows.find(r => +v[r].s > +v[r].o); if (bad) e[f.id] = short(bad)+': marks cannot be more than the total.'; }
     else if (f.type==='tel' && !/^[6-9]\d{9}$/.test(v)) e[f.id] = 'Enter a 10-digit mobile number.';
     else if (f.type==='pin' && !/^\d{4}$/.test(v)) e[f.id] = 'The PIN must be 4 digits.';
@@ -690,23 +763,26 @@ function renderWeek(){
     <div><h1>My week</h1><p class="muted" style="margin:0">${fmt(wk.start)} – ${fmt(wk.end)}</p>
       <p class="finish ${f.late||f.after?'late':'ok'}" style="margin-top:8px">${esc(finishText(f))}</p></div>
     <div class="card"><div class="lbl">Your study hours</div>
-      ${V.editHrs ? `<div class="hrs-edit"><label>School day <select id="eh_wd" class="hsel">${hrs(.5,10).map(h => `<option ${+h===M.wd?'selected':''}>${h}</option>`).join('')}</select> h</label>
+      ${V.editHrs ? `<div class="hrs-edit"><label>${PROGRAM.dayWord} <select id="eh_wd" class="hsel">${hrs(.5,12).map(h => `<option ${+h===M.wd?'selected':''}>${h}</option>`).join('')}</select> h</label>
         <label>Sunday <select id="eh_sun" class="hsel">${hrs(0,10).map(h => `<option ${+h===M.sun?'selected':''}>${h}</option>`).join('')}</select> h</label>
         <div class="actions"><button class="btn primary small" type="button" id="ehSave">Save</button><button class="btn small" type="button" id="ehCancel">Cancel</button></div>
         <p class="muted tiny">Sir's slots from today onwards that are not done yet will be made again with the new hours.</p><p class="err" id="ehErr" hidden></p></div>`
-        : `<p style="margin:4px 0 0">School day <b>${M.wd} h</b> · Sunday <b>${M.sun} h</b> <button class="linkbtn" type="button" id="ehOpen">Change</button></p>`}</div>
-    <div class="card"><div class="lbl" style="margin-bottom:8px">Who makes your timetable?</div>
+        : `<p style="margin:4px 0 0">${PROGRAM.dayWord} <b>${M.wd} h</b> · Sunday <b>${M.sun} h</b> <button class="linkbtn" type="button" id="ehOpen">Change</button></p>`}
+      <div class="lbl" style="margin:12px 0 8px;padding-top:12px;border-top:1px solid var(--rule)">Who makes your timetable?</div>
       ${chipGroup('ttm', ["Mahendra Sir", "Me"], 'radio', o => (o==='Me') === (mode==='own'), 'data-ttm="1"')}
       <p class="muted tiny" style="margin-top:8px">${mode==='own' ? 'Add your own slots for each day: subject and hours. We suggest the chapter, you can change it.' : (V.first ? 'Welcome! Your slots are ready. ' : '') + 'Slots are ready. Change the chapter or kind of study if you want.'}</p>
       ${mode==='own' && empty.length ? `<button class="btn small" type="button" id="fillSir">Fill empty days with Sir's plan</button>` : ''}</div>
+    <p class="muted tiny" style="margin:0">Tap a day to open it.</p>
     <div class="actions">${isNext ? '<button class="btn small" type="button" id="thisWk">‹ This week</button>' : (M.t.getDay() >= 5 || M.t.getDay()===0) ? '<button class="btn small" type="button" id="nextWk">Next week ›</button>' : ''}</div>
     ${eachDay(wk.start, wk.end).map(d => { const k = ymd(d), di = items.filter(i => i.date===k), past = d < M.t;
-      return `<section class="card day-card ${k===ymd(M.t)?'is-today':''}"><h3>${DAY[d.getDay()]} ${fmt(d)}${k===ymd(M.t)?' · today':''}${d.getDay()===0 && mode==='sir'?' · catch-up day':''}</h3>
-        ${di.length ? di.map(it => past ? slotRow(it) : slotEditor(it, mode)).join('') : '<p class="muted">No slot yet.</p>'}
-        ${!past && mode==='own' ? (V.addDay===k ? slotAdder(k) : `<button class="linkbtn" type="button" data-add="${k}">+ Add slot</button>`) : ''}</section>`; }).join('')}
+      const openKey = V.addDay || V.openDay || (wk.start > M.t ? ymd(wk.start) : ymd(M.t)), open = openKey===k;
+      const sum = di.length ? di.map(i => `<span class="sub ${subCls(i.subject)}">${esc(short(i.subject))} ${fmtH(itemMinutes(i))}</span>`).join(' ') + (past ? ` <span class="muted tiny">· ${di.filter(i => i.done===true).length}/${di.length} done</span>` : '') : '<span class="muted tiny">No slot yet</span>';
+      return `<section class="card day-card ${k===ymd(M.t)?'is-today':''} ${open?'open':''}"><button type="button" class="day-h" data-day="${k}" aria-expanded="${open}"><span class="day-t">${DAY[d.getDay()]} ${fmt(d)}${k===ymd(M.t)?' · today':''}${d.getDay()===0 && mode==='sir'?' · catch-up':''}</span>${open ? '' : `<span class="day-sum">${sum}</span>`}<span class="chev" aria-hidden="true">${open?'▴':'▾'}</span></button>
+        ${open ? `${di.length ? di.map(it => past ? slotRow(it) : slotEditor(it, mode)).join('') : '<p class="muted">No slot yet.</p>'}
+        ${!past && mode==='own' ? (V.addDay===k ? slotAdder(k) : `<button class="linkbtn" type="button" data-add="${k}">+ Add slot</button>`) : ''}` : ''}</section>`; }).join('')}
     <div class="savebar" role="status"><span id="saveMsg">Changes save automatically</span><button class="btn small" type="button" id="doneBtn">Done</button></div>
   </div>`;
-  on('doneBtn', () => go('home', {first:false, addDay:null, editHrs:false}));
+  on('doneBtn', () => go('home', {first:false, addDay:null, editHrs:false, openDay:null}));
   on('ehOpen', () => { V.editHrs = true; renderWeek(); });
   on('ehCancel', () => { V.editHrs = false; renderWeek(); });
   on('ehSave', () => {
@@ -725,8 +801,9 @@ function renderWeek(){
       renderWeek(); toast('Study hours updated');
     }).catch(x => { const e2 = document.getElementById('ehErr'); e2.textContent = x.message; e2.hidden = false; b.disabled = false; b.textContent = 'Save'; });
   });
-  on('nextWk', () => { V.wkDate = addDays(cur.end,1); WEEK = null; renderWeek(); });
-  on('thisWk', () => { V.wkDate = M.t; WEEK = null; renderWeek(); });
+  on('nextWk', () => { V.wkDate = addDays(cur.end,1); V.openDay = null; WEEK = null; renderWeek(); });
+  on('thisWk', () => { V.wkDate = M.t; V.openDay = null; WEEK = null; renderWeek(); });
+  scr.querySelectorAll('[data-day]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.day; V.addDay = null; V.openDay = b.getAttribute('aria-expanded')==='true' ? 'none' : k; renderWeek(); }));
   on('fillSir', () => { WEEK.items = WEEK.items.concat(suggestDays(M, empty, WEEK.items)); saveWeek(); renderWeek(); toast("Sir's plan added to empty days"); });
   scr.querySelectorAll('[data-ttm]').forEach(r => r.addEventListener('change', () => {
     const m2 = r.value==='Me' ? 'own' : 'sir'; store.set('c11.tt.'+M.phone, m2);
@@ -762,7 +839,7 @@ function slotEditor(it, mode){
     : `<span class="mono">${fmtH(itemMinutes(it))}</span>`;
   return `<div class="slot ${subCls(it.subject)}"><div class="slot-top"><span class="sub ${subCls(it.subject)}">${esc(short(it.subject))}</span>${hoursCtl}</div>
     <label class="sr-only" for="c_${it.id}">Chapter</label><select id="c_${it.id}" class="big" data-slot="${it.id}" data-k="chapter">${opts}</select>
-    ${chipGroup('a_'+it.id, Object.values(ACT), 'radio', o => ACT[it.activity]===o, `data-slot="${it.id}" data-k="activity"`).replace(/value="([^"]+)"/g, (m0, lab) => `value="${Object.keys(ACT).find(k => ACT[k]===lab) || lab}"`)}</div>`;
+    ${segGroup('a_'+it.id, Object.values(ACT), o => ACT[it.activity]===o, `data-slot="${it.id}" data-k="activity"`).replace(/value="([^"]+)"/g, (m0, lab) => `value="${Object.keys(ACT).find(k => ACT[k]===lab) || lab}"`)}</div>`;
 }
 function saveWeek(){
   const msg = document.getElementById('saveMsg'); if (msg) msg.textContent = 'Saving…';
@@ -782,7 +859,7 @@ function renderCheckin(){
   const planned = its.reduce((x,i)=>x+i.min,0)/60;
   const S = {status:{}, stuck:'No'};
   scr.innerHTML = `<div class="narrow"><form class="card" id="ciForm" novalidate>
-    <h1>Today's check-in</h1><p class="muted">3 taps. Before 10 pm.</p>
+    <h1>Today's check-in</h1><p class="muted">3 taps. Do it before you sleep, even if it is after 12 at night.</p>
     <div class="field"><div class="lbl">1. Today's targets</div>
       ${its.length ? its.map(it => `<div class="ci-row"><div><b>${esc(short(it.subject))}</b> · ${esc(it.chapter||'—')}</div>${chipGroup('st_'+it.id, ['Done','Partly','Not done'], 'radio', () => false, `data-st="${it.id}"`)}</div>`).join('') : '<p class="muted">Nothing was planned today.</p>'}</div>
     <div class="field"><label class="lbl" for="ci_ch">2. Chapter you studied most</label>
@@ -832,11 +909,29 @@ function renderCiDone(){
 // =====================================================================
 // Teacher dashboard (only for Sir): who has not checked in today + Sunday parent lines
 // =====================================================================
-function openMentor(key){
-  MENTOR_KEY = key;
-  scr.innerHTML = '<div class="narrow card"><p class="muted">Loading students…</p></div>';
-  API('mentorAll', {key}).then(r => { MENTOR = r.students.map(buildModel); go('mentor'); })
-    .catch(x => { scr.innerHTML = `<div class="narrow card"><h2>Teacher dashboard</h2><p class="err">${esc(x.message)}</p></div>`; });
+// Opens the dashboard from the copy saved on this device (instant), then fetches fresh data quietly.
+// opts.fresh: ask the server to skip its short cache (Refresh button, after Pause/Remove etc.).
+function openMentor(key, opts){
+  opts = opts || {}; MENTOR_KEY = key;
+  let cached = null; try { cached = JSON.parse(store.get('c11.mentor')); } catch(e){}
+  const shown = V.screen==='mentor' && MENTOR;
+  if (!shown){
+    if (cached && cached.key===key && cached.students){ MENTOR = cached.students.map(buildModel); DASH.syncing = true; go('mentor'); }
+    else scr.innerHTML = '<div class="narrow card"><p class="muted">Loading students…</p></div>';
+  } else { DASH.syncing = true; const m = document.getElementById('syncMsg'); if (m) m.textContent = 'Updating…'; }
+  API('mentorAll', {key, fresh: !!opts.fresh}).then(r => {
+    try { store.set('c11.mentor', JSON.stringify({key, at: Date.now(), students: r.students})); } catch(e){}
+    MENTOR = r.students.map(buildModel); DASH.syncing = false; DASH.syncedAt = Date.now();
+    if (V.screen!=='mentor') return go('mentor');
+    // Redraw in place unless the teacher is typing somewhere.
+    const a = document.activeElement;
+    if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) { const m = document.getElementById('syncMsg'); if (m) m.textContent = 'New data ready · tap Refresh'; return; }
+    const y = window.scrollY; renderMentor(); window.scrollTo(0, y);
+  }).catch(x => {
+    DASH.syncing = false;
+    if (V.screen==='mentor'){ const m = document.getElementById('syncMsg'); if (m) m.textContent = 'Could not update: ' + x.message; }
+    else scr.innerHTML = `<div class="narrow card"><h2>Teacher dashboard</h2><p class="err">${esc(x.message)}</p></div>`;
+  });
 }
 // Weekly message for the parent, in plain words. Always covers the last full week (Sunday to Saturday);
 // a student who joined this week gets this week so far. Three tones: good, okay, weak.
@@ -874,6 +969,40 @@ function parentMessage(m, lang, comment){
     : [`✅ ${p.days} mein se ${p.ci} din padhai ki`, `✅ ${p.total} mein se ${p.done} task poore kiye`, `📚 Syllabus ho chuka: lagbhag ${f.pct}%`, pace, p.tone==='okay' ? '👉 Thoda aur regular hona hoga' : ''];
   return `${head}\n${lines.filter(Boolean).join('\n')}${sign}`;
 }
+// Weekly message for the student: same facts as the parent report, said to the student, plus one chapter to focus on.
+function studentMessage(m, lang, comment){
+  const p = parentFacts(m), f = p.f, en = lang==='en', sign = (comment ? '\n💬 ' + comment : '') + '\n– Mahendra Sir';
+  if (p.days < 4) return en
+    ? `Hi ${p.name} 👋\nWelcome! Your daily plan has started. Check in every day before you sleep (even after 12 at night is fine). Your first weekly report comes next Sunday.${sign}`
+    : `Hi ${p.name} 👋\nWelcome! Tumhara roz ka plan shuru ho gaya hai. Roz sone se pehle check-in karna (raat 12 baje ke baad bhi chalega). Pehli weekly report agle Sunday aayegi.${sign}`;
+  // Focus: the chapter with the most unfinished tasks in the week; otherwise skip the line.
+  const cur = weekOf(m.t, m.joined), wk = cur.start > m.joined ? weekOf(addDays(cur.start,-1), m.joined) : cur, cnt = {};
+  m.items.filter(i => i.d>=wk.start && i.d<=wk.end && i.d<=m.t && i.min>0 && i.done!==true && i.chapter && SUBJECTS.includes(i.subject))
+    .forEach(i => { const k = short(i.subject) + ' – ' + i.chapter; cnt[k] = (cnt[k]||0) + 1; });
+  const focus = Object.keys(cnt).sort((x,y) => cnt[y]-cnt[x])[0];
+  const head = en ? `Hi ${p.name} 👋\nYour report for this week:` : `Hi ${p.name} 👋\nTumhara is hafte ka hisaab:`;
+  if (p.tone==='weak') return en
+    ? `${head}\n⚠️ You studied on only ${p.ci} of ${p.days} days\n⚠️ Finished ${p.done} of ${p.total} tasks\nFrom tomorrow, check in every day before you sleep, even if it is 12 at night. Tell me if something is stopping you.${sign}`
+    : `${head}\n⚠️ ${p.days} mein se sirf ${p.ci} din padhai hui\n⚠️ ${p.total} mein se ${p.done} task poore kiye\nKal se roz sone se pehle check-in karna, chahe raat 12 baje ho. Koi dikkat ho to mujhe batao.${sign}`;
+  const pace = f.done ? (en ? '📅 First round of the syllabus is complete' : '📅 Syllabus ka pehla round poora ho gaya')
+    : f.none ? ''
+    : f.after ? (en ? '📅 At this speed the syllabus will not finish before the exams. Speed must go up.' : '📅 Isi speed se exam se pehle syllabus poora nahi hoga. Speed badhani hogi.')
+    : (en ? `📅 At this speed, your syllabus will finish by ${longDate(f.date)}` : `📅 Isi speed se syllabus ${longDate(f.date)} tak poora ho jayega`);
+  const lines = en
+    ? [`✅ Studied on ${p.ci} of ${p.days} days`, `✅ Finished ${p.done} of ${p.total} tasks`, `📚 Syllabus done: about ${f.pct}%`, pace, focus ? `👉 Focus this week: ${focus} (left unfinished)` : '', p.tone==='good' ? 'Keep it up! 💪' : 'Try to be a little more regular this week 💪']
+    : [`✅ ${p.days} mein se ${p.ci} din padhai ki`, `✅ ${p.total} mein se ${p.done} task poore kiye`, `📚 Syllabus ho chuka: lagbhag ${f.pct}%`, pace, focus ? `👉 Is hafte dhyan do: ${focus} (adhoora reh gaya tha)` : '', p.tone==='good' ? 'Aise hi lage raho! 💪' : 'Is hafte thoda aur regular rehna 💪'];
+  return `${head}\n${lines.filter(Boolean).join('\n')}${sign}`;
+}
+// One-tap reminders to the student. kind: 'checkin' (not checked in today), 'missed' (3+ days), 'plan' (week not planned).
+function reminderText(r, kind){
+  const nm = r.m.name.replace(/\(.*\)/,'').trim().split(' ')[0], en = getLang(r.m.phone)==='en';
+  if (kind==='missed') return en ? `${nm}, no check-in for ${r.streak} days. Is everything okay? Let's start again tomorrow. Tell me if something is wrong. – Mahendra Sir` : `${nm}, ${r.streak} din se check-in nahi aaya. Sab theek hai? Kal se phir shuru karte hain. Koi dikkat ho to mujhe batao. – Mahendra Sir`;
+  if (kind==='plan') return en ? `${nm}, this week's plan is not made yet. Open the app and make it in 2 minutes. – Mahendra Sir` : `${nm}, is hafte ka plan abhi nahi bana. App kholo aur 2 minute mein plan bana lo. – Mahendra Sir`;
+  return en ? `Hi ${nm}, today's check-in is still pending. Do it in 3 taps before you sleep 🙂 – Mahendra Sir` : `Hi ${nm}, aaj ka check-in abhi baaki hai. Sone se pehle 3 tap mein kar do 🙂 – Mahendra Sir`;
+}
+const reminderKinds = r => [r.streak >= 3 ? 'missed' : !r.checkedToday ? 'checkin' : '', r.st==='noplan' ? 'plan' : ''].filter(Boolean);
+const REMIND_LABEL = {checkin:'Check-in reminder', missed:'Missed days message', plan:'Plan-the-week reminder'};
+const waLink = (phone, text) => `https://wa.me/91${encodeURIComponent(phone)}?text=${encodeURIComponent(text)}`;
 const getLang = phone => store.get('c11.lang.'+phone) || 'hi';
 // Teacher dashboard: summary numbers, 14-day check-in chart, one row per student with a status, filters,
 // tap a row for details, and the weekly parent messages at the bottom.
@@ -905,7 +1034,7 @@ function studentRow(m){
   const lastTxt = !last ? 'Never' : last===k ? 'Today' : last===ymd(addDays(t,-1)) ? 'Yesterday' : daysBetween(D(last), t) + ' days ago';
   return {m, st, streak, f, checkedToday, lastTxt, doneW, totalW, stuck, days};
 }
-let DASH = {filter:'all', q:'', open:null, panel:null, jump:false};
+let DASH = {filter:'all', q:'', open:null, panel:null, jump:false, to:{}, msgOpen:false, tab:'students'};
 function renderMentor(){
   const t = today0(), k = ymd(t);
   const ALL = MENTOR.map(studentRow), isPaused = r => r.m.state.profile.status === 'Paused';
@@ -928,7 +1057,7 @@ function renderMentor(){
   const chart = `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="Check-ins per day for the last 14 days">
     ${ticks.map(v => `<line x1="${padL}" x2="${W-4}" y1="${y(v)}" y2="${y(v)}" class="grid"/><text x="${padL-6}" y="${y(v)+4}" class="ax" text-anchor="end">${v}</text>`).join('')}
     ${days.map((x,i) => { const bx = padL + i*bw + 3, h = y(0) - y(x.ci);
-      return `<g><title>${fmt(x.d)}: ${x.ci} of ${x.joined} checked in${x.dk===k ? ' (today, until 10 pm)' : ''}</title>
+      return `<g><title>${fmt(x.d)}: ${x.ci} of ${x.joined} checked in${x.dk===k ? ' (today, open till 5 am)' : ''}</title>
         <rect x="${bx}" y="${y(0) - Math.max(h, x.ci ? 2 : 0)}" width="${bw-6}" height="${Math.max(h, x.ci ? 2 : 0)}" rx="3" class="${x.dk===k ? 'bar today' : 'bar'}"/>
         <rect x="${bx-2}" y="${padT}" width="${bw-2}" height="${H-padT-padB}" fill="transparent"/>
         ${(13-i) % 3 === 0 && x.dk!==k || x.dk===k ? `<text x="${bx + (bw-6)/2}" y="${H-8}" class="ax" text-anchor="middle">${x.dk===k ? 'Today' : x.d.getDate()+' '+MON[x.d.getMonth()]}</text>` : ''}</g>`; }).join('')}
@@ -991,9 +1120,9 @@ function renderMentor(){
   const initials = nm => nm.replace(/\(.*\)/,'').trim().split(/\s+/).slice(0,2).map(w => w[0]||'').join('').toUpperCase();
 
   scr.innerHTML = `<div class="stack dash crm">
-    <div class="cls-sw" role="group" aria-label="Class">${["12","11"].map(c => `<a class="fchip ${c===CLS?"on":""}" href="/class${c}/?view=mentor&key=${encodeURIComponent(MENTOR_KEY)}"${c===CLS?" aria-current=\"page\"":""}>Class ${c}</a>`).join("")}</div>
-    <div class="dash-head"><div><h1>${greet}, Mahendra Sir</h1><p class="muted" style="margin:2px 0 0">${DAY[t.getDay()]} ${fmtY(t)} · check-ins ${hr < 22 ? 'open till 10 pm' : 'closed for today'}</p></div>
-      <button class="btn small" type="button" id="dRefresh">Refresh</button></div>
+    <div class="cls-sw" role="group" aria-label="Class">${[["12","/class12/","Class 12"],["11","/class11/","Class 11"],["cafc","/cafc/","CA Foundation"]].map(([c,p,l]) => `<a class="fchip ${c===CLS?"on":""}" href="${p}?view=mentor&key=${encodeURIComponent(MENTOR_KEY)}"${c===CLS?" aria-current=\"page\"":""}>${l}</a>`).join("")}</div>
+    <div class="dash-head"><div><h1>${greet}, Mahendra Sir</h1><p class="muted" style="margin:2px 0 0">${DAY[t.getDay()]} ${fmtY(t)} · today's check-ins open till 5 am</p></div>
+      <span class="sync"><span class="muted tiny" id="syncMsg" role="status">${DASH.syncing ? 'Updating…' : ''}</span><button class="btn small" type="button" id="dRefresh">Refresh</button></span></div>
     <div class="kpis">
       <button type="button" class="kpi kbtn ${DASH.filter==='all' && !DASH.panel ? '' : ''}" data-kpi="all"><span>Students</span><b>${n}</b><em class="up">${newThisWeek ? '+'+newThisWeek+' this week' : 'no new this week'}</em><i class="khint">See all ›</i></button>
       <button type="button" class="kpi kbtn ${DASH.panel==='today'?'on':''}" data-kpi="today" aria-expanded="${DASH.panel==='today'}"><span>Checked in today</span><b>${inToday}<small> / ${n}</small></b>
@@ -1002,10 +1131,15 @@ function renderMentor(){
       <button type="button" class="kpi kbtn ${DASH.panel==='syl'?'on':''}" data-kpi="syl" aria-expanded="${DASH.panel==='syl'}"><span>Avg syllabus done</span><b>${avgSyl}%</b><em>${avgFinish ? 'On pace for ' + fmt(avgFinish) : ''}</em><i class="khint">${DASH.panel==='syl' ? 'Close ▴' : 'Break up ▾'}</i></button>
     </div>
     ${panel ? `<section class="card kpanel">${panel}</section>` : ''}
+    <div class="tabs" role="tablist" aria-label="Dashboard sections">${[['students','Students'],['batch','Batch'],['messages','Messages']].map(([k,l]) => `<button type="button" role="tab" class="tab ${DASH.tab===k?'on':''}" aria-selected="${DASH.tab===k}" data-tab="${k}">${l}</button>`).join('')}</div>
     <div class="crm-row">
-      <section class="card crm-table">
+      <section class="card crm-table" ${DASH.tab!=='students'?'hidden':''}>
         <div class="dash-head"><h2>Students</h2><input class="big" type="search" id="dSearch" placeholder="Search name or number" value="${esc(DASH.q)}" style="max-width:240px"></div>
         <div class="chips" role="group" aria-label="Filter students">${filters.map(([id,l,c]) => `<button type="button" class="fchip ${DASH.filter===id?'on':''}" data-df="${id}">${l} <b>${c}</b></button>`).join('')}${EXTRA[DASH.filter] ? `<button type="button" class="fchip on" data-df="all" aria-label="Clear filter">${EXTRA[DASH.filter]} <b>${shown.length}</b> ✕</button>` : ''}</div>
+        ${['notin','noplan','risk','slow'].includes(DASH.filter) && shown.some(r => r.m.phone && reminderKinds(r).length) ? `<details class="remind-all"><summary>📲 Send reminders to these ${shown.filter(r => r.m.phone && reminderKinds(r).length).length} students</summary>
+          <p class="muted tiny">Each button opens WhatsApp with the message ready. Press Send there, come back, and tap the next one.</p>
+          ${shown.filter(r => r.m.phone && reminderKinds(r).length).map(r => `<div class="rem-row"><span>${esc(r.m.name)}</span>${reminderKinds(r).filter(k => DASH.filter!=='noplan' || k==='plan').map(k => `<a class="btn small" href="${esc(waLink(r.m.phone, reminderText(r,k)))}" target="_blank" rel="noopener">${REMIND_LABEL[k]}</a>`).join('')}</div>`).join('')}
+        </details>` : ''}
         <div class="srows">
           <div class="srow shead" aria-hidden="true"><span>Student</span><span>Last check-in</span><span>Tasks this week</span><span>Syllabus</span><span>Finishes</span><span>Status</span></div>
           ${shown.map(r => { const st = STATUS_INFO[r.st], open = DASH.open===r.m.phone, paused = isPaused(r);
@@ -1018,33 +1152,34 @@ function renderMentor(){
               <span>${paused ? '<span class="stchip st-noplan">⏸ Paused</span>' : `<span class="stchip ${st.cls}">${st.label}</span>`}${r.stuck.length ? ' <span class="stchip st-stuck">Stuck</span>' : ''}</span>
             </button>${open ? studentDetail(r) : ''}`; }).join('') || '<p class="muted">No students in this group.</p>'}
         </div>
-        <p class="muted tiny">At risk = missed 3+ days, under 40% of last week's work, or won't finish before annual exams. Slow = missed 2 days, under 70% of work, or finishing after 30 Nov. New = joined in the last 3 days.</p>
+        <p class="muted tiny">At risk = missed 3+ days, under 40% of last week's work, or won't finish before annual exams. Slow = missed 2 days, under 70% of work, or finishing after Sir's classes end. New = joined in the last 3 days.</p>
       </section>
-      <div class="crm-side">
+      <div class="crm-side" ${DASH.tab!=='batch'?'hidden':''}>
         <section class="card"><h2>Status of the batch</h2>
           <div class="donut">${donut}<div class="leg">${segs.map(g => `<button type="button" class="leg-i" data-df="${g.id}"><i style="background:${g.c}"></i>${g.l} <b>${g.v}</b></button>`).join('')}</div></div></section>
         <section class="card"><h2>Check-ins, last 14 days</h2>${chart}</section>
       </div>
     </div>
-    <details class="card"><summary><h2 style="display:inline">Weekly parent messages</h2></summary>
-      <p class="muted tiny">Nothing is sent automatically. Pick the language, add your line if you want, then tap "WhatsApp par bhejo" and press Send in WhatsApp.</p>
-      ${MENTOR.map((m,i) => { const lang = getLang(m.phone);
-        return `<div class="pl"><div class="pl-top"><b>${esc(m.name)}</b><span class="mono muted">Parent: ${esc(m.parentPhone||'—')}</span></div>
-        ${chipGroup('lg_'+i, ['Hinglish','English'], 'radio', o => (o==='English') === (lang==='en'), `data-lang="${i}"`)}
-        <p class="pl-text" id="pl_${i}">${esc(parentMessage(m, lang, ''))}</p>
-        <input class="big" type="text" id="pc_${i}" data-cmt="${i}" placeholder="Your line (optional)">
-        <div class="actions">${m.parentPhone ? `<a class="btn primary small" id="wa_${i}" href="https://wa.me/91${esc(m.parentPhone)}?text=${encodeURIComponent(parentMessage(m, lang, ''))}" target="_blank" rel="noopener">WhatsApp par bhejo</a>` : ''}<button class="btn small" type="button" data-copy="${i}">Copy</button></div></div>`; }).join('')}
-    </details>
+    <section class="card msgs" ${DASH.tab!=='messages'?'hidden':''}><h2>Weekly messages (parent & student)</h2>
+      <p class="muted tiny">Nothing is sent automatically. Pick Parent or Student, pick the language, add your line if you want, then tap "WhatsApp par bhejo" and press Send in WhatsApp.</p>
+      ${MENTOR.map((m,i) => { const lang = getLang(m.phone), to = DASH.to[m.phone] || 'parent', tPhone = to==='student' ? m.phone : m.parentPhone, msg = (to==='student' ? studentMessage : parentMessage)(m, lang, '');
+        return `<div class="pl"><div class="pl-top"><b>${esc(m.name)}</b><span class="mono muted">${to==='student' ? 'Student' : 'Parent'}: ${esc(tPhone||'—')}</span></div>
+        <div class="pl-ctl">${segGroup('to_'+i, ['Parent','Student'], o => o.toLowerCase()===to, `data-to="${i}"`)}${segGroup('lg_'+i, ['Hinglish','English'], o => (o==='English') === (lang==='en'), `data-lang="${i}"`)}</div>
+        <details class="pl-more"><summary>See message · add your line</summary><p class="pl-text" id="pl_${i}">${esc(msg)}</p>
+        <input class="big" type="text" id="pc_${i}" data-cmt="${i}" placeholder="Your line (optional)"></details>
+        <div class="actions">${tPhone ? `<a class="btn primary small" id="wa_${i}" href="https://wa.me/91${esc(tPhone)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp par bhejo</a>` : ''}<button class="btn small" type="button" data-copy="${i}">Copy</button></div></div>`; }).join('')}
+    </section>
     ${IS_LIVE ? '' : '<button class="btn" type="button" id="toGate2">Back to start</button>'}
   </div>`;
   on('toGate2', () => go('gate'));
-  on('dRefresh', () => openMentor(MENTOR_KEY));
+  on('dRefresh', () => openMentor(MENTOR_KEY, {fresh:true}));
   const search = document.getElementById('dSearch');
   search.addEventListener('input', () => { DASH.q = search.value; clearTimeout(DASH.t); DASH.t = setTimeout(() => { renderMentor(); const s2 = document.getElementById('dSearch'); s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }, 250); });
-  scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; DASH.jump = !!b.dataset.jump; renderMentor(); }));
+  scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; DASH.tab = 'students'; DASH.jump = !!b.dataset.jump; renderMentor(); }));
+  scr.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { DASH.tab = b.dataset.tab; renderMentor(); }));
   scr.querySelectorAll('[data-kpi]').forEach(b => b.addEventListener('click', () => {
     const k = b.dataset.kpi;
-    if (k==='all'){ DASH.filter = 'all'; DASH.panel = null; DASH.jump = true; }
+    if (k==='all'){ DASH.filter = 'all'; DASH.panel = null; DASH.tab = 'students'; DASH.jump = true; }
     else DASH.panel = DASH.panel===k ? null : k;
     renderMentor();
   }));
@@ -1057,11 +1192,14 @@ function renderMentor(){
     if (act==='remove') args.confirmName = document.getElementById('rm_'+ph).value;
     const done = {pause:'Paused', resume:'Resumed', resetPin:'PIN reset. The student can log in with a new PIN.', setParent:'Parent number saved', remove:'Student removed'}[act];
     b.disabled = true; err.hidden = true;
-    API('adminAction', args).then(() => { toast(done); if (act==='remove') DASH.open = null; openMentor(MENTOR_KEY); })
+    API('adminAction', args).then(() => { toast(done); if (act==='remove') DASH.open = null; openMentor(MENTOR_KEY, {fresh:true}); })
       .catch(x => { err.textContent = x.message; err.hidden = false; b.disabled = false; });
   }));
-  const msgFor = i => parentMessage(MENTOR[i], getLang(MENTOR[i].phone), document.getElementById('pc_'+i).value.trim());
-  const refresh = i => { const tx = msgFor(i); document.getElementById('pl_'+i).textContent = tx; const a = document.getElementById('wa_'+i); if (a) a.href = `https://wa.me/91${MENTOR[i].parentPhone}?text=${encodeURIComponent(tx)}`; };
+  const toOf = i => DASH.to[MENTOR[i].phone] || 'parent';
+  const msgFor = i => (toOf(i)==='student' ? studentMessage : parentMessage)(MENTOR[i], getLang(MENTOR[i].phone), document.getElementById('pc_'+i).value.trim());
+  const refresh = i => { const tx = msgFor(i); document.getElementById('pl_'+i).textContent = tx; const a = document.getElementById('wa_'+i); if (a) a.href = `https://wa.me/91${toOf(i)==='student' ? MENTOR[i].phone : MENTOR[i].parentPhone}?text=${encodeURIComponent(tx)}`; };
+  // Switching Parent/Student changes the number and the button, so redraw (the details box stays open).
+  scr.querySelectorAll('[data-to]').forEach(r => r.addEventListener('change', () => { DASH.to[MENTOR[r.dataset.to].phone] = r.value==='Student' ? 'student' : 'parent'; DASH.msgOpen = true; renderMentor(); }));
   scr.querySelectorAll('[data-lang]').forEach(r => r.addEventListener('change', () => { store.set('c11.lang.'+MENTOR[r.dataset.lang].phone, r.value==='English' ? 'en' : 'hi'); refresh(r.dataset.lang); }));
   scr.querySelectorAll('[data-cmt]').forEach(inp => inp.addEventListener('input', () => refresh(inp.dataset.cmt)));
   scr.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
@@ -1079,6 +1217,7 @@ function studentDetail(r){
     <div><b>Last 7 days</b><div class="dots7">${dots.join('')}</div></div>
     <div><b>Today</b>${todays.length ? todays.map(i => `<div class="tiny">${esc(short(i.subject))} · ${esc(i.chapter||'—')} · ${fmtH(i.min)}${i.done===true ? ' · <span class="st-done">Done</span>' : i.done==='partly' ? ' · <span class="st-partly">Partly</span>' : ''}</div>`).join('') : '<div class="tiny muted">No slots today</div>'}</div>
     <div><b>Stuck notes (7 days)</b>${r.stuck.length ? r.stuck.map(c => `<div class="tiny">${fmt(D(c.date))}: ${esc(c.doubt || 'stuck, no note')}</div>`).join('') : '<div class="tiny muted">None</div>'}</div>
+    ${m.phone && reminderKinds(r).length ? `<div class="remind"><b>Send reminder</b><div class="actions">${reminderKinds(r).map(k => `<a class="btn small primary" href="${esc(waLink(m.phone, reminderText(r,k)))}" target="_blank" rel="noopener">📲 ${REMIND_LABEL[k]}</a>`).join('')}</div></div>` : ''}
     <div class="actions">${m.phone ? `<a class="btn small" href="https://wa.me/91${esc(m.phone)}" target="_blank" rel="noopener">WhatsApp student</a>` : ''}${m.parentPhone ? `<a class="btn small" href="https://wa.me/91${esc(m.parentPhone)}" target="_blank" rel="noopener">WhatsApp parent</a>` : ''}</div>
     <div class="admin"><b>Manage</b>
       <div class="actions">
@@ -1103,12 +1242,16 @@ function boot(params){
   if (params.view==='mentor') return openMentor(params.key || '');
   const tok = store.get('c11.token');
   if (!tok) return go('gate');
-  scr.innerHTML = '<div class="narrow card"><p class="muted">Opening…</p></div>';
-  API('resume', {token:tok}).then(r => { TOKEN = tok; setState(r.state); go('home'); }).catch(() => { store.set('c11.token', null); go('gate'); });
+  // Show the home screen from the last saved data at once, then bring it up to date in the background.
+  let cached = null; try { cached = JSON.parse(store.get('c11.state')); } catch(e){}
+  if (cached && cached.profile){ TOKEN = tok; setState(cached); go('home'); }
+  else scr.innerHTML = '<div class="narrow card"><p class="muted">Opening…</p></div>';
+  API('resume', {token:tok}).then(r => { TOKEN = tok; setState(r.state); if (!cached || V.screen==='home') { if (V.screen==='home') render(); else go('home'); } })
+    .catch(x => { if (/log in again/i.test(x.message) || !cached){ store.set('c11.token', null); store.set('c11.state', null); go('gate'); } });
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791857920422';
+const BUILD = '1791861683570';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class11/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
