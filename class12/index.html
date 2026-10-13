@@ -173,6 +173,7 @@ input[type=text],input[type=tel],input[type=password],select{font:inherit;color:
 details.card summary{cursor:pointer;list-style:none}
 
 /* Clean CRM look */
+.cls-sw{display:flex;gap:8px} .cls-sw a{text-decoration:none;color:inherit;display:inline-flex;align-items:center}
 .kbtn{font:inherit;color:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .kbtn:hover{border-color:var(--accent)} .kbtn.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
 .khint{font-style:normal;font-size:.78rem;color:var(--accent);font-weight:700;margin-top:4px}
@@ -424,16 +425,17 @@ function weekNumbers(m, wk){
 // Backend: on camahendrashekhawat.com the page calls the Apps Script web app over HTTPS
 // without Google cookies (works on phones with several Google accounts). Elsewhere: preview stand-in.
 // =====================================================================
+const CLS = '12';
 const API_URL = 'https://script.google.com/macros/s/AKfycbwmz8Zgg_uPL3sYrkm49ZRWFEZ7Ab3UR9TfKfzZJmyamJQW9rsg2rWxp2f0rAFZ8xNY/exec';
 const IN_GAS = !!(window.google && google.script && google.script.run);
 const REMOTE = !IN_GAS && /(^|\.)camahendrashekhawat\.com$/.test(location.hostname);
 const IS_LIVE = IN_GAS || REMOTE;
 function API(name, args){
-  if (REMOTE) return fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({name, args:args||{}}), redirect:'follow', credentials:'omit'})
+  if (REMOTE) return fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({name, args:Object.assign({}, args||{}, {cls:CLS})}), redirect:'follow', credentials:'omit'})
     .catch(() => { throw new Error('No internet. Check your network and try again.'); })
     .then(r => r.json()).then(j => { if (j.error) throw new Error(j.error); return j.result; });
   return new Promise((res, rej) => {
-    if (IN_GAS) google.script.run.withSuccessHandler(res).withFailureHandler(e => rej(new Error(e && e.message || String(e)))).api(name, args || {});
+    if (IN_GAS) google.script.run.withSuccessHandler(res).withFailureHandler(e => rej(new Error(e && e.message || String(e)))).api(name, Object.assign({}, args||{}, {cls:CLS}));
     else setTimeout(() => { try { res(Mock[name](args || {})); } catch(e){ rej(e); } }, 120);
   });
 }
@@ -995,6 +997,7 @@ function renderMentor(){
   const initials = nm => nm.replace(/\(.*\)/,'').trim().split(/\s+/).slice(0,2).map(w => w[0]||'').join('').toUpperCase();
 
   scr.innerHTML = `<div class="stack dash crm">
+    <div class="cls-sw" role="group" aria-label="Class">${["12","11"].map(c => `<a class="fchip ${c===CLS?"on":""}" href="/class${c}/?view=mentor&key=${encodeURIComponent(MENTOR_KEY)}"${c===CLS?" aria-current=\"page\"":""}>Class ${c}</a>`).join("")}</div>
     <div class="dash-head"><div><h1>${greet}, Mahendra Sir</h1><p class="muted" style="margin:2px 0 0">${DAY[t.getDay()]} ${fmtY(t)} · check-ins ${hr < 22 ? 'open till 10 pm' : 'closed for today'}</p></div>
       <button class="btn small" type="button" id="dRefresh">Refresh</button></div>
     <div class="kpis">
@@ -1014,7 +1017,7 @@ function renderMentor(){
           ${shown.map(r => { const st = STATUS_INFO[r.st], open = DASH.open===r.m.phone, paused = isPaused(r);
             return `<button type="button" class="srow ${open?'open':''}" data-open="${esc(r.m.phone)}" aria-expanded="${open}">
               <span class="nm"><span class="av av-${paused ? 'noplan' : r.st}" aria-hidden="true">${esc(initials(r.m.name))}</span><span class="nm-t"><b>${esc(r.m.name)}</b><small class="mono">${esc(r.m.phone)}</small></span></span>
-              <span><i class="lbl-m">Last check-in </i>${r.lastTxt}${r.streak>=2 ? ` <em class="late">· missed ${r.streak}</em>` : ''}<small class="muted d7">${r.d7} of last ${r.p7} days</small></span>
+              <span><i class="lbl-m">Last check-in </i>${r.lastTxt}${r.streak>=2 ? ` <em class="late">· missed ${r.streak}</em>` : ''}${r.p7 ? `<small class="muted d7">${r.d7} of last ${r.p7} day${r.p7===1?"":"s"}</small>` : ""}</span>
               <span><i class="lbl-m">Tasks </i>${r.totalW ? r.doneW+'/'+r.totalW : '–'}</span>
               <span class="syl"><i class="lbl-m">Syllabus </i><span class="pbar" aria-hidden="true"><span style="width:${Math.min(100, r.f.pct)}%"></span></span>${r.f.pct}%</span>
               <span><i class="lbl-m">Finishes </i>${r.f.done ? 'Done' : r.f.none ? '–' : r.f.after ? '<em class="late">After boards</em>' : `<span class="${r.f.late?'late':''}">${fmt(r.f.date)}</span>`}</span>
@@ -1111,7 +1114,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791825611847';
+const BUILD = '1791857920258';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});

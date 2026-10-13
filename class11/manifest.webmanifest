@@ -1,0 +1,10 @@
+{
+  "name": "Class 11 Plan 2027",
+  "short_name": "Class 11 Plan",
+  "start_url": "/class11/",
+  "scope": "/class11/",
+  "display": "standalone",
+  "background_color": "#f3f6fc",
+  "theme_color": "#2445a8",
+  "icons": [{"src": "/favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any"}]
+}
