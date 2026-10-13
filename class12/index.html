@@ -218,6 +218,11 @@ body:has(.dash) header.bar{max-width:1040px}
 .leg-i i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .leg-i b{margin-left:auto;padding-left:10px}
 /* Compact layout */
+.prob-reply{margin:0;background:var(--good-soft);border-radius:8px;padding:8px 10px;width:100%;box-sizing:border-box}
+.rp-text{width:100%;box-sizing:border-box;min-height:56px}
+.sir-msg{border-color:var(--accent)} .sm{border-top:1px solid var(--rule);padding-top:8px;margin-top:8px} .sm:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.sm-reply{margin:0 0 4px;white-space:pre-wrap;font-weight:600}
+.fb-in .lbl{display:block;margin-top:8px}
 .ch-line{display:flex;gap:6px;align-items:center} .ch-line select{flex:1;min-width:0}
 .ci-line{display:grid;grid-template-columns:minmax(0,1fr) 72px auto;grid-template-areas:"sub h u" "chap chap chap";gap:6px;align-items:center;padding:8px 0;border-top:1px solid var(--rule)}
 .ci-line .ci-sub{grid-area:sub} .ci-line .ci-h{grid-area:h} .ci-line .tiny{grid-area:u} .ci-line .ci-chap{grid-area:chap}
@@ -242,7 +247,7 @@ body:has(.dash) header.bar{max-width:1040px}
 .day-t{font-weight:700;font-size:1.02rem} .day-sum{display:flex;flex-wrap:wrap;gap:4px;align-items:center;flex:1 1 160px} .day-sum .sub{font-size:.75rem}
 .chev{margin-left:auto;color:var(--muted)}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--rule);overflow-x:auto}
-.tab{flex:1 1 auto;background:none;border:0;border-bottom:3px solid transparent;padding:10px 8px;font:inherit;font-weight:700;color:var(--muted);white-space:nowrap;cursor:pointer;min-height:44px}
+.tab{flex:1 1 auto;background:none;border:0;border-bottom:3px solid transparent;padding:10px 4px;font-size:.92rem;font:inherit;font-weight:700;color:var(--muted);white-space:nowrap;cursor:pointer;min-height:44px}
 .tab.on{color:var(--ink);border-bottom-color:var(--accent)}
 .crm-row{display:block} .crm-side:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 @media (max-width:720px){.crm-side:not([hidden]){grid-template-columns:minmax(0,1fr)}}
@@ -523,7 +528,7 @@ const Mock = (() => {
   const K = 'c12pilot.preview.v2'; let db = null;
   const load = () => { if (db) return; try { db = JSON.parse(localStorage.getItem(K)); } catch(e){} if (!db || !db.students) { db = seed(); persist(); } };
   const persist = () => { try { localStorage.setItem(K, JSON.stringify(db)); } catch(e){} };
-  const pub = s => ({profile:{phone:s.phone, name:s.name, joined:s.joined, parentPhone:s.answers.parentPhone, answers:s.answers}, items:s.items, checkins:s.checkins});
+  const pub = s => ({profile:{phone:s.phone, name:s.name, joined:s.joined, parentPhone:s.answers.parentPhone, answers:s.answers, messages:((db && db.feedback)||[]).filter(f => f.phone===s.phone && f.reply).map(f => ({when:f.repliedAt, question:f.message, reply:f.reply}))}, items:s.items, checkins:s.checkins});
   const byTok = tok => { load(); const s = db.students.find(x => x.token===tok); if (!s) throw new Error('Please log in again.'); return s; };
   function seed(){
     let r = 11; const rnd = () => (r = (r*16807) % 2147483647) / 2147483647;
@@ -553,9 +558,10 @@ const Mock = (() => {
     checkin({token, date, status, data, photos}){ const s = byTok(token);
       s.items.forEach(i => { if (i.date===date && status[i.id]) i.done = status[i.id]==='done' ? true : status[i.id]==='partly' ? 'partly' : false; });
       s.checkins = s.checkins.filter(c => c.date!==date).concat([Object.assign({date}, data, {photos:(photos||[]).map(p => '(preview) '+p.name)})]); persist(); return {state:pub(s)}; },
-    feedback({token, phone, screen, message}){ load(); let who = phone || ''; try { if (token) who = byTok(token).phone; } catch(e){} db.feedback = db.feedback || []; db.feedback.unshift({when: ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5), phone: who, screen: screen || '', message}); persist(); return {ok:true}; },
+    feedback({token, phone, screen, message, name}){ load(); let who = phone || ''; try { if (token) who = byTok(token).phone; } catch(e){} db.feedback = db.feedback || []; db.feedback.unshift({row: Date.now(), when: ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5), phone: who, name: name || '', screen: screen || '', message, reply:'', repliedAt:''}); persist(); return {ok:true}; },
+    replyFeedback({row, value}){ load(); const f = (db.feedback||[]).find(x => String(x.row)===String(row)); if (!f) throw new Error('Report not found. Refresh the dashboard.'); f.reply = value; f.repliedAt = ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5); persist(); return {ok:true}; },
     updateHours({token, weekdayHrs, sunHrs}){ const s = byTok(token); s.answers.weekdayHrs = String(weekdayHrs); s.answers.sunHrs = String(sunHrs); persist(); return {state:pub(s)}; },
-    mentorAll(){ load(); return {students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; }), feedback: db.feedback || [{when: ymd(addDays(today0(),-1)) + ' 21:40', phone:'9876500003', screen:'checkin', message:'Photo upload nahi ho raha'}]}; },
+    mentorAll(){ load(); return {students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; }), feedback: db.feedback || (db.feedback = [{row:1, when: ymd(addDays(today0(),-1)) + ' 21:40', phone:'9876500003', name:'Kabir Singh', screen:'checkin', message:'Photo upload nahi ho raha', reply:'', repliedAt:''}])}; },
     adminAction({phone, action, value, confirmName}){ load(); const s = db.students.find(x => x.phone===phone); if (!s) throw new Error('Student not found.');
       if (action==='pause' || action==='resume') s.status = action==='pause' ? 'Paused' : 'Active';
       else if (action==='resetPin') s.pin = '';
@@ -589,6 +595,9 @@ function openFeedback(){
   if (document.getElementById('fb')) return;
   const box = document.createElement('div'); box.id = 'fb'; box.className = 'fb';
   box.innerHTML = `<div class="fb-in" role="dialog" aria-label="Report a problem"><h3>Report a problem or suggestion</h3>
+    ${TOKEN ? '' : `<label class="lbl" for="fbName">Your name</label><input id="fbName" class="big" type="text" maxlength="80" value="${esc((typeof FA!=='undefined' && FA.name) || '')}">
+    <label class="lbl" for="fbPhone">Your WhatsApp number</label><input id="fbPhone" class="big" type="tel" inputmode="numeric" maxlength="10" value="${esc((typeof FA!=='undefined' && FA.phone) || '')}">
+    <p class="fhelp">So Mahendra Sir can reply to you.</p>`}
     <textarea id="fbText" placeholder="What went wrong, or what should be better?"></textarea>
     <p class="err" id="fbErr" hidden></p>
     <div class="actions"><button class="btn primary" type="button" id="fbSend">Send</button><button class="btn" type="button" id="fbClose">Close</button></div></div>`;
@@ -598,8 +607,10 @@ function openFeedback(){
   on('fbSend', () => {
     const msg = document.getElementById('fbText').value.trim(), err = document.getElementById('fbErr');
     if (!msg){ err.textContent = 'Write a few words first.'; err.hidden = false; return; }
+    const nm = TOKEN ? '' : document.getElementById('fbName').value.trim(), ph = TOKEN ? '' : document.getElementById('fbPhone').value.replace(/\D/g,'');
+    if (!TOKEN && (!nm || ph.length !== 10)){ err.textContent = 'Write your name and 10-digit WhatsApp number.'; err.hidden = false; return; }
     const b = document.getElementById('fbSend'); b.disabled = true; b.textContent = 'Sending…';
-    API('feedback', {token:TOKEN||'', screen:V.screen, message:msg, phone: M ? M.phone : ''})
+    API('feedback', {token:TOKEN||'', screen:V.screen, message:msg, phone: M ? M.phone : ph, name: M ? M.name : nm})
       .then(() => { box.remove(); toast('Sent. Thank you!'); })
       .catch(x => { err.textContent = x.message; err.hidden = false; b.disabled = false; b.textContent = 'Send'; });
   });
@@ -747,6 +758,7 @@ function renderHome(){
       <p class="finish ${f.late||f.after?'late':'ok'}">${esc(finishText(f))}</p>
       <div class="loadbar" aria-hidden="true"><span style="width:${f.pct}%"></span></div><p class="muted tiny">${f.pct}% of syllabus done${f.basis==='hours'?' · date based on your study hours until you have a week of check-ins':''}</p></div>
     ${weekEmpty ? `<div class="banner"><span><b>Plan your week.</b> ${ttMode()==='own' ? 'Add your slots for each day.' : 'Your time slots are ready.'}</span><button class="btn primary small" type="button" id="toWeek1">Fill my week</button></div>` : ''}
+    ${(ST.profile.messages||[]).length ? `<section class="card sir-msg"><h2>💬 Message from Mahendra Sir</h2>${ST.profile.messages.slice(0,2).map(mm => `<div class="sm"><p class="sm-reply">${esc(mm.reply)}</p><p class="muted tiny">About: “${esc(mm.question.length > 80 ? mm.question.slice(0,80) + '…' : mm.question)}” · ${esc(mm.when)}</p></div>`).join('')}</section>` : ''}
     <section class="card"><h2>Today</h2>${its.length ? its.map(i => slotRow(i)).join('') : '<p class="muted">Nothing planned for today.</p>'}</section>
     ${checked ? '<p class="done-line">✓ Today\'s check-in is done</p>' : `<button class="btn primary big wide" type="button" id="ciBtn">Today's check-in</button>`}
     <div class="two-btn"><button class="btn big" type="button" id="toWeek">My week</button><button class="btn big" type="button" id="toSyl">My syllabus</button></div>
@@ -1187,8 +1199,12 @@ function renderMentor(){
   const nameOf = ph => (MENTOR.find(m => m.phone===ph) || {}).name;
   const problemsHTML = `<section class="card probs" ${DASH.tab!=='problems'?'hidden':''}><h2>Problems reported</h2>
       <p class="muted tiny">From the "Report a problem" button. Also saved in the Google Sheet, tab "Feedback", and sent to your email.</p>
-      ${FEEDBACK.length ? FEEDBACK.map(f => `<div class="prob ${f.when > seenAt ? 'new' : ''}"><div class="prob-top"><b>${esc(nameOf(f.phone) || (f.phone ? f.phone : 'Not logged in'))}</b><span class="muted tiny">${esc(f.when)}${f.screen ? ' · ' + esc(f.screen) + ' screen' : ''}</span></div>
-        <p class="prob-msg">${esc(f.message)}</p>${f.phone ? `<a class="btn small" href="${esc(waLink(f.phone, 'Hi, Mahendra Sir here. About the problem you reported: '))}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : ''}</div>`).join('') : '<p class="muted">No problems reported yet.</p>'}
+      ${FEEDBACK.length ? FEEDBACK.map(f => `<div class="prob ${f.when > seenAt ? 'new' : ''}"><div class="prob-top"><b>${esc(nameOf(f.phone) || f.name || 'Name not given')}</b>${f.phone ? `<span class="mono muted tiny">${esc(f.phone)}</span>` : ''}<span class="muted tiny">${esc(f.when)}${f.screen ? ' · ' + esc(f.screen) + ' screen' : ''}</span></div>
+        <p class="prob-msg">${esc(f.message)}</p>
+        ${f.reply ? `<p class="prob-reply"><b>Your reply</b> <span class="muted tiny">${esc(f.repliedAt)}</span><br>${esc(f.reply)}</p>` : ''}
+        ${f.row && (f.phone || !f.reply) ? `<textarea class="big rp-text" id="rp_${f.row}" data-rp="${f.row}" rows="2" placeholder="${f.reply ? 'Write another reply' : 'Write your reply'}"></textarea>
+        <div class="actions"><button class="btn primary small" type="button" data-rpsend="${f.row}">Send in app</button>${f.phone ? `<a class="btn small" id="rpwa_${f.row}" href="${esc(waLink(f.phone, 'Hi, Mahendra Sir here. About the problem you reported: '))}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : '<span class="muted tiny">No number given (sent before login), so only an in-app reply is possible once they log in with that number.</span>'}</div>
+        <p class="err" id="rperr_${f.row}" hidden></p>` : ''}</div>`).join('') : '<p class="muted">No problems reported yet.</p>'}
     </section>`;
   // Clean CRM look: greeting, four number cards with trends, student table + status donut + 14-day chart.
   const hr = new Date().getHours(), greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
@@ -1267,6 +1283,16 @@ function renderMentor(){
   const search = document.getElementById('dSearch');
   search.addEventListener('input', () => { DASH.q = search.value; clearTimeout(DASH.t); DASH.t = setTimeout(() => { renderMentor(); const s2 = document.getElementById('dSearch'); s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }, 250); });
   scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; DASH.tab = 'students'; DASH.jump = !!b.dataset.jump; renderMentor(); }));
+  // Problems: typed reply goes into the WhatsApp link too; "Send in app" saves it for the student's home screen.
+  scr.querySelectorAll('[data-rp]').forEach(t => t.addEventListener('input', () => { const f = FEEDBACK.find(x => String(x.row)===t.dataset.rp), a = document.getElementById('rpwa_'+t.dataset.rp);
+    if (f && a) a.href = waLink(f.phone, 'Hi, Mahendra Sir here. About the problem you reported: ' + t.value.trim()); }));
+  scr.querySelectorAll('[data-rpsend]').forEach(b => b.addEventListener('click', () => {
+    const row = b.dataset.rpsend, t = document.getElementById('rp_'+row), e2 = document.getElementById('rperr_'+row), text = t.value.trim();
+    if (!text){ e2.textContent = 'Write the reply first.'; e2.hidden = false; return; }
+    b.disabled = true; b.textContent = 'Sending…'; e2.hidden = true;
+    API('replyFeedback', {key:MENTOR_KEY, row, value:text}).then(() => { toast('Reply saved. The student sees it on the app home screen.'); const f = FEEDBACK.find(x => String(x.row)===row); if (f){ f.reply = text; f.repliedAt = 'just now'; } renderMentor(); openMentor(MENTOR_KEY, {fresh:true}); })
+      .catch(x => { e2.textContent = x.message; e2.hidden = false; b.disabled = false; b.textContent = 'Send in app'; });
+  }));
   scr.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { if (DASH.tab==='problems' && b.dataset.tab!=='problems' && FEEDBACK[0]) store.set('c12.fbSeen', FEEDBACK[0].when); DASH.tab = b.dataset.tab; renderMentor(); if (DASH.tab==='problems' && FEEDBACK[0]) store.set('c12.fbSeen', FEEDBACK[0].when); }));
   scr.querySelectorAll('[data-kpi]').forEach(b => b.addEventListener('click', () => {
     const k = b.dataset.kpi;
@@ -1343,7 +1369,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791867896375';
+const BUILD = '1791874088437';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
