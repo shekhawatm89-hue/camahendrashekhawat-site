@@ -218,6 +218,10 @@ body:has(.dash) header.bar{max-width:1040px}
 .leg-i i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .leg-i b{margin-left:auto;padding-left:10px}
 /* Compact layout */
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--bad);color:var(--sheet);font-size:.75rem;font-weight:800}
+.prob{border-top:1px solid var(--rule);padding:12px 0;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.prob.new{background:var(--accent-soft);margin:0 -10px;padding:12px 10px;border-radius:10px}
+.prob-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline} .prob-msg{margin:0;white-space:pre-wrap}
 .sync{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 [hidden]{display:none!important}
 .segs{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:0;max-width:440px}
@@ -229,7 +233,7 @@ body:has(.dash) header.bar{max-width:1040px}
 .day-t{font-weight:700;font-size:1.02rem} .day-sum{display:flex;flex-wrap:wrap;gap:4px;align-items:center;flex:1 1 160px} .day-sum .sub{font-size:.75rem}
 .chev{margin-left:auto;color:var(--muted)}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--rule);overflow-x:auto}
-.tab{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font:inherit;font-weight:700;color:var(--muted);white-space:nowrap;cursor:pointer;min-height:44px}
+.tab{flex:1 1 auto;background:none;border:0;border-bottom:3px solid transparent;padding:10px 8px;font:inherit;font-weight:700;color:var(--muted);white-space:nowrap;cursor:pointer;min-height:44px}
 .tab.on{color:var(--ink);border-bottom-color:var(--accent)}
 .crm-row{display:block} .crm-side:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 @media (max-width:720px){.crm-side:not([hidden]){grid-template-columns:minmax(0,1fr)}}
@@ -531,9 +535,9 @@ const Mock = (() => {
     checkin({token, date, status, data, photos}){ const s = byTok(token);
       s.items.forEach(i => { if (i.date===date && status[i.id]) i.done = status[i.id]==='done' ? true : status[i.id]==='partly' ? 'partly' : false; });
       s.checkins = s.checkins.filter(c => c.date!==date).concat([Object.assign({date}, data, {photos:(photos||[]).map(p => '(preview) '+p.name)})]); persist(); return {state:pub(s)}; },
-    feedback(){ return {ok:true}; },
+    feedback({token, phone, screen, message}){ load(); let who = phone || ''; try { if (token) who = byTok(token).phone; } catch(e){} db.feedback = db.feedback || []; db.feedback.unshift({when: ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5), phone: who, screen: screen || '', message}); persist(); return {ok:true}; },
     updateHours({token, weekdayHrs, sunHrs}){ const s = byTok(token); s.answers.weekdayHrs = String(weekdayHrs); s.answers.sunHrs = String(sunHrs); persist(); return {state:pub(s)}; },
-    mentorAll(){ load(); return {students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; })}; },
+    mentorAll(){ load(); return {students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; }), feedback: db.feedback || [{when: ymd(addDays(today0(),-1)) + ' 21:40', phone:'9876500003', screen:'checkin', message:'Photo upload nahi ho raha'}]}; },
     adminAction({phone, action, value, confirmName}){ load(); const s = db.students.find(x => x.phone===phone); if (!s) throw new Error('Student not found.');
       if (action==='pause' || action==='resume') s.status = action==='pause' ? 'Paused' : 'Active';
       else if (action==='resetPin') s.pin = '';
@@ -911,17 +915,18 @@ function renderCiDone(){
 // =====================================================================
 // Opens the dashboard from the copy saved on this device (instant), then fetches fresh data quietly.
 // opts.fresh: ask the server to skip its short cache (Refresh button, after Pause/Remove etc.).
+let FEEDBACK = [];
 function openMentor(key, opts){
   opts = opts || {}; MENTOR_KEY = key;
   let cached = null; try { cached = JSON.parse(store.get('c11.mentor')); } catch(e){}
   const shown = V.screen==='mentor' && MENTOR;
   if (!shown){
-    if (cached && cached.key===key && cached.students){ MENTOR = cached.students.map(buildModel); DASH.syncing = true; go('mentor'); }
+    if (cached && cached.key===key && cached.students){ MENTOR = cached.students.map(buildModel); FEEDBACK = cached.feedback || []; DASH.syncing = true; go('mentor'); }
     else scr.innerHTML = '<div class="narrow card"><p class="muted">Loading students…</p></div>';
   } else { DASH.syncing = true; const m = document.getElementById('syncMsg'); if (m) m.textContent = 'Updating…'; }
   API('mentorAll', {key, fresh: !!opts.fresh}).then(r => {
-    try { store.set('c11.mentor', JSON.stringify({key, at: Date.now(), students: r.students})); } catch(e){}
-    MENTOR = r.students.map(buildModel); DASH.syncing = false; DASH.syncedAt = Date.now();
+    try { store.set('c11.mentor', JSON.stringify({key, at: Date.now(), students: r.students, feedback: r.feedback || []})); } catch(e){}
+    MENTOR = r.students.map(buildModel); FEEDBACK = r.feedback || []; DASH.syncing = false; DASH.syncedAt = Date.now();
     if (V.screen!=='mentor') return go('mentor');
     // Redraw in place unless the teacher is typing somewhere.
     const a = document.activeElement;
@@ -1100,6 +1105,13 @@ function renderMentor(){
     .filter(r => !q || r.m.name.toLowerCase().includes(q) || (r.m.phone||'').includes(q))
     .sort((a,b) => order[a.st]-order[b.st] || b.streak-a.streak || a.m.name.localeCompare(b.m.name));
 
+  const seenAt = store.get('c11.fbSeen') || '', newProblems = FEEDBACK.filter(f => f.when > seenAt).length;
+  const nameOf = ph => (MENTOR.find(m => m.phone===ph) || {}).name;
+  const problemsHTML = `<section class="card probs" ${DASH.tab!=='problems'?'hidden':''}><h2>Problems reported</h2>
+      <p class="muted tiny">From the "Report a problem" button. Also saved in the Google Sheet, tab "Feedback", and sent to your email.</p>
+      ${FEEDBACK.length ? FEEDBACK.map(f => `<div class="prob ${f.when > seenAt ? 'new' : ''}"><div class="prob-top"><b>${esc(nameOf(f.phone) || (f.phone ? f.phone : 'Not logged in'))}</b><span class="muted tiny">${esc(f.when)}${f.screen ? ' · ' + esc(f.screen) + ' screen' : ''}</span></div>
+        <p class="prob-msg">${esc(f.message)}</p>${f.phone ? `<a class="btn small" href="${esc(waLink(f.phone, 'Hi, Mahendra Sir here. About the problem you reported: '))}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : ''}</div>`).join('') : '<p class="muted">No problems reported yet.</p>'}
+    </section>`;
   // Clean CRM look: greeting, four number cards with trends, student table + status donut + 14-day chart.
   const hr = new Date().getHours(), greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
   const newThisWeek = R.filter(r => r.m.joined >= sundayOf(t)).length;
@@ -1131,7 +1143,7 @@ function renderMentor(){
       <button type="button" class="kpi kbtn ${DASH.panel==='syl'?'on':''}" data-kpi="syl" aria-expanded="${DASH.panel==='syl'}"><span>Avg syllabus done</span><b>${avgSyl}%</b><em>${avgFinish ? 'On pace for ' + fmt(avgFinish) : ''}</em><i class="khint">${DASH.panel==='syl' ? 'Close ▴' : 'Break up ▾'}</i></button>
     </div>
     ${panel ? `<section class="card kpanel">${panel}</section>` : ''}
-    <div class="tabs" role="tablist" aria-label="Dashboard sections">${[['students','Students'],['batch','Batch'],['messages','Messages']].map(([k,l]) => `<button type="button" role="tab" class="tab ${DASH.tab===k?'on':''}" aria-selected="${DASH.tab===k}" data-tab="${k}">${l}</button>`).join('')}</div>
+    <div class="tabs" role="tablist" aria-label="Dashboard sections">${[['students','Students'],['batch','Batch'],['messages','Messages'],['problems','Problems']].map(([k,l]) => `<button type="button" role="tab" class="tab ${DASH.tab===k?'on':''}" aria-selected="${DASH.tab===k}" data-tab="${k}">${l}${k==='problems' && newProblems ? ` <span class="badge">${newProblems}</span>` : ''}</button>`).join('')}</div>
     <div class="crm-row">
       <section class="card crm-table" ${DASH.tab!=='students'?'hidden':''}>
         <div class="dash-head"><h2>Students</h2><input class="big" type="search" id="dSearch" placeholder="Search name or number" value="${esc(DASH.q)}" style="max-width:240px"></div>
@@ -1169,6 +1181,7 @@ function renderMentor(){
         <input class="big" type="text" id="pc_${i}" data-cmt="${i}" placeholder="Your line (optional)"></details>
         <div class="actions">${tPhone ? `<a class="btn primary small" id="wa_${i}" href="https://wa.me/91${esc(tPhone)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp par bhejo</a>` : ''}<button class="btn small" type="button" data-copy="${i}">Copy</button></div></div>`; }).join('')}
     </section>
+    ${problemsHTML}
     ${IS_LIVE ? '' : '<button class="btn" type="button" id="toGate2">Back to start</button>'}
   </div>`;
   on('toGate2', () => go('gate'));
@@ -1176,7 +1189,7 @@ function renderMentor(){
   const search = document.getElementById('dSearch');
   search.addEventListener('input', () => { DASH.q = search.value; clearTimeout(DASH.t); DASH.t = setTimeout(() => { renderMentor(); const s2 = document.getElementById('dSearch'); s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }, 250); });
   scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; DASH.tab = 'students'; DASH.jump = !!b.dataset.jump; renderMentor(); }));
-  scr.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { DASH.tab = b.dataset.tab; renderMentor(); }));
+  scr.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { if (DASH.tab==='problems' && b.dataset.tab!=='problems' && FEEDBACK[0]) store.set('c11.fbSeen', FEEDBACK[0].when); DASH.tab = b.dataset.tab; renderMentor(); if (DASH.tab==='problems' && FEEDBACK[0]) store.set('c11.fbSeen', FEEDBACK[0].when); }));
   scr.querySelectorAll('[data-kpi]').forEach(b => b.addEventListener('click', () => {
     const k = b.dataset.kpi;
     if (k==='all'){ DASH.filter = 'all'; DASH.panel = null; DASH.tab = 'students'; DASH.jump = true; }
@@ -1251,7 +1264,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791861683570';
+const BUILD = '1791864568327';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class11/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
