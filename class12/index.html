@@ -218,6 +218,12 @@ body:has(.dash) header.bar{max-width:1040px}
 .leg-i i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .leg-i b{margin-left:auto;padding-left:10px}
 /* Compact layout */
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
+.pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}
+.pick-b{position:relative;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;white-space:nowrap;min-height:48px;padding-left:6px;padding-right:6px;cursor:pointer}
+.pick-b:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.pick-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pick-f{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);border-radius:999px;padding:4px 4px 4px 10px;font-size:.88rem}
 .prob-reply{margin:0;background:var(--good-soft);border-radius:8px;padding:8px 10px;width:100%;box-sizing:border-box}
 .rp-text{width:100%;box-sizing:border-box;min-height:56px}
 .sir-msg{border-color:var(--accent)} .sm{border-top:1px solid var(--rule);padding-top:8px;margin-top:8px} .sm:first-of-type{border-top:0;margin-top:0;padding-top:0}
@@ -933,7 +939,13 @@ function renderCheckin(){
         <input id="ci_rnote" class="big" type="text" maxlength="120" placeholder="Optional: a few words"></div></div>
     <div class="field"><div class="lbl">3. Stuck anywhere?</div>${chipGroup('ci_stuck', ['No','Yes'], 'radio', o => o==='No', '')}
       <input id="ci_note" class="big" type="text" maxlength="120" placeholder="Optional: where? (one line)" hidden></div>
-    <div class="field"><label class="lbl" for="ci_p">📷 Photo or PDF of your work (optional)</label><input id="ci_p" type="file" accept="image/*,application/pdf" multiple><p class="fhelp">Up to 3 files. A PDF can be up to 4 MB.</p></div>
+    <div class="field"><div class="lbl">📷 Photo or PDF of your work (optional)</div>
+      <div class="pick">
+        <label class="btn small pick-b">📷 Camera<input class="vh" type="file" accept="image/*" capture="environment" data-pick="1"></label>
+        <label class="btn small pick-b">🖼️ Gallery<input class="vh" type="file" accept="image/*" multiple data-pick="1"></label>
+        <label class="btn small pick-b">📎 PDF<input class="vh" type="file" accept="application/pdf,.pdf" data-pick="1"></label>
+      </div>
+      <div id="ci_files" class="pick-list"></div><p class="fhelp">Up to 3 files. A PDF can be up to 4 MB.</p></div>
     <p class="err" id="ci_err" hidden></p>
     <div class="form-nav"><button class="btn big" type="button" id="ciBack">Back</button><button class="btn primary big" type="submit" id="ciSend">Submit</button></div>
   </form></div>`;
@@ -958,6 +970,15 @@ function renderCheckin(){
   on('ciAddRow', () => { const used = S.rows.map(r => r.subject), sub = SUBJECTS.find(x => !used.includes(x)) || SUBJECTS[0];
     S.rows.push({subject:sub, chapter:(M.chapters.find(c => c.subject===sub && c.rem > 0) || {}).chapter || '', h:1}); drawRows(); });
   scr.querySelectorAll('input[name="ci_reason"]').forEach(r => r.addEventListener('change', () => S.reason = r.value));
+  // Chosen files (max 3), shown by name with ✕.
+  S.files = [];
+  const drawFiles = () => { document.getElementById('ci_files').innerHTML = S.files.map((f, j) => `<span class="pick-f">${/pdf/i.test(f.type) || /.pdf$/i.test(f.name) ? '📎' : '🖼️'} ${esc(f.name.length > 28 ? f.name.slice(0,25) + '…' : f.name)}<button class="x" type="button" data-unpick="${j}" aria-label="Remove this file">✕</button></span>`).join('');
+    document.querySelectorAll('[data-unpick]').forEach(b => b.addEventListener('click', () => { S.files.splice(+b.dataset.unpick, 1); drawFiles(); })); };
+  scr.querySelectorAll('[data-pick]').forEach(inp => inp.addEventListener('change', () => {
+    const err = document.getElementById('ci_err'); err.hidden = true;
+    [...inp.files].forEach(f => { if (S.files.length < 3) S.files.push(f); else { err.textContent = 'Only 3 files can be added.'; err.hidden = false; } });
+    inp.value = ''; drawFiles();
+  }));
   scr.querySelectorAll('input[name="ci_stuck"]').forEach(r => r.addEventListener('change', () => { S.stuck = r.value; document.getElementById('ci_note').hidden = r.value!=='Yes'; }));
   on('ciBack', () => go('home'));
   document.getElementById('ciForm').addEventListener('submit', async e => {
@@ -969,7 +990,7 @@ function renderCheckin(){
     const vals = Object.values(map), finished = !vals.length ? 'Nothing planned' : vals.every(v => v==='done') ? 'Done' : vals.every(v => v==='not') ? 'Not done' : 'Partly';
     const b = document.getElementById('ciSend'); b.disabled = true; b.textContent = 'Saving…';
     let photos = [];
-    try { photos = await readPhotos(document.getElementById('ci_p').files); } catch(x){ err.textContent = x && x.message ? x.message : 'Could not read the photo. Try another one.'; err.hidden = false; b.disabled = false; b.textContent = 'Submit'; return; }
+    try { photos = await readPhotos(S.files); } catch(x){ err.textContent = x && x.message ? x.message : 'Could not read the photo. Try another one.'; err.hidden = false; b.disabled = false; b.textContent = 'Submit'; return; }
     const studied = S.rows.filter(r => +r.h > 0), ns = noStudy(), rnote = (document.getElementById('ci_rnote')||{}).value || '';
     const what = studied.length ? studied.map(r => `${short(r.subject)}: ${r.chapter} (${r.h} h)`).join('; ') : 'Did not study';
     const doubt = [S.stuck==='Yes' ? document.getElementById('ci_note').value.trim() : '', ns && rnote.trim() ? 'Why no study: ' + rnote.trim() : ''].filter(Boolean).join(' | ');
@@ -1369,7 +1390,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791874088437';
+const BUILD = '1791912621115';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
