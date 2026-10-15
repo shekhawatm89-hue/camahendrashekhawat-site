@@ -601,7 +601,7 @@ const Mock = (() => {
         db.walog[it.phone] = Object.assign({}, db.walog[it.phone], {[kind]: when}); persist(); return o; }), test: ''}; },
     updateHours({token, weekdayHrs, sunHrs}){ const s = byTok(token); s.answers.weekdayHrs = String(weekdayHrs); s.answers.sunHrs = String(sunHrs); persist(); return {state:pub(s)}; },
     leads(){ const d = n => ymd(addDays(today0(), -n)); return {leads: [
-      {row:5, When: d(0) + ' 19:42', Type:'Audit', Course:'CA Inter', Name:'Riya Mehta', WhatsApp:'9876500011', 'Parent WhatsApp':'', Attempt:'Jan 2027', 'Weekday hours':'5', 'Sunday hours':'8', 'Report status':'No safety margin', 'Syllabus done':'46%', 'Finishes (this speed)':'28 Dec 2026', Exam:'1 Jan 2027', 'Hours/week now':'27', 'Hours/week needed':'31', 'Top gaps':'Taxation: GST · Costing: Standard Costing · Audit: Company Audit', Strengths:'Advanced Accounting: AS 2 · FM: Ratio Analysis', Source:'', Stage:'New'},
+      {row:5, When: d(0) + ' 19:42', Type:'Audit', Course:'CA Inter', Name:'Riya Mehta', WhatsApp:'9876500011', 'Parent WhatsApp':'', Attempt:'Jan 2027', 'Weekday hours':'5', 'Sunday hours':'8', 'Report status':'No safety margin', 'Syllabus done':'46%', 'Finishes (this speed)':'28 Dec 2026', Exam:'1 Jan 2027', 'Hours/week now':'27', 'Hours/week needed':'31', 'Top gaps':'Taxation: GST · Costing: Standard Costing · Audit: Company Audit', Strengths:'Advanced Accounting: AS 2 · FM: Ratio Analysis', Source:'', Stage:'New', Age:'20', 'Report link':'https://camahendrashekhawat.com/audit/?r=abcdef123456', 'Report WhatsApp':'Sent'},
       {row:4, When: d(0) + ' 18:05', Type:'Enquiry', Course:'Class 12 Commerce', Name:'Aarav Jain', WhatsApp:'9876500012', Source:'class-11-12-v2 [C12-v2-instagram] source=instagram&medium=reel', Stage:'New'},
       {row:3, When: d(1) + ' 21:10', Type:'Audit', Course:'Class 12 Commerce', Name:'Meera Shekhawat', WhatsApp:'9876500013', 'Parent WhatsApp':'9876500014', 'Weekday hours':'2', 'Sunday hours':'3', 'Report status':'On track', 'Syllabus done':'49%', 'Finishes (this speed)':'29 Jan 2027', Exam:'15 Feb 2027', 'Hours/week now':'12', 'Hours/week needed':'12', 'Top gaps':'BS: Directing · Accountancy: Cash Flow Statement', Strengths:'Economics: National Income', Source:'', Stage:'New'},
       {row:2, When: d(2) + ' 16:30', Type:'Enquiry', Course:'CA Foundation', Name:'Kunal Sharma', WhatsApp:'9876500015', Source:'ca-foundation', Stage:'New'}
@@ -1152,7 +1152,8 @@ function leadsHTML(){
         <p class="muted tiny" style="margin:4px 0">${esc(leadSource(l))} · <span class="mono">${esc(l.WhatsApp)}</span>${l['Parent WhatsApp'] ? ' · parent <span class="mono">' + esc(l['Parent WhatsApp']) + '</span>' : ''}</p>
         ${audit ? `<p style="margin:4px 0"><b>${esc(l['Report status']||'')}</b> · ${esc(l['Syllabus done']||'')} ready · finishes ${esc(l['Finishes (this speed)']||'–')} · exam ${esc(l.Exam||'–')}</p>` : ''}
         ${audit && open ? `<div class="muted tiny" style="margin:6px 0"><p style="margin:2px 0"><b>Weak:</b> ${esc(l['Top gaps']||'–')}</p><p style="margin:2px 0"><b>Strong:</b> ${esc(l.Strengths||'–')}</p><p style="margin:2px 0"><b>Hours:</b> ${esc(l['Weekday hours']||'?')} a day, ${esc(l['Sunday hours']||'?')} on Sunday · ${esc(l['Hours/week now']||'?')} h/week now, ${esc(l['Hours/week needed']||'?')} needed${l.Attempt ? ' · attempt ' + esc(l.Attempt) : ''}</p></div>` : ''}
-        <div class="actions"><a class="btn primary small" href="${esc(waLink(l.WhatsApp, leadMsg(l)))}" target="_blank" rel="noopener">WhatsApp</a><a class="btn small" href="tel:+91${esc(l.WhatsApp)}">Call</a>${audit ? `<button class="btn small" type="button" data-lopen="${l.row}" aria-expanded="${open}">${open ? 'Hide report' : 'See report details'}</button>` : ''}</div></div>`; }).join('') || '<p class="muted">No leads here yet.</p>'}
+        <div class="actions"><a class="btn primary small" href="${esc(waLink(l.WhatsApp, leadMsg(l)))}" target="_blank" rel="noopener">WhatsApp</a><a class="btn small" href="tel:+91${esc(l.WhatsApp)}">Call</a>${audit ? `<button class="btn small" type="button" data-lopen="${l.row}" aria-expanded="${open}">${open ? 'Hide report' : 'See report details'}</button>` : ''}${l['Report link'] ? `<a class="btn small" href="${esc(l['Report link'])}" target="_blank" rel="noopener">Open report</a>` : ''}</div>
+        ${l['Report WhatsApp'] ? `<p class="muted tiny" style="margin:6px 0 0">Report link on WhatsApp: ${esc(l['Report WhatsApp'])}${l.Age ? ' · age ' + esc(l.Age) : ''}${l['Parent permission'] === 'Yes' ? ' · parent permission given' : ''}</p>` : ''}</div>`; }).join('') || '<p class="muted">No leads here yet.</p>'}
   </section>`;
 }   // WhatsApp sending from the app: switched on? test number? last sends per student
 function openMentor(key, opts){
@@ -1634,7 +1635,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1792080264578';
+const BUILD = '1792081581448';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});

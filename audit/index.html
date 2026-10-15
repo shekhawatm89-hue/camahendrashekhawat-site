@@ -312,7 +312,9 @@ A.ch = A.ch || {};
 A.fb = A.fb || {};
 const FB = A.fb;   // report feedback: {kind: 'spot'|'off'|'talk', text, sent}
 let STEP = A.done ? 6 : (A.course ? Number(store.get('audit.step') || 1) : 0);
-const save = () => { store.set('audit.answers', JSON.stringify(A)); store.set('audit.step', String(STEP)); };
+const RID = (location.search.match(/[?&]r=([a-f0-9]{12})\b/) || [])[1] || '';
+let VIEW = false;   // true while showing a saved report from a ?r= link
+const save = () => { if (VIEW) return; store.set('audit.answers', JSON.stringify(A)); store.set('audit.step', String(STEP)); };
 
 function api(name, args){
   if (!LIVE) return new Promise((res, rej) => setTimeout(() => { try { res(MOCK[name](args)); } catch(e){ rej(new Error(String(e.message).split(' / ')[0])); } }, 300));
@@ -325,7 +327,8 @@ const MOCK = {
   auditConfig: () => ({otp: true}),
   auditOtp: () => ({ok: true, resendIn: 30}),
   auditFeedback: () => ({ok: true}),
-  auditSave: a => { if (a.code !== '123456') throw new Error('Wrong code. 4 tries left. / Galat code. 4 koshish baaki.'); return {ok: true}; },
+  auditSave: a => { if (a.code !== '123456') throw new Error('Wrong code. 4 tries left. / Galat code. 4 koshish baaki.'); try { localStorage.setItem('audit.preview.report', JSON.stringify(a.report)); } catch (e) {} return {ok: true, id: 'abcdef123456', wa: 'Sent'}; },
+  auditReport: () => { let r = null; try { r = JSON.parse(localStorage.getItem('audit.preview.report')); } catch (e) {} if (!r) throw new Error('This report was not found. Please take the audit again.'); return {answers: r}; },
 };
 
 const C = () => COURSES[A.course];
@@ -470,8 +473,9 @@ function renderUnlock(){
   const finish = code => {
     go.disabled = true; go.textContent = 'Making your report…';
     const R = compute();
-    return api('auditSave', {code, answers: answersForServer(), summary: summaryForServer(R)})
-      .then(() => { A.done = true; A.when = new Date().toISOString(); STEP = 6; try { window.cmsTrack && window.cmsTrack('audit_complete', {course: A.course}); } catch (e) {} render(); })
+    const report = {course: A.course, name: A.name, age: A.age || '', attempt: A.attempt || '', target: A.target || '', career: A.career || '', wd: A.wd, sun: A.sun, mode: A.mode, ch: A.ch, when: new Date().toISOString()};
+    return api('auditSave', {code, answers: answersForServer(), summary: summaryForServer(R), report})
+      .then(r => { A.rid = (r && r.id) || ''; A.done = true; A.when = new Date().toISOString(); STEP = 6; try { window.cmsTrack && window.cmsTrack('audit_complete', {course: A.course}); } catch (e) {} render(); })
       .catch(x => { go.textContent = 'Open my report →'; fail(x.message); });
   };
   go.addEventListener('click', () => {
@@ -705,6 +709,11 @@ function renderReport(){
 
 // Under the report (screen only): feedback box and buttons.
 function feedbackAndActions(D){
+  if (VIEW) return `<div class="no-print rp-actions" style="max-width:210mm;margin:0 auto">
+      <button class="btn" type="button" id="pdf">⬇ Download PDF (4 pages)</button>
+      <a class="btn wa" href="${D.waLink}" target="_blank" rel="noopener">Discuss my report on WhatsApp</a>
+      <a class="btn ghost" href="${esc(joinUrl())}">Join the mentorship →</a>
+      <a class="btn ghost" href="/audit/">Take your own free audit</a></div>`;
   return `<div class="no-print" style="display:flex;flex-direction:column;gap:14px;max-width:210mm;margin:0 auto">
     <section class="fb-box" aria-label="Your feedback on the report">
       <h3>How does your report feel?</h3>
@@ -727,6 +736,7 @@ function feedbackAndActions(D){
 }
 function wireReportActions(D){
   document.getElementById('pdf').addEventListener('click', () => window.print());
+  if (VIEW) return;
   const fbSend = (kind, text) => { const e = document.getElementById('fbErr'); e.hidden = true;
     return api('auditFeedback', {phone: A.phone, name: A.name, course: C().label, kind, text: text || '', status: D.stLabel, syllabus: D.R.pct + '%'})
       .then(() => { FB.sent = true; FB.kind = kind; FB.text = text || ''; save(); renderReport(); })
@@ -743,7 +753,15 @@ function wireReportActions(D){
 }
 
 const short = s => (C().short || {})[s] || s;
-render();
+if (RID) {
+  VIEW = true;
+  app.innerHTML = '<div class="card"><p class="muted">Opening the report…</p></div>';
+  api('auditReport', {id: RID}).then(r => {
+    const a = (r && r.answers) || {};
+    if (!COURSES[a.course]) throw new Error('This report could not be opened.');
+    A = Object.assign({}, a, {done: true}); STEP = 6; render();
+  }).catch(x => { app.innerHTML = '<div class="card"><h2>Report not found</h2><p class="muted">' + esc(x.message) + '</p><p><a class="btn" href="/audit/">Take the free study audit</a></p></div>'; });
+} else render();
 </script>
 </body>
 </html>
