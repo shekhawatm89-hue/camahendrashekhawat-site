@@ -600,6 +600,12 @@ const Mock = (() => {
         else { if (it.to!=='parent') o.sent++; if (it.to!=='student') { if (parent) o.sent++; else o.noParent = true; } if (!o.sent) { o.skipped = 'No parent number'; return o; } }
         db.walog[it.phone] = Object.assign({}, db.walog[it.phone], {[kind]: when}); persist(); return o; }), test: ''}; },
     updateHours({token, weekdayHrs, sunHrs}){ const s = byTok(token); s.answers.weekdayHrs = String(weekdayHrs); s.answers.sunHrs = String(sunHrs); persist(); return {state:pub(s)}; },
+    leads(){ const d = n => ymd(addDays(today0(), -n)); return {leads: [
+      {row:5, When: d(0) + ' 19:42', Type:'Audit', Course:'CA Inter', Name:'Riya Mehta', WhatsApp:'9876500011', 'Parent WhatsApp':'', Attempt:'Jan 2027', 'Weekday hours':'5', 'Sunday hours':'8', 'Report status':'No safety margin', 'Syllabus done':'46%', 'Finishes (this speed)':'28 Dec 2026', Exam:'1 Jan 2027', 'Hours/week now':'27', 'Hours/week needed':'31', 'Top gaps':'Taxation: GST · Costing: Standard Costing · Audit: Company Audit', Strengths:'Advanced Accounting: AS 2 · FM: Ratio Analysis', Source:'', Stage:'New'},
+      {row:4, When: d(0) + ' 18:05', Type:'Enquiry', Course:'Class 12 Commerce', Name:'Aarav Jain', WhatsApp:'9876500012', Source:'class-11-12-v2 [C12-v2-instagram] source=instagram&medium=reel', Stage:'New'},
+      {row:3, When: d(1) + ' 21:10', Type:'Audit', Course:'Class 12 Commerce', Name:'Meera Shekhawat', WhatsApp:'9876500013', 'Parent WhatsApp':'9876500014', 'Weekday hours':'2', 'Sunday hours':'3', 'Report status':'On track', 'Syllabus done':'49%', 'Finishes (this speed)':'29 Jan 2027', Exam:'15 Feb 2027', 'Hours/week now':'12', 'Hours/week needed':'12', 'Top gaps':'BS: Directing · Accountancy: Cash Flow Statement', Strengths:'Economics: National Income', Source:'', Stage:'New'},
+      {row:2, When: d(2) + ' 16:30', Type:'Enquiry', Course:'CA Foundation', Name:'Kunal Sharma', WhatsApp:'9876500015', Source:'ca-foundation', Stage:'New'}
+    ]}; },
     mentorAll(){ load(); return {wa: {on: true, test: '', last: db.walog || {}}, students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; }), feedback: db.feedback || (db.feedback = [{row:1, when: ymd(addDays(today0(),-1)) + ' 21:40', phone:'9876500003', name:'Kabir Singh', screen:'checkin', message:'Photo upload nahi ho raha', reply:'', repliedAt:''}])}; },
     adminAction({phone, action, value, confirmName}){ load(); const s = db.students.find(x => x.phone===phone); if (!s) throw new Error('Student not found.');
       if (action==='pause' || action==='resume') s.status = action==='pause' ? 'Paused' : 'Active';
@@ -1113,7 +1119,42 @@ function renderCiDone(){
 // Opens the dashboard from the copy saved on this device (instant), then fetches fresh data quietly.
 // opts.fresh: ask the server to skip its short cache (Refresh button, after Pause/Remove etc.).
 let FEEDBACK = [];
-let WA = {on: false, test: '', last: {}};   // WhatsApp sending from the app: switched on? test number? last sends per student
+let WA = {on: false, test: '', last: {}};
+let LEADS = null, LEADS_ERR = '', LEADS_BUSY = false;   // Leads tab: loaded when the tab is first opened
+function loadLeads(){
+  if (LEADS_BUSY) return; LEADS_BUSY = true; LEADS_ERR = '';
+  API('leads', {key: MENTOR_KEY}).then(r => { LEADS = (r && r.leads) || []; try { store.set('c12.leadsSeen.count', store.get('c12.leadsSeen.count') || '0'); } catch(e){} })
+    .catch(x => { LEADS_ERR = x.message; }).then(() => { LEADS_BUSY = false; if (V.screen==='mentor' && DASH.tab==='leads') { const y = window.scrollY; renderMentor(); window.scrollTo(0, y); } });
+}
+const LEAD_PAGE = {'ca-inter':'CA Inter page', 'ca-foundation':'CA Foundation page', 'class-11-12':'Class 11–12 page', 'mentorship-landing':'Mentorship page'};
+const leadSource = l => { const src = String(l.Source||''), camp = (src.match(/(?:^|\s)source=([^&\s]+)/) || [])[1], via = camp ? ' · from ' + camp : '';
+  if (l.Type==='Audit') return 'Free study audit' + via;
+  const m = src.match(/^([a-z0-9-]+?)(?:-v(\d))?(?=\s|$)/); return m && LEAD_PAGE[m[1]] ? LEAD_PAGE[m[1]] + ' · video ' + (m[2] || '1') + via : (src || 'Landing page'); };
+const leadCourseKey = c => /inter/i.test(c) ? 'inter' : /foundation/i.test(c) ? 'fc' : 'cls';
+function leadMsg(l){
+  const nm = String(l.Name||'').split(/\s+/)[0] || 'there';
+  if (l.Type==='Audit') return 'Hi ' + nm + ', this is CA Mahendra Shekhawat\'s team. Thank you for taking the Free Study Audit (' + l.Course + '). Your report says: ' + (l['Report status']||'') + ', ' + (l['Syllabus done']||'') + ' of the syllabus ready. Shall we talk for 10 minutes about a plan to close your gaps?';
+  return 'Hi ' + nm + ', this is CA Mahendra Shekhawat\'s team. Thank you for your interest in the ' + l.Course + ' mentorship. When is a good time to call you for 10 minutes?';
+}
+function leadsHTML(){
+  if (DASH.tab!=='leads') return '';
+  if (LEADS===null) { if (!LEADS_BUSY && !LEADS_ERR) setTimeout(loadLeads, 0); return '<section class="card"><h2>Leads</h2>' + (LEADS_ERR ? '<p class="err">' + esc(LEADS_ERR) + '</p><button class="btn small" type="button" id="lRetry">Try again</button>' : '<p class="muted">Loading leads…</p>') + '</section>'; }
+  const f = DASH.lf || 'all', cf = DASH.lc || 'all', q = (DASH.lq || '').toLowerCase();
+  const byType = {all: LEADS.length, Audit: LEADS.filter(l => l.Type==='Audit').length, Enquiry: LEADS.filter(l => l.Type==='Enquiry').length};
+  const shown = LEADS.filter(l => (f==='all' || l.Type===f) && (cf==='all' || leadCourseKey(l.Course)===cf) && (!q || String(l.Name).toLowerCase().includes(q) || String(l.WhatsApp).includes(q)));
+  const today = ymd(today0()), newToday = LEADS.filter(l => String(l.When).slice(0,10)===today).length;
+  return `<section class="card leads"><div class="dash-head"><div><h2>Leads</h2><p class="muted tiny" style="margin:2px 0 0">Free study audits and "Join" enquiries from the landing pages · ${newToday} today · also in the Google Sheet "Free Audit Leads"</p></div><button class="btn small" type="button" id="lRefresh">${LEADS_BUSY ? 'Updating…' : 'Refresh'}</button></div>
+    <div class="chips" role="group" aria-label="Lead type">${[['all','All'],['Audit','Free audit'],['Enquiry','Join enquiry']].map(([k,l]) => `<button type="button" class="fchip ${f===k?'on':''}" data-lf="${k}">${l} <b>${byType[k]}</b></button>`).join('')}</div>
+    <div class="chips" role="group" aria-label="Course" style="margin-top:8px">${[['all','All courses'],['cls','Class 11–12'],['fc','CA Foundation'],['inter','CA Inter']].map(([k,l]) => `<button type="button" class="fchip ${cf===k?'on':''}" data-lc="${k}">${l}</button>`).join('')}</div>
+    <input type="search" id="lSearch" placeholder="Search name or number" value="${esc(DASH.lq||'')}" class="big" style="max-width:260px;margin:10px 0 8px">
+    ${shown.map(l => { const audit = l.Type==='Audit', open = DASH.lopen===String(l.row);
+      return `<div class="pl lead"><div class="pl-top" style="justify-content:flex-start;align-items:center"><b>${esc(l.Name)}</b><span class="stchip ${audit ? 'st-ok' : 'st-new'}">${audit ? 'Free audit' : 'Join enquiry'}</span><span class="muted tiny" style="margin-left:auto">${esc(l.Course)} · ${esc(l.When)}</span></div>
+        <p class="muted tiny" style="margin:4px 0">${esc(leadSource(l))} · <span class="mono">${esc(l.WhatsApp)}</span>${l['Parent WhatsApp'] ? ' · parent <span class="mono">' + esc(l['Parent WhatsApp']) + '</span>' : ''}</p>
+        ${audit ? `<p style="margin:4px 0"><b>${esc(l['Report status']||'')}</b> · ${esc(l['Syllabus done']||'')} ready · finishes ${esc(l['Finishes (this speed)']||'–')} · exam ${esc(l.Exam||'–')}</p>` : ''}
+        ${audit && open ? `<div class="muted tiny" style="margin:6px 0"><p style="margin:2px 0"><b>Weak:</b> ${esc(l['Top gaps']||'–')}</p><p style="margin:2px 0"><b>Strong:</b> ${esc(l.Strengths||'–')}</p><p style="margin:2px 0"><b>Hours:</b> ${esc(l['Weekday hours']||'?')} a day, ${esc(l['Sunday hours']||'?')} on Sunday · ${esc(l['Hours/week now']||'?')} h/week now, ${esc(l['Hours/week needed']||'?')} needed${l.Attempt ? ' · attempt ' + esc(l.Attempt) : ''}</p></div>` : ''}
+        <div class="actions"><a class="btn primary small" href="${esc(waLink(l.WhatsApp, leadMsg(l)))}" target="_blank" rel="noopener">WhatsApp</a><a class="btn small" href="tel:+91${esc(l.WhatsApp)}">Call</a>${audit ? `<button class="btn small" type="button" data-lopen="${l.row}" aria-expanded="${open}">${open ? 'Hide report' : 'See report details'}</button>` : ''}</div></div>`; }).join('') || '<p class="muted">No leads here yet.</p>'}
+  </section>`;
+}   // WhatsApp sending from the app: switched on? test number? last sends per student
 function openMentor(key, opts){
   opts = opts || {}; MENTOR_KEY = key;
   let cached = null; try { cached = JSON.parse(store.get('c12.mentor')); } catch(e){}
@@ -1401,7 +1442,7 @@ function renderMentor(){
       <button type="button" class="kpi kbtn ${DASH.panel==='syl'?'on':''}" data-kpi="syl" aria-expanded="${DASH.panel==='syl'}"><span>Avg syllabus done</span><b>${avgSyl}%</b><em>${avgFinish ? 'On pace for ' + fmt(avgFinish) : ''}</em><i class="khint">${DASH.panel==='syl' ? 'Close ▴' : 'Break up ▾'}</i></button>
     </div>
     ${panel ? `<section class="card kpanel">${panel}</section>` : ''}
-    <div class="tabs" role="tablist" aria-label="Dashboard sections">${[['students','Students'],['batch','Batch'],['messages','Messages'],['problems','Problems']].map(([k,l]) => `<button type="button" role="tab" class="tab ${DASH.tab===k?'on':''}" aria-selected="${DASH.tab===k}" data-tab="${k}">${l}${k==='problems' && newProblems ? ` <span class="badge">${newProblems}</span>` : ''}</button>`).join('')}</div>
+    <div class="tabs" role="tablist" aria-label="Dashboard sections">${[['students','Students'],['batch','Batch'],['messages','Messages'],['problems','Problems'],['leads','Leads']].map(([k,l]) => `<button type="button" role="tab" class="tab ${DASH.tab===k?'on':''}" aria-selected="${DASH.tab===k}" data-tab="${k}">${l}${k==='problems' && newProblems ? ` <span class="badge">${newProblems}</span>` : ''}</button>`).join('')}</div>
     <div class="crm-row">
       <section class="card crm-table" ${DASH.tab!=='students'?'hidden':''}>
         <div class="dash-head"><h2>Students</h2><input class="big" type="search" id="dSearch" placeholder="Search name or number" value="${esc(DASH.q)}" style="max-width:240px"></div>
@@ -1441,10 +1482,18 @@ function renderMentor(){
         <div class="actions">${tPhone ? `<a class="btn primary small" id="wa_${i}" href="https://wa.me/91${esc(tPhone)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp par bhejo</a>` : ''}<button class="btn small" type="button" data-copy="${i}">Copy</button></div></div>`; }).join('')}
     </section>
     ${problemsHTML}
+    ${leadsHTML()}
     ${IS_LIVE ? '' : '<button class="btn" type="button" id="toGate2">Back to start</button>'}
   </div>`;
   on('toGate2', () => go('gate'));
-  on('dRefresh', () => openMentor(MENTOR_KEY, {fresh:true}));
+  on('dRefresh', () => { openMentor(MENTOR_KEY, {fresh:true}); if (DASH.tab==='leads') loadLeads(); });
+  on('lRefresh', () => { loadLeads(); renderMentor(); });
+  on('lRetry', () => { LEADS_ERR = ''; loadLeads(); renderMentor(); });
+  scr.querySelectorAll('[data-lf]').forEach(b => b.addEventListener('click', () => { DASH.lf = b.dataset.lf; renderMentor(); }));
+  scr.querySelectorAll('[data-lc]').forEach(b => b.addEventListener('click', () => { DASH.lc = b.dataset.lc; renderMentor(); }));
+  scr.querySelectorAll('[data-lopen]').forEach(b => b.addEventListener('click', () => { DASH.lopen = DASH.lopen===b.dataset.lopen ? null : b.dataset.lopen; renderMentor(); }));
+  const lSearch = document.getElementById('lSearch');
+  if (lSearch) lSearch.addEventListener('input', () => { DASH.lq = lSearch.value; clearTimeout(DASH.lt); DASH.lt = setTimeout(() => { renderMentor(); const s2 = document.getElementById('lSearch'); s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }, 250); });
   const search = document.getElementById('dSearch');
   search.addEventListener('input', () => { DASH.q = search.value; clearTimeout(DASH.t); DASH.t = setTimeout(() => { renderMentor(); const s2 = document.getElementById('dSearch'); s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }, 250); });
   scr.querySelectorAll('[data-df]').forEach(b => b.addEventListener('click', () => { DASH.filter = b.dataset.df; DASH.open = null; DASH.tab = 'students'; DASH.jump = !!b.dataset.jump; renderMentor(); }));
@@ -1585,7 +1634,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1792059242839';
+const BUILD = '1792080264578';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});

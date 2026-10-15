@@ -276,11 +276,14 @@ textarea.big{font:inherit;font-size:16px;padding:10px 12px;border:1px solid #d4d
 @media print{.wrap>header,.wrap>.foot{display:none!important}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="/track.js"></script>
+<style>.site-foot{max-width:640px;margin:28px auto 24px;padding:0 16px;display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;font-size:13px}.site-foot a{color:var(--ink2,#3b4054)}.top a.home{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}</style>
 </head>
 <body>
 <div class="wrap">
-  <header class="top no-print"><img src="/favicon.png" alt="" width="32" height="32" style="border-radius:50%"><div class="brand">CA Mahendra Shekhawat</div></header>
+  <header class="top no-print"><a class="home" href="/mentorship/" aria-label="CA Mahendra Shekhawat, home"><img src="/favicon.png" alt="" width="32" height="32" style="border-radius:50%"><div class="brand">CA Mahendra Shekhawat</div></a></header>
   <main id="app"></main>
+  <footer class="site-foot no-print"><a href="/mentorship/">Home</a><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms</a><a href="/refund/">Refund policy</a><a href="https://wa.me/919468767477">WhatsApp +91 94687 67477</a></footer>
   <p class="foot no-print">Your answers are used only to make your report and to contact you about it. · camahendrashekhawat.com</p>
 </div>
 <script>
@@ -292,7 +295,7 @@ const COURSES = {"c11":{"label":"Class 11 Commerce","sub":"CBSE · Accounts, BST
 const API_URL = 'https://script.google.com/macros/s/AKfycbwmz8Zgg_uPL3sYrkm49ZRWFEZ7Ab3UR9TfKfzZJmyamJQW9rsg2rWxp2f0rAFZ8xNY/exec';
 const LIVE = /(^|\.)camahendrashekhawat\.com$/.test(location.hostname);
 // Where the "talk to us" and "join" buttons go. Fill before launch.
-const WA_CHAT = '';                 // e.g. '919xxxxxxxxx' (a phone that Sir's team reads); empty = button hidden
+const WA_CHAT = '919468767477';                 // e.g. '919xxxxxxxxx' (a phone that Sir's team reads); empty = button hidden
 const JOIN_URL = '/mentorship/';    // fallback: course chooser
 const JOIN_URLS = { c11: '/class-11-12/', c12: '/class-11-12/', cafc: '/ca-foundation/', cainter: '/ca-inter/' };
 const joinUrl = () => JOIN_URLS[A.course] || JOIN_URL;
@@ -355,7 +358,7 @@ function render(){
 
 function renderCourse(){
   app.innerHTML = `<div class="fade">${stepBar()}
-    <p class="eyebrow">Free study audit · 5 minute</p>
+    <p class="eyebrow">Free study audit · 10–15 minutes</p>
     <h1>See where your <em>real preparation</em> stands</h1>
     <p class="muted">Mark every chapter. Your report shows what is ready, where the gaps are, and when your syllabus will finish at your current pace.</p>
     <p class="lbl" style="margin-top:18px">Which course are you in?</p>
@@ -366,6 +369,7 @@ function renderCourse(){
 function profileFields(){
   return `<div class="field"><label class="lbl" for="f_name">Your name</label><input id="f_name" class="big" type="text" autocomplete="name" maxlength="60" value="${esc(A.name||'')}"></div>
     <div class="field"><label class="lbl" for="f_school">${C().attempts ? 'Coaching / institute' : 'School'} <span class="muted small">(optional)</span></label><input id="f_school" class="big" type="text" maxlength="80" value="${esc(A.school||'')}"></div>
+    <div class="field"><label class="lbl" for="f_age">Your age</label><input id="f_age" class="big" type="tel" inputmode="numeric" maxlength="2" value="${esc(A.age||'')}" style="max-width:120px"></div>
     <div class="field"><label class="lbl" for="f_city">City</label><input id="f_city" class="big" type="text" maxlength="40" value="${esc(A.city||'')}"></div>
     ${C().attempts ? `<div class="field"><span class="lbl">Which attempt are you preparing for?</span>${chips('attempt', Object.keys(C().attempts))}</div>` : ''}`;
 }
@@ -380,7 +384,7 @@ function timeFields(){
     <div class="field"><span class="lbl">How many hours on Sunday?</span>${chips('sun', ['0','2','4','6','8','10+'])}</div>
     <div class="field"><span class="lbl">How are you studying now?</span>${chips('mode', C().attempts ? ['Coaching','Self study','Coaching + self study'] : ['School only','School + tuition','School + coaching'])}</div>`;
 }
-const NEED = {1:['name','city'], 2:['target'], 3:['wd','sun','mode']};
+const NEED = {1:['name','age','city'], 2:['target'], 3:['wd','sun','mode']};
 function renderForm(step, title, body){
   app.innerHTML = `<div class="fade">${stepBar()}<div class="card"><div><p class="eyebrow">${esc(C().label)} · ${step}</p><h2>${esc(title)}</h2></div>${body}
     <p class="err" id="err" hidden></p>
@@ -391,6 +395,7 @@ function renderForm(step, title, body){
   document.getElementById('next').addEventListener('click', () => {
     const need = (NEED[STEP] || []).concat(STEP===1 && C().attempts ? ['attempt'] : []).concat(STEP===2 && !C().attempts ? ['career'] : []);
     const miss = need.filter(k => !String(A[k]||'').trim());
+    if (STEP === 1 && A.age && !(+A.age >= 10 && +A.age <= 60)) { const e = document.getElementById('err'); e.textContent = 'Enter your age in years (for example 17).'; e.hidden = false; return; }
     if (miss.length){ const e = document.getElementById('err'); e.textContent = 'Please answer every question to continue.'; e.hidden = false; return; }
     STEP++; render();
   });
@@ -430,11 +435,13 @@ function renderChapters(){
 }
 
 let OTP_ON = true, resendT = null;
+const minor = () => +A.age > 0 && +A.age < 18;
 function renderUnlock(){
   app.innerHTML = `<div class="fade">${stepBar()}<div class="card"><div><p class="eyebrow">Last step</p><h2>Your report is ready 🎯</h2>
     <p class="muted">Enter your WhatsApp number. We will send a code; enter it to open your report.</p></div>
     <div class="field"><label class="lbl" for="f_phone">Your WhatsApp number</label><input id="f_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" value="${esc(A.phone||'')}"></div>
-    <div class="field"><label class="lbl" for="f_parent">Parent's WhatsApp <span class="muted small">(optional, they get the report too)</span></label><input id="f_parent" class="big" type="tel" inputmode="numeric" maxlength="10" value="${esc(A.parent||'')}"></div>
+    <div class="field"><label class="lbl" for="f_parent">Parent's WhatsApp <span class="muted small">${minor() ? '(needed because you are under 18)' : '(optional, they get the report too)'}</span></label><input id="f_parent" class="big" type="tel" inputmode="numeric" maxlength="10" value="${esc(A.parent||'')}"></div>
+    ${minor() ? `<label class="check"><input type="checkbox" id="f_pok" ${A.parentOk ? "checked" : ""}><span>My parent knows about this audit and agrees that we can send the report and study updates on WhatsApp.</span></label>` : ''}
     <label class="check"><input type="checkbox" id="f_ok" ${A.consent ? "checked" : ""}><span>Send my report and study updates to me on WhatsApp.</span></label>
     <div id="codeBox" hidden class="field"><label class="lbl" for="f_code">The 6-digit code from WhatsApp</label><input id="f_code" class="big otp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"><span class="muted small" id="resend"></span></div>
     <p class="err" id="err" hidden></p>
@@ -448,7 +455,10 @@ function renderUnlock(){
   const sendCode = () => {
     const ph = A.phone || '';
     if (!/^[6-9]\d{9}$/.test(ph)) return fail('Enter a valid 10-digit WhatsApp number.');
-    if (A.parent && !/^[6-9]\d{9}$/.test(A.parent)) return fail('Enter a valid parent number, or leave it empty.');
+    if (minor() && !A.parent) return fail('You are under 18, so please add a parent\'s WhatsApp number.');
+    if (A.parent && !/^[6-9]\d{9}$/.test(A.parent)) return fail(minor() ? 'Enter a valid 10-digit parent number.' : 'Enter a valid parent number, or leave it empty.');
+    if (A.parent && A.parent === ph) return fail('The parent number must be different from your own number.');
+    if (minor()) { if (!$('f_pok').checked) return fail('Tick the box to confirm that your parent agrees.'); A.parentOk = true; }
     if (!$('f_ok').checked) return fail('Tick the box so we can send your report on WhatsApp.');
     A.consent = true; err.hidden = true; go.disabled = true; go.textContent = 'Sending…';
     api('auditConfig', {}).then(c => { OTP_ON = !!(c && c.otp); if (!OTP_ON) return finish('');
@@ -461,7 +471,7 @@ function renderUnlock(){
     go.disabled = true; go.textContent = 'Making your report…';
     const R = compute();
     return api('auditSave', {code, answers: answersForServer(), summary: summaryForServer(R)})
-      .then(() => { A.done = true; A.when = new Date().toISOString(); STEP = 6; render(); })
+      .then(() => { A.done = true; A.when = new Date().toISOString(); STEP = 6; try { window.cmsTrack && window.cmsTrack('audit_complete', {course: A.course}); } catch (e) {} render(); })
       .catch(x => { go.textContent = 'Open my report →'; fail(x.message); });
   };
   go.addEventListener('click', () => {
@@ -473,7 +483,8 @@ function renderUnlock(){
 }
 function answersForServer(){
   return {course: A.course, courseLabel: C().label, name: (A.name||'').trim(), school: (A.school||'').trim(), city: (A.city||'').trim(), attempt: A.attempt||'',
-    target: A.target||'', career: A.career||'', wd: A.wd, sun: A.sun, mode: A.mode, phone: A.phone, parent: A.parent||'', consent: !!A.consent, utm: UTM,
+    target: A.target||'', career: A.career||'', wd: A.wd, sun: A.sun, mode: A.mode, phone: A.phone, parent: A.parent||'', consent: !!A.consent, age: A.age||'', parentOk: !!A.parentOk,
+    utm: ((window.cmsUtmString && window.cmsUtmString()) || UTM) + (window.cmsTag ? ' ' + window.cmsTag('AU') : ''),
     chapters: C().syl.map(c => [c.subject, c.chapter, STATUS[A.ch[chKey(c)]] || '']) };
 }
 function summaryForServer(R){
@@ -530,6 +541,12 @@ const R4 = {
   offer: ['Study audit report', 'Daily study planner', 'Daily tracking, 1 minute', 'Weekly report to parents', 'Stuck? Connect with us', '1-to-1 on day 1 + every month', 'Book-wise tests, 2 pre-boards, checked copies', 'Revision plan + career guidance'],
   cls: ['s-acc', 's-bs', 's-eco', 's-test', 's-other', 's-other2'],
 };
+const OFFER = {
+  cls: ['Study audit report', 'Daily study planner', 'Daily tracking, 1 minute', 'Weekly report to parents', 'Stuck? Connect with us', '1-to-1 on day 1 + every month', 'Chapter + book-wise tests, 3 pre-boards per subject', 'Revision plan + 2 counselling calls'],
+  cafc: ['Study audit report', 'Daily study planner', 'Daily tracking, 1 minute', 'Weekly progress report', 'Stuck? Connect with us', '1-to-1 on day 1 + every month', 'Chapter tests, full mocks, ICAI RTP/MTP practice', 'Revision plan + 2 counselling calls'],
+  cainter: ['Study audit report, all 6 papers', 'Daily plan on the ICAI MTP calendar', 'Daily tracking, 1 minute', 'Weekly progress report', 'Stuck? Connect with us', '1-to-1 on day 1 + every month', 'Full mocks, copies checked ICAI-style', 'Group-wise revision + 2 guidance calls']
+};
+const offerFor = c => OFFER[c] || OFFER.cls;
 const shortD = d => d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
 const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
 function report4Data(){
@@ -673,7 +690,7 @@ function renderReport(){
     <div class="cta"><div><div class="eyebrow" style="color:#F1C774">Next step</div><h2>Talk to us on WhatsApp</h2>
       <p>Send us a message. We will go through this report with you and your parents and tell you what to do next. No pressure.</p>
       <a class="wa" href="${D.waLink}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="#0B2E17"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.6 2.1 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg>WhatsApp ${R4.waDisplay}</a>
-      <div class="offer">${R4.offer.map(o => `<div>${esc(o)}</div>`).join('')}</div>
+      <div class="offer">${offerFor(A.course).map(o => `<div>${esc(o)}</div>`).join('')}</div>
       <div class="price">Full mentorship: <b>${({cafc:"₹5,999",cainter:"₹6,999"})[A.course] || "₹4,999"}</b> · one fee ${D.price}.</div></div>
       <div><div class="qr" id="r4qr"></div><div class="qr-cap">Scan to message us</div></div></div>
     <p class="method"><b>How this report was made:</b> from the answers ${esc(D.first)} gave in the audit on ${date}. Readiness is self-reported, chapter hours are estimates for an average student, and finish dates assume the same weekly hours. It is a study-planning guide, not a prediction of marks.</p>
