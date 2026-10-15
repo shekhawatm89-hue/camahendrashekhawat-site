@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Free Study Audit · CA Mahendra Shekhawat</title>
-<meta name="description" content="5-minute free study audit for Class 11, Class 12 Commerce, CA Foundation and CA Inter. See where your preparation really stands.">
+<meta name="description" content="A free 10–15 minute study audit for Class 11, Class 12 Commerce, CA Foundation and CA Inter. Mark every chapter and get a 4-page report on where your preparation really stands.">
+<meta property="og:title" content="Free Study Audit · CA Mahendra Shekhawat">
+<meta property="og:description" content="A free 10–15 minute study audit. Mark every chapter and get a 4-page report on where your preparation really stands.">
 <link rel="icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
@@ -29,11 +31,13 @@ header.top{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 h1,h2{font-family:"Poppins",var(--font)}
 h1{font-size:clamp(28px,6vw,40px);font-weight:500;letter-spacing:-.035em;line-height:1.1;margin:6px 0 10px;text-wrap:balance}
-h1 em{font-style:normal;background:var(--yellow);padding:0 6px;border-radius:6px}
+h1 em{font-style:normal;background:var(--yellow);padding:0 6px;border-radius:6px;white-space:nowrap}
 h2{font-size:22px;font-weight:500;letter-spacing:-.02em;margin:0 0 4px}
 p{margin:0 0 10px}.muted{color:var(--muted)}.small{font-size:14px}
 .steps{display:flex;gap:6px;margin:0 0 18px;overflow-x:auto}
 .steps span{flex:1;min-width:58px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);border-top:3px solid var(--line);padding-top:6px}
+.steps span i{font-style:normal}
+@media (max-width:560px){.steps{overflow:visible}.steps span{min-width:0;flex:1}.steps span:not(.on) i{display:none}.steps span.on{flex:3}}
 .steps span.on{color:var(--blue);border-color:var(--blue)}.steps span.done{color:var(--ink2);border-color:var(--ink2)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
 .field{display:flex;flex-direction:column;gap:6px}
@@ -183,6 +187,7 @@ textarea.big{font:inherit;font-size:16px;padding:10px 12px;border:1px solid #d4d
 .r4 .tl .pt{position:absolute;transform:translateX(-50%);text-align:center;font-size:9.5pt;line-height:1.2;white-space:nowrap}.r4 .tl .pt b{display:block;font-size:10.5pt}
 .r4 .tl .dot{position:absolute;top:12.6mm;width:6mm;height:6mm;border-radius:50%;background:#fff;border:1.6mm solid var(--navy);transform:translateX(-50%)}
 .r4 .tl .up{bottom:19mm}.r4 .tl .down{top:21mm}.r4 .tl .edge-l{transform:none}.r4 .tl .edge-r{transform:translateX(-100%);text-align:right}
+.r4 .tl .pt .tgt{display:block;font-size:8.5pt;color:#6b6f80}
 .r4 .tl-note{font-size:11pt;margin-top:1mm}.r4 .tl-note b{color:#9A5A00}
 /* page 2 */
 .r4 .rings{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
@@ -263,7 +268,7 @@ textarea.big{font:inherit;font-size:16px;padding:10px 12px;border:1px solid #d4d
   .r4 .pc-row{grid-template-columns:8mm 1fr}.r4 .pc-row .hbar{grid-column:2}
   .r4 .risk-row,.r4 .many .risk-row{grid-template-columns:1fr}.r4 .risk-row .wk{text-align:left}
   .r4 .parent dl{grid-template-columns:1fr}.r4 .teacher{grid-template-columns:1fr}
-  .r4 .tl{height:36mm}.r4 .tl .pt{font-size:11px}
+  .r4 .foot{flex-direction:column;gap:2px}.r4 .tl{height:38mm}.r4 .tl .bar{top:17mm}.r4 .tl .rev{top:16.2mm}.r4 .tl .dot{top:15.6mm}.r4 .tl .up{bottom:auto;top:0}.r4 .tl .down{top:24mm}.r4 .tl .pt{font-size:11px}.r4 .tl .pt b{font-size:12px}.r4 .tl .rev-l{display:none}
 }
 @media print{
   @page{size:A4;margin:0}
@@ -343,7 +348,7 @@ const examName = () => plan().examLabel || fmtD(examDate());
 
 // ---------------------------------------------------------------- screens
 const STEPS = ['Course','Profile','Goals','Time','Chapters','Report'];
-function stepBar(){ const i = Math.min(STEP, 5); return `<div class="steps" aria-hidden="true">${STEPS.map((s,k) => `<span class="${k<i?'done':k===i?'on':''}">0${k+1} ${s}</span>`).join('')}</div>`; }
+function stepBar(){ const i = Math.min(STEP, 5); return `<div class="steps" aria-hidden="true">${STEPS.map((s,k) => `<span class="${k<i?'done':k===i?'on':''}">0${k+1}<i> ${s}</i></span>`).join('')}</div>`; }
 const chips = (key, opts, multi) => `<div class="chips" role="group">${opts.map(o => `<button type="button" class="chip" data-k="${key}" data-v="${esc(o)}" aria-pressed="${multi ? (A[key]||[]).includes(o) : A[key]===o}">${esc(o)}</button>`).join('')}</div>`;
 
 function render(){
@@ -444,8 +449,8 @@ function renderUnlock(){
     <p class="muted">Enter your WhatsApp number. We will send a code; enter it to open your report.</p></div>
     <div class="field"><label class="lbl" for="f_phone">Your WhatsApp number</label><input id="f_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" value="${esc(A.phone||'')}"></div>
     <div class="field"><label class="lbl" for="f_parent">Parent's WhatsApp <span class="muted small">${minor() ? '(needed because you are under 18)' : '(optional, they get the report too)'}</span></label><input id="f_parent" class="big" type="tel" inputmode="numeric" maxlength="10" value="${esc(A.parent||'')}"></div>
-    ${minor() ? `<label class="check"><input type="checkbox" id="f_pok" ${A.parentOk ? "checked" : ""}><span>My parent knows about this audit and agrees that we can send the report and study updates on WhatsApp.</span></label>` : ''}
-    <label class="check"><input type="checkbox" id="f_ok" ${A.consent ? "checked" : ""}><span>Send my report and study updates to me on WhatsApp.</span></label>
+    ${minor() ? `<label class="check"><input type="checkbox" id="f_pok" ${A.parentOk ? "checked" : ""}><span>My parent knows about this audit and agrees that we can send the report and study updates on WhatsApp. <a href="/privacy/" target="_blank" rel="noopener">Privacy policy</a></span></label>` : ''}
+    <label class="check"><input type="checkbox" id="f_ok" ${A.consent ? "checked" : ""}><span>Send my report and study updates to me on WhatsApp. <a href="/privacy/" target="_blank" rel="noopener">Privacy policy</a></span></label>
     <div id="codeBox" hidden class="field"><label class="lbl" for="f_code">The 6-digit code from WhatsApp</label><input id="f_code" class="big otp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"><span class="muted small" id="resend"></span></div>
     <p class="err" id="err" hidden></p>
     ${LIVE ? '' : '<p class="note">Preview: no message is sent. Enter the code <b>123456</b>.</p>'}
@@ -650,9 +655,9 @@ function renderReport(){
       <div class="tl" style="--f:${D.pos}"><div class="bar"></div><div class="rev"></div>
         <div class="dot" style="left:0"></div><div class="dot" style="left:${D.pos}%;border-color:var(--mid)"></div><div class="dot" style="left:100%;border-color:var(--bad)"></div>
         <div class="pt up edge-l" style="left:0"><b>Today</b>${shortD(D.today)}</div>
-        <div class="pt up" style="left:${D.pos}%"><b>You finish</b>${R.finish ? shortD(R.finish) : '—'} (target ${shortD(D.target)})</div>
+        <div class="pt ${D.pos < 28 ? 'down edge-l' : D.pos > 68 ? 'up edge-r' : 'up'}" style="left:${D.pos}%"><b>You finish</b>${R.finish ? shortD(R.finish) : '—'}<span class="tgt">target ${shortD(D.target)}</span></div>
         <div class="pt down edge-r" style="left:100%"><b>Exam</b>${D.examShort}</div>
-        <div class="pt down edge-r" style="left:calc(${D.pos}% + 2mm)"><b style="color:#9A5A00">Revision: ${plural(D.revision, 'day')} →</b></div></div>
+        ${D.pos >= 28 && D.pos <= 55 ? `<div class="pt down edge-l rev-l" style="left:calc(${D.pos}% + 2mm)"><b style="color:#9A5A00">Revision: ${plural(D.revision, 'day')} →</b></div>` : ''}</div>
       <p class="tl-note">At your current pace, revision gets only the <b>last ${plural(D.revision, 'day')}</b>. Page 3 shows how to get <b>${plural(D.boostRevision, 'day')}</b>.</p></div>
     ${foot('Prepared by CA Mahendra Shekhawat · 15+ years of experience', 'camahendrashekhawat.com')}
   </section>
