@@ -390,7 +390,7 @@ function profileFields(){
 }
 function goalFields(){
   return C().attempts
-    ? (A.course === 'cainter' ? `<div class="field"><span class="lbl">Which groups are you writing in this attempt?</span>${chips('group', ['Both groups', 'Group I only', 'Group II only'])}</div>` : '') + `<div class="field"><span class="lbl">Your target in the exam</span>${chips('target', ['Pass in this attempt', 'Exemption in some papers', 'All India Rank'])}</div>`
+    ? (A.course === 'cainter' ? `<div class="field"><span class="lbl">Which groups are you writing in this attempt?</span>${chips('group', ['Both groups', 'Group I only', 'Group II only'])}</div>` : '') + `<div class="field"><span class="lbl">Your target in the exam</span>${chips('target', ['Pass in this attempt', 'Exemption in some papers'].concat(A.course === 'cainter' && /only/.test(A.group || '') ? [] : ['All India Rank']))}</div>`
     : `<div class="field"><span class="lbl">Your target % in the board exams</span>${chips('target', ['95% +','90–95%','80–90%','70–80%','A good pass'])}</div>
        <div class="field"><span class="lbl">What do you want to do after Class 12?</span>${chips('career', ['CA','CS / CMA','B.Com / BBA','Not decided yet'])}</div>`;
 }
@@ -404,7 +404,8 @@ function renderForm(step, title, body){
   app.innerHTML = `<div class="fade">${stepBar()}<div class="card"><div><p class="eyebrow">${esc(C().label)} · ${step}</p><h2>${esc(title)}</h2></div>${body}
     <p class="err" id="err" hidden></p>
     <div class="nav"><button class="btn ghost" type="button" id="back">← Back</button><button class="btn" type="button" id="next">Next →</button></div></div></div>`;
-  app.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { A[b.dataset.k] = b.dataset.v; app.querySelectorAll(`.chip[data-k="${b.dataset.k}"]`).forEach(x => x.setAttribute('aria-pressed', x===b)); save(); }));
+  app.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { A[b.dataset.k] = b.dataset.v;
+    if (b.dataset.k === 'group') { if (/only/.test(A.group) && A.target === 'All India Rank') A.target = ''; save(); return render(); } app.querySelectorAll(`.chip[data-k="${b.dataset.k}"]`).forEach(x => x.setAttribute('aria-pressed', x===b)); save(); }));
   app.querySelectorAll('input.big').forEach(i => i.addEventListener('input', () => { A[i.id.slice(2)] = i.value; save(); }));
   document.getElementById('back').addEventListener('click', () => { STEP--; render(); });
   document.getElementById('next').addEventListener('click', () => {
