@@ -535,10 +535,10 @@ const IS_LIVE = IN_GAS || REMOTE;
 function API(name, args){
   if (REMOTE) return fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({name, args:Object.assign({}, args||{}, {cls:CLS})}), redirect:'follow', credentials:'omit'})
     .catch(() => { throw new Error('No internet. Check your network and try again.'); })
-    .then(r => r.json()).then(j => { if (j.error) throw new Error(j.error); return j.result; });
+    .then(r => r.json()).then(j => { if (j.error) throw new Error(String(j.error).split(' / ')[0]); return j.result; });
   return new Promise((res, rej) => {
-    if (IN_GAS) google.script.run.withSuccessHandler(res).withFailureHandler(e => rej(new Error(e && e.message || String(e)))).api(name, Object.assign({}, args||{}, {cls:CLS}));
-    else setTimeout(() => { try { res(Mock[name](args || {})); } catch(e){ rej(e); } }, 120);
+    if (IN_GAS) google.script.run.withSuccessHandler(res).withFailureHandler(e => rej(new Error(String(e && e.message || e).split(' / ')[0]))).api(name, Object.assign({}, args||{}, {cls:CLS}));
+    else setTimeout(() => { try { res(Mock[name](args || {})); } catch(e){ rej(new Error(String(e.message).split(' / ')[0])); } }, 120);
   });
 }
 const Mock = (() => {
@@ -658,11 +658,11 @@ function renderGateOtp(){
     <ol class="steps3"><li><b>1</b>Join once (5 minutes)</li><li><b>2</b>Every Sunday: plan your week</li><li><b>3</b>Every day: check in before you sleep</li></ol>
     <form class="card" id="otpForm" novalidate>
       <h2>Log in</h2>
-      <div id="otpStep"><div class="field"><label for="lg_phone">Your WhatsApp number / Aapka WhatsApp number</label>
+      <div id="otpStep"><div class="field"><label for="lg_phone">Your WhatsApp number</label>
         <input id="lg_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel" value="${esc(V.prefillPhone||'')}"></div>
         <p class="err" id="lg_err" hidden></p>
         <button class="btn primary big wide" type="submit" id="lgSend">Send code on WhatsApp</button>
-        <p class="muted tiny" style="text-align:center;margin:8px 0 0">A 6-digit code will come on WhatsApp. / WhatsApp par 6 ankon ka code aayega.</p></div>
+        <p class="muted tiny" style="text-align:center;margin:8px 0 0">A 6-digit code will come on WhatsApp.</p></div>
       <p style="margin-top:14px;text-align:center">New student? <button class="linkbtn" type="button" id="newBtn">Join here</button></p>
       <p style="margin:4px 0 0;text-align:center"><button class="linkbtn tiny" type="button" id="toPin">Log in with PIN instead</button></p>
     </form>
@@ -677,7 +677,7 @@ function renderGateOtp(){
   document.getElementById('otpForm').addEventListener('submit', e => {
     e.preventDefault();
     const phone = document.getElementById('lg_phone').value.replace(/\D/g,''), err = document.getElementById('lg_err');
-    if (!/^[6-9]\d{9}$/.test(phone)){ err.textContent = 'Enter your 10-digit WhatsApp number. / Apna 10 ankon ka WhatsApp number daalein.'; err.hidden = false; return; }
+    if (!/^[6-9]\d{9}$/.test(phone)){ err.textContent = 'Enter your 10-digit WhatsApp number.'; err.hidden = false; return; }
     const b = document.getElementById('lgSend'); b.disabled = true; b.textContent = 'Sending… / Bhej rahe hain…'; err.hidden = true;
     const send = () => API('otpSend', {phone, purpose:'login'});
     send().then(() => otpBox(document.getElementById('otpStep'), phone,
@@ -1545,24 +1545,24 @@ let otpTimer = null;
 function otpBox(target, phone, onVerify, onResend){
   clearInterval(otpTimer);
   target.innerHTML = `<div class="otp-box"><p style="margin:0">We sent a 6-digit code on WhatsApp to <b class="mono">+91 ${esc(phone)}</b>.<br><span class="muted tiny">WhatsApp par 6 ankon ka code bheja hai.</span></p>
-    <label class="lbl" for="otp_code">Enter the code / Code daalein</label>
+    <label class="lbl" for="otp_code">Enter the code</label>
     <input id="otp_code" class="big otp-in" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••">
     <p class="err" id="otp_err" hidden></p>
-    <button class="btn primary big wide" type="button" id="otpGo">Verify / Verify karein</button>
+    <button class="btn primary big wide" type="button" id="otpGo">Verify</button>
     <p class="otp-row"><button class="linkbtn" type="button" id="otpResend" disabled>Resend code in 30s</button></p></div>`;
   const inp = document.getElementById('otp_code'), err = document.getElementById('otp_err'), go = document.getElementById('otpGo'), rs = document.getElementById('otpResend');
-  const tick = secs => { let n = secs; rs.disabled = true; rs.textContent = `Resend code in ${n}s / ${n}s baad dobara`; clearInterval(otpTimer);
+  const tick = secs => { let n = secs; rs.disabled = true; rs.textContent = `Resend code in ${n}s`; clearInterval(otpTimer);
     otpTimer = setInterval(() => { n--; if (!document.body.contains(rs)) return clearInterval(otpTimer);
-      if (n <= 0){ clearInterval(otpTimer); rs.disabled = false; rs.textContent = 'Resend code / Code dobara bhejein'; } else rs.textContent = `Resend code in ${n}s / ${n}s baad dobara`; }, 1000); };
+      if (n <= 0){ clearInterval(otpTimer); rs.disabled = false; rs.textContent = 'Resend code'; } else rs.textContent = `Resend code in ${n}s`; }, 1000); };
   tick(30); setTimeout(() => inp.focus(), 50);
   inp.addEventListener('input', () => { inp.value = inp.value.replace(/\D/g,'').slice(0,6); if (inp.value.length===6) go.click(); });
   go.addEventListener('click', () => {
     const code = inp.value.trim();
-    if (!/^\d{6}$/.test(code)){ err.textContent = 'Enter the 6-digit code. / 6 ankon ka code daalein.'; err.hidden = false; return; }
+    if (!/^\d{6}$/.test(code)){ err.textContent = 'Enter the 6-digit code.'; err.hidden = false; return; }
     go.disabled = true; go.textContent = 'Checking… / Check ho raha hai…'; err.hidden = true;
-    onVerify(code).catch(x => { err.textContent = x.message; err.hidden = false; go.disabled = false; go.textContent = 'Verify / Verify karein'; inp.select(); });
+    onVerify(code).catch(x => { err.textContent = x.message; err.hidden = false; go.disabled = false; go.textContent = 'Verify'; inp.select(); });
   });
-  rs.addEventListener('click', () => { rs.disabled = true; onResend().then(r => { toast('New code sent / Naya code bheja'); tick((r && r.resendIn) || 30); })
+  rs.addEventListener('click', () => { rs.disabled = true; onResend().then(r => { toast('New code sent'); tick((r && r.resendIn) || 30); })
     .catch(x => { err.textContent = x.message; err.hidden = false; rs.disabled = false; }); });
 }
 function boot(params){
@@ -1579,7 +1579,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1792058806451';
+const BUILD = '1792059218390';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class11/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
