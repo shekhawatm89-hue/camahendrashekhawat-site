@@ -41,7 +41,7 @@
   }
 
   // ---- Events: whatsapp_click, join_click, generate_lead, video_play (+ Meta standard events where they fit)
-  var META = { whatsapp_click: ['track', 'Contact'], generate_lead: ['track', 'Lead'], join_click: ['trackCustom', 'JoinClick'], video_play: ['trackCustom', 'VideoPlay'], audit_complete: ['track', 'CompleteRegistration'] };
+  var META = { begin_checkout: ['track', 'InitiateCheckout'], whatsapp_click: ['track', 'Contact'], generate_lead: ['track', 'Lead'], join_click: ['trackCustom', 'JoinClick'], video_play: ['trackCustom', 'VideoPlay'], audit_complete: ['track', 'CompleteRegistration'] };
   window.cmsTrack = function (name, params) {
     params = params || {}; params.variant = 'v' + (v || '1'); if (utm.source) params.utm_source = utm.source;
     try { if (window.gtag) window.gtag('event', name, params); } catch (e) {}

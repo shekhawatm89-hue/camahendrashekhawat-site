@@ -215,7 +215,8 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #2347
 <p style="margin:16px 0 0;font-size:16px;line-height:1.55;font-weight:300;color:#dfe5ff;text-wrap:pretty">One fee till your board exam. <span style="color:#fff;font-weight:500">All 14 services included.</span></p>
 <p style="margin:10px 0 0;font-size:14px;line-height:1.5;color:#dfe5ff">Full refund if requested within 7 days of payment. One-time fee, no partial refunds after that. <a href="/refund/" style="color:#fff">Refund policy</a></p>
 <p style="margin:8px 0 0;font-size:14px;line-height:1.5;color:#dfe5ff">How to pay: after your enquiry we send a UPI / payment link on WhatsApp, and you get an invoice for the fee.</p>
-<button class="join hv-yel" type="button" style="margin-top:28px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#0e1222;padding:15px 22px;border:0;border-radius:10px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s">Join the mentorship <span>→</span></button>
+<button class="pay" type="button" style="margin-top:28px;display:flex;align-items:center;justify-content:center;gap:10px;background:#ffd23f;color:#0e1222;padding:15px 22px;border:0;border-radius:10px;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer">Pay ₹4,999 now by UPI <span>→</span></button>
+<button class="join hv-yel" type="button" style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#0e1222;padding:15px 22px;border:0;border-radius:10px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s">Join the mentorship <span>→</span></button>
 <a class="wa " href="#" target="_blank" rel="noopener" style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;color:#fff;font-size:14.5px;font-weight:500;text-decoration:none"><span class="dot"></span><span style="white-space:nowrap">WhatsApp +91 94687 67477</span></a>
 </div>
 <div style="background:#fff;border:1px solid #e3e3de;border-radius:16px;overflow:hidden;flex:2 1 520px;min-width:0">
@@ -265,6 +266,19 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #2347
 <div class="narrow-only" style="position:sticky;bottom:0;z-index:30;padding:10px 12px;background:rgba(247,247,244,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid #e3e3de">
 <div style="display:flex;gap:8px;width:100%"><a class="wa " href="#" target="_blank" rel="noopener" style="flex:none;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;border:1px solid #d4d4ce;background:#fff;border-radius:10px;font-size:14px;font-weight:500;color:#0e1222;text-decoration:none"><span class="dot"></span>WhatsApp</a><button class="join" type="button" style="flex:1;background:#2347d6;color:#fff;padding:15px;border:0;border-radius:10px;font-weight:500;font-size:16px;font-family:inherit;cursor:pointer;white-space:nowrap">Join · ₹4,999 →</button></div>
 </div>
+
+<div id="payWrap" hidden style="position:fixed;inset:0;z-index:50;background:rgba(14,18,34,.55);align-items:center;justify-content:center;padding:16px;display:flex">
+<div role="dialog" aria-modal="true" aria-labelledby="pTitle" style="width:100%;max-width:400px;max-height:calc(100vh - 32px);overflow:auto;background:#fff;border-radius:16px;padding:24px;box-sizing:border-box;color:#0e1222">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><h3 id="pTitle" style="margin:0;font-size:21px;font-weight:500;letter-spacing:-.02em">Pay ₹4,999 by UPI</h3><p style="margin:6px 0 0;font-size:14px;color:#5b6072">Class 11–12 Commerce mentorship · one-time fee</p></div><button type="button" id="pClose" aria-label="Close" style="width:44px;height:44px;flex:none;border:1px solid #e3e3de;background:#f7f7f4;border-radius:10px;font-size:18px;cursor:pointer;color:#0e1222">×</button></div>
+<a id="pApp" class="narrow-only" href="#" style="margin-top:18px;justify-content:center;background:#2347d6;color:#fff;padding:15px;border-radius:10px;font-weight:500;font-size:16px;text-decoration:none">Open UPI app to pay ₹4,999</a>
+<div style="margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:8px"><div id="pQr" style="width:200px;height:200px;padding:10px;background:#fff;border:1px solid #e3e3de;border-radius:12px"></div><span style="font-size:13px;color:#5b6072;text-align:center">Scan with GPay, PhonePe, Paytm or any UPI app</span></div>
+<div style="margin-top:16px;border:1px solid #e3e3de;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span>UPI ID: <b class="mono" style="font-size:13.5px">9001114477@ptsbi</b></span><button type="button" id="pCopy" style="border:1px solid #d4d4ce;background:#fff;border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer">Copy</button></div>
+<div style="color:#5b6072;margin-top:4px">Name: Mahendra Singh Shekhawat · Amount: <b style="color:#0e1222">₹4,999</b></div></div>
+<p style="margin:16px 0 0;font-size:14px;line-height:1.5"><b>After paying:</b> send the payment screenshot on WhatsApp with the student's name. You get your invoice and joining details there.</p>
+<a id="pWa" href="#" target="_blank" rel="noopener" style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #d4d4ce;background:#fff;color:#0e1222;padding:13px;border-radius:10px;font-weight:500;font-size:15px;text-decoration:none"><span class="dot"></span>I have paid · send screenshot</a>
+<p style="margin:12px 0 0;font-size:12.5px;line-height:1.5;color:#5b6072">Full refund if requested within 7 days of payment. One-time fee, no partial refunds after that.</p>
+</div></div>
 
 <div id="formWrap" hidden style="position:fixed;inset:0;z-index:50;background:rgba(14,18,34,.55);align-items:center;justify-content:center;padding:16px;display:flex">
 <form id="form" role="dialog" aria-modal="true" aria-labelledby="fTitle" novalidate style="width:100%;max-width:420px;background:#fff;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box;font-family:inherit;color:#0e1222">
@@ -378,6 +392,23 @@ if ('IntersectionObserver' in window) {
   var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.remove('reveal-hide'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -10% 0px' });
   hid.forEach(function(n){ io.observe(n); });
 } else hid.forEach(function(n){ n.classList.remove('reveal-hide'); });
+
+// Pay by UPI
+var PAY = {"id":"9001114477@ptsbi","name":"Mahendra Singh Shekhawat","amount":"4999","note":"Class 11–12 Commerce mentorship"};
+var pw = $('#payWrap'), payLast;
+var upiUrl = 'upi://pay?pa=' + PAY.id + '&pn=' + encodeURIComponent(PAY.name) + '&am=' + PAY.amount + '&cu=INR&tn=' + encodeURIComponent(PAY.note);
+$('#pApp').href = upiUrl;
+$('#pWa').href = wa('Hi, I have paid ' + COURSE.price + ' for the ' + COURSE.name + ' mentorship by UPI. Screenshot attached.\nStudent name: \n\n' + TAG);
+function drawQr(){ if ($('#pQr').childNodes.length) return; var go = function(){ new QRCode($('#pQr'), { text: upiUrl, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M }); };
+  if (window.QRCode) return go(); var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload = go; document.head.appendChild(sc); }
+function openPay(){ payLast = document.activeElement; setMenu(false); pw.hidden = false; drawQr(); track('begin_checkout', { page: COURSE.slug, value: +PAY.amount, currency: 'INR' }); setTimeout(function(){ $('#pClose').focus(); }, 30); }
+function closePay(){ pw.hidden = true; if (payLast) payLast.focus(); }
+$$('.pay').forEach(function(b){ b.addEventListener('click', openPay); });
+$('#pClose').addEventListener('click', closePay);
+pw.addEventListener('click', function(e){ if (e.target === pw) closePay(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !pw.hidden) closePay(); });
+$('#pApp').addEventListener('click', function(){ track('upi_app_open', { page: COURSE.slug }); });
+$('#pCopy').addEventListener('click', function(){ var b = this; try { navigator.clipboard.writeText(PAY.id).then(function(){ b.textContent = 'Copied'; }); } catch (e) { b.textContent = PAY.id; } });
 
 // Enquiry form
 var fw = $('#formWrap'), cls = '12', lastFocus;
