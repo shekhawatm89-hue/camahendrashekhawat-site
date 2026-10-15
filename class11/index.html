@@ -1544,7 +1544,7 @@ let CONFIG = (() => { try { return JSON.parse(store.get('c11.cfg')) || {}; } cat
 let otpTimer = null;
 function otpBox(target, phone, onVerify, onResend){
   clearInterval(otpTimer);
-  target.innerHTML = `<div class="otp-box"><p style="margin:0">We sent a 6-digit code on WhatsApp to <b class="mono">+91 ${esc(phone)}</b>.<br><span class="muted tiny">WhatsApp par 6 ankon ka code bheja hai.</span></p>
+  target.innerHTML = `<div class="otp-box"><p style="margin:0">We sent a 6-digit code on WhatsApp to <b class="mono">+91 ${esc(phone)}</b>.</p>
     <label class="lbl" for="otp_code">Enter the code</label>
     <input id="otp_code" class="big otp-in" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••">
     <p class="err" id="otp_err" hidden></p>
@@ -1579,7 +1579,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1792059218390';
+const BUILD = '1792059243043';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class11/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
