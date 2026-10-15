@@ -273,17 +273,18 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #2347
 <div style="color:#5b6072;margin-top:4px">Name: Mahendra Singh Shekhawat · Amount: <b style="color:#0e1222">₹6,999</b></div></div>
 <p style="margin:16px 0 0;font-size:14px;line-height:1.5"><b>After paying:</b> send the payment screenshot on WhatsApp with the student's name. You get your invoice and joining details there.</p>
 <a id="pWa" href="#" target="_blank" rel="noopener" style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #d4d4ce;background:#fff;color:#0e1222;padding:13px;border-radius:10px;font-weight:500;font-size:15px;text-decoration:none"><span class="dot"></span>I have paid · send screenshot</a>
-<p style="margin:12px 0 0;font-size:12.5px;line-height:1.5;color:#5b6072">Full refund if requested within 7 days of payment. One-time fee, no partial refunds after that.</p>
+<p style="margin:12px 0 0;font-size:14px;text-align:center">Questions before paying? <a id="pAsk" href="#" target="_blank" rel="noopener" style="font-weight:500">Ask on WhatsApp</a></p>
+<p style="margin:10px 0 0;font-size:12.5px;line-height:1.5;color:#5b6072">Full refund if requested within 7 days of payment. One-time fee, no partial refunds after that.</p>
 </div></div>
 
 <div id="formWrap" hidden style="position:fixed;inset:0;z-index:50;background:rgba(14,18,34,.55);align-items:center;justify-content:center;padding:16px;display:flex">
 <form id="form" role="dialog" aria-modal="true" aria-labelledby="fTitle" novalidate style="width:100%;max-width:420px;background:#fff;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box;font-family:inherit;color:#0e1222">
-<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><h3 id="fTitle" style="margin:0;font-size:22px;font-weight:500;letter-spacing:-.02em">Join the CA Inter mentorship</h3><p style="margin:6px 0 0;font-size:14.5px;color:#5b6072">Share your details. We’ll reply on WhatsApp.</p></div><button type="button" id="fClose" aria-label="Close" style="width:44px;height:44px;flex:none;border:1px solid #e3e3de;background:#f7f7f4;border-radius:10px;font-size:18px;cursor:pointer;color:#0e1222">×</button></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><h3 id="fTitle" style="margin:0;font-size:22px;font-weight:500;letter-spacing:-.02em">Join the CA Inter mentorship</h3><p style="margin:6px 0 0;font-size:14.5px;color:#5b6072">Step 1 of 2: your details. Step 2: pay ₹6,999 by UPI.</p></div><button type="button" id="fClose" aria-label="Close" style="width:44px;height:44px;flex:none;border:1px solid #e3e3de;background:#f7f7f4;border-radius:10px;font-size:18px;cursor:pointer;color:#0e1222">×</button></div>
 <label style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500">Student name<input id="fName" autocomplete="name" maxlength="60" required style="height:46px;border:1px solid #d4d4ce;border-radius:10px;padding:0 14px;font-size:16px;font-family:inherit"></label>
 
 <label style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500">WhatsApp number<input id="fPhone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" required placeholder="10-digit mobile" style="height:46px;border:1px solid #d4d4ce;border-radius:10px;padding:0 14px;font-size:16px;font-family:inherit"></label>
 <p id="fErr" role="alert" hidden style="margin:-6px 0 0;font-size:13.5px;color:#c0392b"></p>
-<button type="submit" class="hv-pri" style="height:50px;border:0;border-radius:10px;background:#2347d6;color:#fff;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer">Send enquiry →</button>
+<button type="submit" class="hv-pri" style="height:50px;border:0;border-radius:10px;background:#2347d6;color:#fff;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer">Continue to payment →</button>
 <p style="margin:0;font-size:13.5px;color:#5b6072;text-align:center">Or message directly: <a class="wa " href="#" target="_blank" rel="noopener" style="font-weight:500;text-decoration:none"><span style="white-space:nowrap">WhatsApp +91 94687 67477</span></a></p>
 </form>
 </div>
@@ -394,6 +395,7 @@ var PAY = {"id":"9001114477@ptsbi","name":"Mahendra Singh Shekhawat","amount":"6
 var pw = $('#payWrap'), payLast;
 var upiUrl = 'upi://pay?pa=' + PAY.id + '&pn=' + encodeURIComponent(PAY.name) + '&am=' + PAY.amount + '&cu=INR&tn=' + encodeURIComponent(PAY.note);
 $('#pApp').href = upiUrl;
+$('#pAsk').href = wa(WA_JOIN + '\nI have a question before paying.\n\n' + TAG);
 $('#pWa').href = wa('Hi, I have paid ' + COURSE.price + ' for the ' + COURSE.name + ' mentorship by UPI. Screenshot attached.\nStudent name: \n\n' + TAG);
 function drawQr(){ if ($('#pQr').childNodes.length) return; var go = function(){ new QRCode($('#pQr'), { text: upiUrl, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M }); };
   if (window.QRCode) return go(); var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload = go; document.head.appendChild(sc); }
@@ -426,8 +428,9 @@ $('#form').addEventListener('submit', function(e){
   var course = $('.cls') ? 'Class ' + cls + ' Commerce' : COURSE.name;
   if (FORM_ENDPOINT) try { fetch(FORM_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name: name, class: $('.cls') ? cls : COURSE.name, phone: phone, source: (COURSE.slug + '-v' + vKey + ' ' + TAG + (window.cmsUtmString && window.cmsUtmString() ? ' ' + window.cmsUtmString() : '')).slice(0, 200) }) }).catch(function(){}); } catch (x) {}
   track('generate_lead', { page: COURSE.slug, course: course });
-  window.open(wa(WA_JOIN.replace(COURSE.name, course) + '\nName: ' + name + '\nPhone: ' + phone + '\n\n' + TAG), '_blank');
-  closeForm();
+  $('#pWa').href = wa('Hi, I have paid ' + COURSE.price + ' for the ' + course + ' mentorship by UPI. Screenshot attached.\nStudent name: ' + name + '\nPhone: ' + phone + '\n\n' + TAG);
+  $('#pAsk').href = wa(WA_JOIN.replace(COURSE.name, course) + '\nName: ' + name + '\nPhone: ' + phone + '\nI have a question before paying.\n\n' + TAG);
+  fw.hidden = true; openPay();
 });
 })();
 </script>
