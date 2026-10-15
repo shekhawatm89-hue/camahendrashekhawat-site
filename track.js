@@ -2,8 +2,8 @@
    first-touch UTM memory, a short source tag for WhatsApp messages / enquiries, and click events.
    Pages call: window.cmsTrack(event, params) and window.cmsTag(pageCode). */
 (function () {
-  var META_PIXEL_ID = '';   // e.g. '123456789012345'
-  var GA4_ID = '';          // e.g. 'G-XXXXXXXXXX'
+  var META_PIXEL_ID = '1533213905281999';   // e.g. '123456789012345'
+  var GA4_ID = 'G-T3V2G6FJ8B';          // e.g. 'G-XXXXXXXXXX'
 
   // ---- UTM: remember the first campaign a visitor came from (30 days), so the audit page knows it too
   var KEY = 'cms.utm', q = new URLSearchParams(location.search), now = Date.now(), utm = {};
