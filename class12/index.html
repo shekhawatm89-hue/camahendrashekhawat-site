@@ -218,6 +218,23 @@ body:has(.dash) header.bar{max-width:1040px}
 .leg-i i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .leg-i b{margin-left:auto;padding-left:10px}
 /* Compact layout */
+.otp-box{display:flex;flex-direction:column;gap:8px}
+.otp-in{font-size:1.6rem;letter-spacing:.5em;text-align:center;font-variant-numeric:tabular-nums}
+.otp-row{text-align:center;margin:4px 0 0}
+.wa-box .note{margin:0 0 8px;padding:8px 10px;border-radius:8px;background:var(--accent-soft);font-size:15px}
+.wa-box .note.warn{background:var(--bad-soft);color:var(--ink)}
+.wa-part{border-top:1px solid var(--rule);padding:8px 0}
+.wa-part summary{font-weight:700;cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px}
+.wa-to{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 8px}.wa-to .segs{width:auto;flex:1 1 220px;max-width:360px}
+.wa-all{margin:2px 0 6px}
+.wa-list{display:flex;flex-direction:column;margin-bottom:8px}
+.wa-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--rule)}
+.wa-row:first-child{border-top:0}
+.wa-row input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--accent)}
+.wa-chk{display:flex;align-items:center;gap:10px;flex:1 1 240px;min-width:0}
+.wa-nm{display:flex;flex-direction:column;min-width:0;flex:1 1 160px}.wa-nm small{font-size:13px}
+.wa-note{flex:1 1 100%;min-width:0;font-size:15px}
+.wa-res{font-size:13px;font-weight:600}.wa-res.ok{color:var(--good)}.wa-res.bad{color:var(--bad)}.wa-res.skip{color:var(--muted)}
 .vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
 .pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}
 .pick-b{position:relative;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;white-space:nowrap;min-height:48px;padding-left:6px;padding-right:6px;cursor:pointer}
@@ -556,8 +573,16 @@ const Mock = (() => {
     })};
   }
   return {
-    register({answers, pin}){ load(); if (db.students.some(s => s.phone===answers.phone)) throw new Error('This number has already joined. Log in with your PIN.');
+    register({answers, pin, otp}){ load(); if (db.students.some(s => s.phone===answers.phone)) throw new Error('This number has already joined. Log in with your PIN.');
+      if (otp !== undefined && otp !== '123456') throw new Error('Wrong code. 4 tries left. / Galat code. 4 koshish baaki.');
       const s = {phone:answers.phone, name:answers.name, pin, token:uid(), joined:ymd(today0()), answers, items:[], checkins:[]}; db.students.push(s); persist(); return {token:s.token, state:pub(s)}; },
+    config(){ return {otp:true}; },
+    otpSend({phone, purpose}){ load(); const s = db.students.find(x => x.phone===phone);
+      if (purpose==='join' && s) throw new Error('This WhatsApp number is already registered. Log in instead. / Ye number pehle se juda hai, login karein.');
+      if (purpose!=='join' && !s) throw new Error('This number has not joined yet. Tap "Join here". / Ye number abhi juda nahi hai. "Join here" dabaiye.');
+      return {ok:true, resendIn:30}; },
+    otpLogin({phone, code}){ load(); const s = db.students.find(x => x.phone===phone); if (!s) throw new Error('This number has not joined yet.');
+      if (code!=='123456') throw new Error('Wrong code. 4 tries left. / Galat code. 4 koshish baaki.'); return {token:s.token, state:pub(s)}; },
     login({phone, pin}){ load(); const s = db.students.find(x => x.phone===phone); if (s && !s.pin && /^\d{4}$/.test(pin)) s.pin = pin; if (!s || s.pin!==pin) throw new Error('WhatsApp number or PIN is wrong.'); return {token:s.token, state:pub(s)}; },
     resume({token}){ return {state:pub(byTok(token))}; },
     savePlan({token, start, end, items}){ const s = byTok(token); s.items = s.items.filter(i => i.date<start || i.date>end).concat(items); persist(); return {state:pub(s)}; },
@@ -565,9 +590,17 @@ const Mock = (() => {
       s.items.forEach(i => { if (i.date===date && status[i.id]) i.done = status[i.id]==='done' ? true : status[i.id]==='partly' ? 'partly' : false; });
       s.checkins = s.checkins.filter(c => c.date!==date).concat([Object.assign({date}, data, {photos:(photos||[]).map(p => '(preview) '+p.name)})]); persist(); return {state:pub(s)}; },
     feedback({token, phone, screen, message, name}){ load(); let who = phone || ''; try { if (token) who = byTok(token).phone; } catch(e){} db.feedback = db.feedback || []; db.feedback.unshift({row: Date.now(), when: ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5), phone: who, name: name || '', screen: screen || '', message, reply:'', repliedAt:''}); persist(); return {ok:true}; },
-    replyFeedback({row, value}){ load(); const f = (db.feedback||[]).find(x => String(x.row)===String(row)); if (!f) throw new Error('Report not found. Refresh the dashboard.'); f.reply = value; f.repliedAt = ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5); persist(); return {ok:true}; },
+    replyFeedback({row, value}){ load(); const f = (db.feedback||[]).find(x => String(x.row)===String(row)); if (!f) throw new Error('Report not found. Refresh the dashboard.'); f.reply = value; f.repliedAt = ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5); persist(); return {ok:true, wa: arguments[0].wa === false ? 'off' : db.students.some(x => x.phone===f.phone) ? 'sent' : 'no-student'}; },
+    waSend({kind, items}){ load(); db.walog = db.walog || {}; const when = ymd(new Date()) + ' ' + new Date().toTimeString().slice(0,5);
+      return {results: (items||[]).map(it => { const st = db.students.find(x => x.phone===it.phone), o = {phone: it.phone, sent: 0};
+        if (!st) { o.skipped = 'Student not found'; return o; } if (st.status==='Paused') { o.skipped = 'Paused'; return o; }
+        const prev = (db.walog[it.phone]||{})[kind]; if (prev && daysBetween(D(prev.slice(0,10)), today0()) < (kind==='weekly' ? 5 : 3)) { o.skipped = 'Already sent on ' + prev; return o; }
+        const parent = st.answers.parentPhone;
+        if (kind==='weekly'){ if (!parent) { o.skipped = 'No parent number'; return o; } o.sent = 1; }
+        else { if (it.to!=='parent') o.sent++; if (it.to!=='student') { if (parent) o.sent++; else o.noParent = true; } if (!o.sent) { o.skipped = 'No parent number'; return o; } }
+        db.walog[it.phone] = Object.assign({}, db.walog[it.phone], {[kind]: when}); persist(); return o; }), test: ''}; },
     updateHours({token, weekdayHrs, sunHrs}){ const s = byTok(token); s.answers.weekdayHrs = String(weekdayHrs); s.answers.sunHrs = String(sunHrs); persist(); return {state:pub(s)}; },
-    mentorAll(){ load(); return {students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; }), feedback: db.feedback || (db.feedback = [{row:1, when: ymd(addDays(today0(),-1)) + ' 21:40', phone:'9876500003', name:'Kabir Singh', screen:'checkin', message:'Photo upload nahi ho raha', reply:'', repliedAt:''}])}; },
+    mentorAll(){ load(); return {wa: {on: true, test: '', last: db.walog || {}}, students: db.students.map(s => { const p = pub(s); p.profile.status = s.status || 'Active'; return p; }), feedback: db.feedback || (db.feedback = [{row:1, when: ymd(addDays(today0(),-1)) + ' 21:40', phone:'9876500003', name:'Kabir Singh', screen:'checkin', message:'Photo upload nahi ho raha', reply:'', repliedAt:''}])}; },
     adminAction({phone, action, value, confirmName}){ load(); const s = db.students.find(x => x.phone===phone); if (!s) throw new Error('Student not found.');
       if (action==='pause' || action==='resume') s.status = action==='pause' ? 'Paused' : 'Active';
       else if (action==='resetPin') s.pin = '';
@@ -625,7 +658,42 @@ function openFeedback(){
 // =====================================================================
 // Gate: one line, 3 steps, log in
 // =====================================================================
+function renderGateOtp(){
+  scr.innerHTML = `<div class="narrow stack">
+    <h1 style="margin-top:8px">Mahendra Sir's Board Plan</h1>
+    <ol class="steps3"><li><b>1</b>Join once (5 minutes)</li><li><b>2</b>Every Sunday: plan your week</li><li><b>3</b>Every day: check in before you sleep</li></ol>
+    <form class="card" id="otpForm" novalidate>
+      <h2>Log in</h2>
+      <div id="otpStep"><div class="field"><label for="lg_phone">Your WhatsApp number / Aapka WhatsApp number</label>
+        <input id="lg_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel" value="${esc(V.prefillPhone||'')}"></div>
+        <p class="err" id="lg_err" hidden></p>
+        <button class="btn primary big wide" type="submit" id="lgSend">Send code on WhatsApp</button>
+        <p class="muted tiny" style="text-align:center;margin:8px 0 0">A 6-digit code will come on WhatsApp. / WhatsApp par 6 ankon ka code aayega.</p></div>
+      <p style="margin-top:14px;text-align:center">New student? <button class="linkbtn" type="button" id="newBtn">Join here</button></p>
+      <p style="margin:4px 0 0;text-align:center"><button class="linkbtn tiny" type="button" id="toPin">Log in with PIN instead</button></p>
+    </form>
+    ${IS_LIVE ? '' : `<div class="banner"><span><b>Preview.</b> Example student: <span class="mono">9876500000</span>. The WhatsApp code in preview is <span class="mono">123456</span>.</span>
+      <span class="actions"><button class="btn small" type="button" id="demoMentor">Open teacher dashboard</button><button class="linkbtn" type="button" id="demoReset">Reset</button></span></div>`}
+    <p class="muted tiny"><a href="https://camahendrashekhawat.com/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="https://camahendrashekhawat.com/terms/" target="_blank" rel="noopener">Terms</a></p>
+  </div>`;
+  on('newBtn', () => go('form', {step:+(store.get('c12.step')||0)}));
+  on('toPin', () => go('gate', {pinLogin:true}));
+  on('demoMentor', () => openMentor(''));
+  on('demoReset', () => { Mock.reset(); store.set('c12.answers', null); toast('Preview data reset'); });
+  document.getElementById('otpForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const phone = document.getElementById('lg_phone').value.replace(/\D/g,''), err = document.getElementById('lg_err');
+    if (!/^[6-9]\d{9}$/.test(phone)){ err.textContent = 'Enter your 10-digit WhatsApp number. / Apna 10 ankon ka WhatsApp number daalein.'; err.hidden = false; return; }
+    const b = document.getElementById('lgSend'); b.disabled = true; b.textContent = 'Sending… / Bhej rahe hain…'; err.hidden = true;
+    const send = () => API('otpSend', {phone, purpose:'login'});
+    send().then(() => otpBox(document.getElementById('otpStep'), phone,
+        code => API('otpLogin', {phone, code}).then(r => { TOKEN = r.token; store.set('c12.token', TOKEN); setState(r.state); go('home'); }), send))
+      .catch(x => { err.textContent = x.message; err.hidden = false; b.disabled = false; b.textContent = 'Send code on WhatsApp';
+        if (/not joined/i.test(x.message)) { /* keep the Join link visible */ } });
+  });
+}
 function renderGate(){
+  if (CONFIG.otp && !V.pinLogin) return renderGateOtp();
   scr.innerHTML = `<div class="narrow stack">
     <h1 style="margin-top:8px">Mahendra Sir's Board Plan</h1>
     <ol class="steps3"><li><b>1</b>Join once (5 minutes)</li><li><b>2</b>Every Sunday: plan your week</li><li><b>3</b>Every day: check in before you sleep</li></ol>
@@ -635,6 +703,7 @@ function renderGate(){
       <div class="field"><label for="lg_pin">PIN</label><input id="lg_pin" class="big pinbox" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"></div>
       <p class="err" id="lg_err" hidden></p>
       <button class="btn primary big wide" type="submit" id="lgBtn">Log in</button>
+      ${CONFIG.otp ? '<p style="margin-top:10px;text-align:center"><button class="linkbtn" type="button" id="toOtp">Log in with WhatsApp code instead</button></p>' : ''}
       <p style="margin-top:14px;text-align:center">New student? <button class="linkbtn" type="button" id="newBtn">Join here</button></p>
     </form>
     ${IS_LIVE ? '' : `<div class="banner"><span><b>Preview.</b> Example student: <span class="mono">9876500000</span>, PIN <span class="mono">1234</span>.</span>
@@ -642,6 +711,7 @@ function renderGate(){
     <p class="muted tiny"><a href="https://camahendrashekhawat.com/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="https://camahendrashekhawat.com/terms/" target="_blank" rel="noopener">Terms</a></p>
   </div>`;
   on('newBtn', () => go('form', {step:+(store.get('c12.step')||0)}));
+  on('toOtp', () => go('gate', {pinLogin:false}));
   document.getElementById('loginForm').addEventListener('submit', e => {
     e.preventDefault();
     const phone = document.getElementById('lg_phone').value.trim(), pin = document.getElementById('lg_pin').value.trim(), err = document.getElementById('lg_err');
@@ -671,6 +741,7 @@ function fieldHTML(f){
   const lab = `${esc(f.l)}${f.req?' <span class="req" aria-hidden="true">*</span>':''}`;
   const help = f.help ? `<p class="fhelp">${esc(f.help)}</p>` : '', err = errors[f.id] ? `<p class="err">${esc(errors[f.id])}</p>` : '';
   if (f.type==='text' || f.type==='tel') return `<div class="field"><label for="${id}">${lab}</label>${help}<input id="${id}" class="big" type="${f.type}" ${da} value="${esc(v||'')}" ${f.type==='tel'?'inputmode="numeric" maxlength="10"':''}>${err}</div>`;
+  if (f.type==='pin' && CONFIG.otp) return '';
   if (f.type==='pin') return `<div class="field"><label for="${id}">${lab}</label>${help}<input id="${id}" class="big pinbox" type="tel" inputmode="numeric" maxlength="4" ${da} value="${esc(v||'')}">${err}</div>`;
   if (f.type==='select') return `<div class="field"><label for="${id}">${lab}</label>${help}<select id="${id}" class="big" ${da}><option value="">Choose</option>${f.opts.map(o=>`<option ${String(v)===o?'selected':''}>${o}</option>`).join('')}</select>${err}</div>`;
   let body = '';
@@ -708,6 +779,21 @@ function renderForm(){
     if (i < n-1){ V.step = i+1; saveDraft(); renderForm(); window.scrollTo(0,0); return; }
     const answers = Object.assign({}, FA), pin = answers.pin; delete answers.pin;
     const b = document.getElementById('nextBtn'); b.disabled = true; b.textContent = 'Please wait…';
+    const joined = r => { TOKEN = r.token; store.set('c12.token', TOKEN); store.set('c12.answers', null); store.set('c12.step', null); FA = {}; setState(r.state); go('week', {first:true}); };
+    if (CONFIG.otp){
+      // Prove the WhatsApp number with a code, then join.
+      const send = () => API('otpSend', {phone: answers.phone, purpose:'join'});
+      send().then(() => {
+        const box = document.createElement('div'); box.className = 'fb'; box.innerHTML = '<div class="fb-in" role="dialog" aria-label="Check your WhatsApp number"><h3>Check your WhatsApp number</h3><div id="joinOtp"></div><button class="linkbtn" type="button" id="joinOtpClose" style="margin-top:8px">Change number / Number badlein</button></div>';
+        document.body.appendChild(box);
+        on('joinOtpClose', () => { clearInterval(otpTimer); box.remove(); b.disabled = false; b.textContent = 'Join'; V.step = 0; errors = {}; saveDraft(); renderForm(); window.scrollTo(0,0); });
+        otpBox(document.getElementById('joinOtp'), answers.phone, code => API('register', {answers, otp: code}).then(r => { box.remove(); joined(r); }), send);
+      }).catch(x => { const el = document.getElementById('formErr'); el.textContent = x.message; el.hidden = false; b.disabled = false; b.textContent = 'Join';
+        if (/already/i.test(x.message)){ const old = document.getElementById('dupActs'); if (old) old.remove();
+          el.insertAdjacentHTML('afterend', `<div class="actions" id="dupActs"><button class="btn primary" type="button" id="dupLogin">Log in with this number</button><button class="btn" type="button" id="dupChange">Change my number</button></div>`);
+          on('dupLogin', () => go('gate', {prefillPhone: FA.phone})); on('dupChange', () => { V.step = 0; errors = {phone: 'Enter the correct WhatsApp number.'}; saveDraft(); renderForm(); window.scrollTo(0,0); }); } });
+      return;
+    }
     API('register', {answers, pin}).then(r => {
       TOKEN = r.token; store.set('c12.token', TOKEN); store.set('c12.answers', null); store.set('c12.step', null); FA = {};
       setState(r.state); go('week', {first:true});
@@ -735,12 +821,13 @@ function onFormInput(e){
 function validate(sec){
   const e = {};
   sec.f.forEach(f => {
+    if (f.type==='pin' && CONFIG.otp) return;
     const v = FA[f.id];
     const filled = f.type==='marks' ? f.rows.every(r => v && v[r] && v[r].s && v[r].o) : f.type==='chapters' ? chaptersOf(f.subject,'').every(c => v && v[c.chapter]) : f.type==='multi' ? (v||[]).length>0 : v!==undefined && String(v).trim()!=='';
     if (f.req && !filled) e[f.id] = f.type==='marks' ? 'Fill marks and total for every subject.' : f.type==='chapters' ? 'Tap one option for every chapter.' : 'Please answer this.';
     else if (f.type==='marks'){ const bad = f.rows.find(r => +v[r].s > +v[r].o); if (bad) e[f.id] = short(bad)+': marks cannot be more than the total.'; }
     else if (f.type==='tel' && !/^[6-9]\d{9}$/.test(v)) e[f.id] = 'Enter a 10-digit mobile number.';
-    else if (f.type==='pin' && !/^\d{4}$/.test(v)) e[f.id] = 'The PIN must be 4 digits.';
+    else if (f.type==='pin' && !CONFIG.otp && !/^\d{4}$/.test(v)) e[f.id] = 'The PIN must be 4 digits.';
   });
   if (sec.f.some(f => f.id==='parentPhone') && FA.parentPhone && FA.parentPhone===FA.phone) e.parentPhone = 'Parent number must be different from yours.';
   return e;
@@ -1026,17 +1113,18 @@ function renderCiDone(){
 // Opens the dashboard from the copy saved on this device (instant), then fetches fresh data quietly.
 // opts.fresh: ask the server to skip its short cache (Refresh button, after Pause/Remove etc.).
 let FEEDBACK = [];
+let WA = {on: false, test: '', last: {}};   // WhatsApp sending from the app: switched on? test number? last sends per student
 function openMentor(key, opts){
   opts = opts || {}; MENTOR_KEY = key;
   let cached = null; try { cached = JSON.parse(store.get('c12.mentor')); } catch(e){}
   const shown = V.screen==='mentor' && MENTOR;
   if (!shown){
-    if (cached && cached.key===key && cached.students){ MENTOR = cached.students.map(buildModel); FEEDBACK = cached.feedback || []; DASH.syncing = true; go('mentor'); }
+    if (cached && cached.key===key && cached.students){ MENTOR = cached.students.map(buildModel); FEEDBACK = cached.feedback || []; WA = cached.wa || WA; DASH.syncing = true; go('mentor'); }
     else scr.innerHTML = '<div class="narrow card"><p class="muted">Loading students…</p></div>';
   } else { DASH.syncing = true; const m = document.getElementById('syncMsg'); if (m) m.textContent = 'Updating…'; }
   API('mentorAll', {key, fresh: !!opts.fresh}).then(r => {
-    try { store.set('c12.mentor', JSON.stringify({key, at: Date.now(), students: r.students, feedback: r.feedback || []})); } catch(e){}
-    MENTOR = r.students.map(buildModel); FEEDBACK = r.feedback || []; DASH.syncing = false; DASH.syncedAt = Date.now();
+    try { store.set('c12.mentor', JSON.stringify({key, at: Date.now(), students: r.students, feedback: r.feedback || [], wa: r.wa || null})); } catch(e){}
+    MENTOR = r.students.map(buildModel); FEEDBACK = r.feedback || []; WA = r.wa || {on:false, test:'', last:{}}; DASH.syncing = false; DASH.syncedAt = Date.now();
     if (V.screen!=='mentor') return go('mentor');
     // Redraw in place unless the teacher is typing somewhere.
     const a = document.activeElement;
@@ -1059,6 +1147,15 @@ function parentFacts(m){
   const ratio = its.length ? done/its.length : 0;
   const tone = (ci <= days.length*.45 || (its.length && ratio < .3)) ? 'weak' : (ci >= days.length-1 && ratio >= .7) ? 'good' : 'okay';
   return {name:m.name.replace(/\(.*\)/,'').trim().split(' ')[0], days:days.length, ci, done, total:its.length, f, tone};
+}
+// Numbers for the WhatsApp weekly report template; null if the student was not with us for the whole week.
+function weeklyFacts(m){
+  const p = parentFacts(m);
+  if (p.days < 7) return null;
+  const cur = weekOf(m.t, m.joined), wk = cur.start > m.joined ? weekOf(addDays(cur.start,-1), m.joined) : cur;
+  const note = p.tone==='good' ? 'Very good week. Keep it up.' : p.tone==='okay' ? 'Good effort, but needs to be a little more regular.'
+    : `Studies were irregular this week. Please talk to ${p.name} at home, and I will also talk to ${p.name}.`;
+  return {week: `${wk.start.getDate()} ${MON[wk.start.getMonth()]} to ${wk.end.getDate()} ${MON[wk.end.getMonth()]}`, days: String(p.ci), tasks: `${p.done} of ${p.total}`, syllabus: p.f.pct + '%', note, tone: p.tone};
 }
 const MONTHS_LONG = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const longDate = d => d.getDate() + ' ' + MONTHS_LONG[d.getMonth()];
@@ -1150,6 +1247,52 @@ function studentRow(m){
   const lastTxt = !last ? 'Never' : last===k ? 'Today' : last===ymd(addDays(t,-1)) ? 'Yesterday' : daysBetween(D(last), t) + ' days ago';
   return {m, st, streak, f, checkedToday, lastTxt, doneW, totalW, stuck, noStudy, days};
 }
+// WhatsApp box (Messages tab): who missed reports for 2+ days, and full-week reports for parents.
+// Ticks, the "send to" choice, typed notes and the last results stay while the dashboard redraws.
+const WAUI = {to:'both', off:{}, res:{}, note:{}};
+const waWhen = v => v ? v.slice(8,10) + ' ' + MON[+v.slice(5,7)-1] + ' ' + v.slice(11) : '';
+function waResult(o){
+  if (!o) return '';
+  if (o.skipped) return `<span class="wa-res skip">${esc(o.skipped)}</span>`;
+  if (o.errors) return `<span class="wa-res bad">${o.sent ? '✓ ' + o.sent + ' sent · ' : ''}✗ ${esc(o.errors.join('; '))}</span>`;
+  return `<span class="wa-res ok">✓ Sent${o.noParent ? ' (no parent number)' : ''}</span>`;
+}
+function waBox(R){
+  if (DASH.tab!=='messages') return '';
+  const last = WA.last || {};
+  const recent = (ph, kind, days) => { const v = (last[ph]||{})[kind]; return v && daysBetween(D(v.slice(0,10)), today0()) < days ? v : ''; };
+  const missed = R.filter(r => r.m.phone && r.streak >= 2).sort((a,b) => b.streak - a.streak);
+  const weekly = R.map(r => ({r, w: weeklyFacts(r.m)})).filter(x => x.w);
+  const newbies = R.filter(r => !weeklyFacts(r.m)).length;
+  const ready = (list, kind, days) => list.filter(x => { const ph = (x.r || x).m.phone; return !WAUI.off[kind+ph] && !recent(ph, kind, days) && (kind!=='weekly' || (x.r||x).m.parentPhone); });
+  const nM = ready(missed, 'missed', 3).length, nW = ready(weekly, 'weekly', 5).length;
+  const selAll = (kind, phones) => { if (phones.length < 2) return ''; const allOn = phones.every(ph => !WAUI.off[kind+ph]);
+    return `<button type="button" class="btn small wa-all" data-waall="${kind}" data-waon="${allOn ? 0 : 1}" data-waph="${esc(phones.join(','))}">${allOn ? 'Clear all' : 'Select all'}</button>`; };
+  const box = (kind, ph, disabled, extra) => `<input type="checkbox" data-wack="${kind}${esc(ph)}" ${disabled ? 'disabled' : WAUI.off[kind+ph] ? '' : 'checked'} aria-label="Send to this student">`;
+  return `<section class="card wa-box"><h2>📲 Send WhatsApp from the app</h2>
+    ${!WA.on ? '<p class="note">Not switched on yet. Until then, use the WhatsApp buttons below (they open your own WhatsApp).</p>'
+      : WA.test ? `<p class="note warn"><b>Test mode:</b> every message goes only to your number ending ${esc(WA.test)}. Students and parents get nothing.</p>` : ''}
+    ${IS_LIVE ? '' : '<p class="muted tiny">Preview: nothing is really sent.</p>'}
+    <details class="wa-part" ${DASH.waOpen!=='weekly' ? 'open' : ''} data-wapart="missed"><summary>Report not sent for 2 or more days <b>${missed.length}</b></summary>
+      ${missed.length ? `<div class="wa-to"><span class="muted tiny">Send to</span>${segGroup('wato', ['Student','Parent','Both'], o => o.toLowerCase()===WAUI.to, 'data-wato="1"')}</div>
+      ${selAll('missed', missed.filter(r => !recent(r.m.phone, 'missed', 3)).map(r => r.m.phone))}
+      <div class="wa-list">${missed.map(r => { const ph = r.m.phone, rec = recent(ph, 'missed', 3);
+        return `<label class="wa-row">${box('missed', ph, rec)}<span class="wa-nm"><b>${esc(r.m.name)}</b><small class="muted">Missed ${r.streak} days${r.m.parentPhone ? '' : ' · no parent number'}${rec ? ' · reminded ' + esc(waWhen(rec)) : ''}</small></span>${waResult(WAUI.res['missed'+ph])}</label>`; }).join('')}</div>
+      <p class="muted tiny">The same student gets this reminder at most once in 3 days.</p>
+      <button class="btn primary" type="button" id="waGoMissed" ${!WA.on || !nM ? 'disabled' : ''}>Send WhatsApp to ${nM} student${nM===1?'':'s'}</button>`
+      : '<p class="muted">Everyone has sent a report in the last 2 days. 👍</p>'}
+      <p class="err" id="waErrMissed" hidden></p></details>
+    <details class="wa-part" ${DASH.waOpen==='weekly' ? 'open' : ''} data-wapart="weekly"><summary>Weekly report to parents <b>${weekly.length}</b></summary>
+      ${weekly.length ? `<p class="muted tiny">Week ${esc(weekly[0].w.week)}. Change the note if you want; it goes as "My note".${newbies ? ` ${newbies} student${newbies===1?'':'s'} joined during the week and will get the first report next Sunday.` : ''}</p>
+      ${selAll('weekly', weekly.filter(({r}) => r.m.parentPhone && !recent(r.m.phone, 'weekly', 5)).map(({r}) => r.m.phone))}
+      <div class="wa-list">${weekly.map(({r, w}) => { const ph = r.m.phone, rec = recent(ph, 'weekly', 5), noP = !r.m.parentPhone;
+        return `<div class="wa-row wk"><label class="wa-chk">${box('weekly', ph, rec || noP)}<span class="wa-nm"><b>${esc(r.m.name)}</b><small class="muted">${w.days} of 7 days · ${esc(w.tasks)} tasks · syllabus ${esc(w.syllabus)}${noP ? ' · no parent number' : ''}${rec ? ' · sent ' + esc(waWhen(rec)) : ''}</small></span></label>
+          <input class="big wa-note" type="text" maxlength="300" data-wanote="${esc(ph)}" value="${esc(WAUI.note[ph] != null ? WAUI.note[ph] : w.note)}" aria-label="Note for ${esc(r.m.name)}'s parent" ${rec || noP ? 'disabled' : ''}>${waResult(WAUI.res['weekly'+ph])}</div>`; }).join('')}</div>
+      <button class="btn primary" type="button" id="waGoWeekly" ${!WA.on || !nW ? 'disabled' : ''}>Send weekly report to ${nW} parent${nW===1?'':'s'}</button>`
+      : '<p class="muted">No student has a full week yet.</p>'}
+      <p class="err" id="waErrWeekly" hidden></p></details>
+  </section>`;
+}
 let DASH = {filter:'all', q:'', open:null, panel:null, jump:false, to:{}, msgOpen:false, tab:'students'};
 function renderMentor(){
   const t = today0(), k = ymd(t);
@@ -1224,7 +1367,7 @@ function renderMentor(){
         <p class="prob-msg">${esc(f.message)}</p>
         ${f.reply ? `<p class="prob-reply"><b>Your reply</b> <span class="muted tiny">${esc(f.repliedAt)}</span><br>${esc(f.reply)}</p>` : ''}
         ${f.row && (f.phone || !f.reply) ? `<textarea class="big rp-text" id="rp_${f.row}" data-rp="${f.row}" rows="2" placeholder="${f.reply ? 'Write another reply' : 'Write your reply'}"></textarea>
-        <div class="actions"><button class="btn primary small" type="button" data-rpsend="${f.row}">Send in app</button>${f.phone ? `<a class="btn small" id="rpwa_${f.row}" href="${esc(waLink(f.phone, 'Hi, Mahendra Sir here. About the problem you reported: '))}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : '<span class="muted tiny">No number given (sent before login), so only an in-app reply is possible once they log in with that number.</span>'}</div>
+        <div class="actions">${WA.on && f.phone ? `<button class="btn primary small" type="button" data-rpsend="${f.row}" data-rpwa="1">Send (app + WhatsApp)</button><button class="btn small" type="button" data-rpsend="${f.row}" data-rpwa="0">Send in app only</button>` : `<button class="btn primary small" type="button" data-rpsend="${f.row}">Send in app</button>`}${f.phone ? `<a class="btn small" id="rpwa_${f.row}" href="${esc(waLink(f.phone, 'Hi, Mahendra Sir here. About the problem you reported: '))}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : '<span class="muted tiny">No number given (sent before login), so only an in-app reply is possible once they log in with that number.</span>'}</div>
         <p class="err" id="rperr_${f.row}" hidden></p>` : ''}</div>`).join('') : '<p class="muted">No problems reported yet.</p>'}
     </section>`;
   // Clean CRM look: greeting, four number cards with trends, student table + status donut + 14-day chart.
@@ -1287,7 +1430,8 @@ function renderMentor(){
         <section class="card"><h2>Check-ins, last 14 days</h2>${chart}</section>
       </div>
     </div>
-    <section class="card msgs" ${DASH.tab!=='messages'?'hidden':''}><h2>Weekly messages (parent & student)</h2>
+    ${waBox(R)}
+    <section class="card msgs" ${DASH.tab!=='messages'?'hidden':''}><h2>Weekly messages from your own WhatsApp (parent & student)</h2>
       <p class="muted tiny">Nothing is sent automatically. Pick Parent or Student, pick the language, add your line if you want, then tap "WhatsApp par bhejo" and press Send in WhatsApp.</p>
       ${MENTOR.map((m,i) => { const lang = getLang(m.phone), to = DASH.to[m.phone] || 'parent', tPhone = to==='student' ? m.phone : m.parentPhone, msg = (to==='student' ? studentMessage : parentMessage)(m, lang, '');
         return `<div class="pl"><div class="pl-top"><b>${esc(m.name)}</b><span class="mono muted">${to==='student' ? 'Student' : 'Parent'}: ${esc(tPhone||'—')}</span></div>
@@ -1311,8 +1455,9 @@ function renderMentor(){
     const row = b.dataset.rpsend, t = document.getElementById('rp_'+row), e2 = document.getElementById('rperr_'+row), text = t.value.trim();
     if (!text){ e2.textContent = 'Write the reply first.'; e2.hidden = false; return; }
     b.disabled = true; b.textContent = 'Sending…'; e2.hidden = true;
-    API('replyFeedback', {key:MENTOR_KEY, row, value:text}).then(() => { toast('Reply saved. The student sees it on the app home screen.'); const f = FEEDBACK.find(x => String(x.row)===row); if (f){ f.reply = text; f.repliedAt = 'just now'; } renderMentor(); openMentor(MENTOR_KEY, {fresh:true}); })
-      .catch(x => { e2.textContent = x.message; e2.hidden = false; b.disabled = false; b.textContent = 'Send in app'; });
+    API('replyFeedback', {key:MENTOR_KEY, row, value:text, wa: b.dataset.rpwa !== '0'}).then(res => { const wa = res && res.wa;
+      toast(wa==='sent' ? 'Reply saved. The student also got a WhatsApp message to open the app.' : wa && !/^(off|no-student)$/.test(wa) ? 'Reply saved in the app. WhatsApp not sent: ' + wa : 'Reply saved. The student sees it on the app home screen.'); const f = FEEDBACK.find(x => String(x.row)===row); if (f){ f.reply = text; f.repliedAt = 'just now'; } renderMentor(); openMentor(MENTOR_KEY, {fresh:true}); })
+      .catch(x => { e2.textContent = x.message; e2.hidden = false; b.disabled = false; b.textContent = b.dataset.rpwa==='1' ? 'Send (app + WhatsApp)' : b.dataset.rpwa==='0' ? 'Send in app only' : 'Send in app'; });
   }));
   scr.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { if (DASH.tab==='problems' && b.dataset.tab!=='problems' && FEEDBACK[0]) store.set('c12.fbSeen', FEEDBACK[0].when); DASH.tab = b.dataset.tab; renderMentor(); if (DASH.tab==='problems' && FEEDBACK[0]) store.set('c12.fbSeen', FEEDBACK[0].when); }));
   scr.querySelectorAll('[data-kpi]').forEach(b => b.addEventListener('click', () => {
@@ -1333,6 +1478,29 @@ function renderMentor(){
     API('adminAction', args).then(() => { toast(done); if (act==='remove') DASH.open = null; openMentor(MENTOR_KEY, {fresh:true}); })
       .catch(x => { err.textContent = x.message; err.hidden = false; b.disabled = false; });
   }));
+  scr.querySelectorAll('[data-wack]').forEach(c => c.addEventListener('change', () => { if (c.checked) delete WAUI.off[c.dataset.wack]; else WAUI.off[c.dataset.wack] = 1; renderMentor(); }));
+  scr.querySelectorAll('[data-waall]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.waall, onAll = b.dataset.waon==='1';
+    b.dataset.waph.split(',').forEach(ph => { if (onAll) delete WAUI.off[k+ph]; else WAUI.off[k+ph] = 1; }); DASH.waOpen = k; renderMentor(); }));
+  scr.querySelectorAll('[data-wato]').forEach(r => r.addEventListener('change', () => { WAUI.to = r.value.toLowerCase(); renderMentor(); }));
+  scr.querySelectorAll('[data-wanote]').forEach(inp => inp.addEventListener('input', () => { WAUI.note[inp.dataset.wanote] = inp.value; }));
+  scr.querySelectorAll('[data-wapart]').forEach(d => d.addEventListener('toggle', () => { if (d.open) DASH.waOpen = d.dataset.wapart; }));
+  const waGo = (kind) => {
+    const R = MENTOR.map(studentRow).filter(r => r.m.state.profile.status !== 'Paused');
+    const checked = [...scr.querySelectorAll(`[data-wack^="${kind}"]`)].filter(c => c.checked && !c.disabled).map(c => c.dataset.wack.slice(kind.length));
+    const items = checked.map(ph => { const r = R.find(x => x.m.phone===ph); if (!r) return null;
+      if (kind==='missed') return {phone: ph, days: r.streak, to: WAUI.to};
+      const w = weeklyFacts(r.m); return w && {phone: ph, week: w.week, days: w.days, tasks: w.tasks, syllabus: w.syllabus, note: (WAUI.note[ph] != null ? WAUI.note[ph] : w.note).trim()}; }).filter(Boolean);
+    const b = document.getElementById(kind==='missed' ? 'waGoMissed' : 'waGoWeekly'), e2 = document.getElementById(kind==='missed' ? 'waErrMissed' : 'waErrWeekly');
+    if (!items.length) return;
+    b.disabled = true; b.textContent = 'Sending…'; e2.hidden = true; DASH.waOpen = kind;
+    API('waSend', {key: MENTOR_KEY, kind, items}).then(res => {
+      let sent = 0; (res.results||[]).forEach(o => { WAUI.res[kind+o.phone] = o; sent += o.sent || 0; });
+      toast(`${sent} WhatsApp message${sent===1?'':'s'} sent${res.test ? ' to your test number' : ''}.`);
+      openMentor(MENTOR_KEY, {fresh:true});
+    }).catch(x => { e2.textContent = x.message; e2.hidden = false; b.disabled = false; b.textContent = 'Try again'; });
+  };
+  on('waGoMissed', () => waGo('missed'));
+  on('waGoWeekly', () => waGo('weekly'));
   const toOf = i => DASH.to[MENTOR[i].phone] || 'parent';
   const msgFor = i => (toOf(i)==='student' ? studentMessage : parentMessage)(MENTOR[i], getLang(MENTOR[i].phone), document.getElementById('pc_'+i).value.trim());
   const refresh = i => { const tx = msgFor(i); document.getElementById('pl_'+i).textContent = tx; const a = document.getElementById('wa_'+i); if (a) a.href = `https://wa.me/91${toOf(i)==='student' ? MENTOR[i].phone : MENTOR[i].parentPhone}?text=${encodeURIComponent(tx)}`; };
@@ -1377,7 +1545,34 @@ function studentDetail(r){
 // =====================================================================
 // Start
 // =====================================================================
+let CONFIG = (() => { try { return JSON.parse(store.get('c12.cfg')) || {}; } catch(e){ return {}; } })();
+// Code entry with a 30-second "Resend" countdown. onVerify(code) and onResend() return promises.
+let otpTimer = null;
+function otpBox(target, phone, onVerify, onResend){
+  clearInterval(otpTimer);
+  target.innerHTML = `<div class="otp-box"><p style="margin:0">We sent a 6-digit code on WhatsApp to <b class="mono">+91 ${esc(phone)}</b>.<br><span class="muted tiny">WhatsApp par 6 ankon ka code bheja hai.</span></p>
+    <label class="lbl" for="otp_code">Enter the code / Code daalein</label>
+    <input id="otp_code" class="big otp-in" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••">
+    <p class="err" id="otp_err" hidden></p>
+    <button class="btn primary big wide" type="button" id="otpGo">Verify / Verify karein</button>
+    <p class="otp-row"><button class="linkbtn" type="button" id="otpResend" disabled>Resend code in 30s</button></p></div>`;
+  const inp = document.getElementById('otp_code'), err = document.getElementById('otp_err'), go = document.getElementById('otpGo'), rs = document.getElementById('otpResend');
+  const tick = secs => { let n = secs; rs.disabled = true; rs.textContent = `Resend code in ${n}s / ${n}s baad dobara`; clearInterval(otpTimer);
+    otpTimer = setInterval(() => { n--; if (!document.body.contains(rs)) return clearInterval(otpTimer);
+      if (n <= 0){ clearInterval(otpTimer); rs.disabled = false; rs.textContent = 'Resend code / Code dobara bhejein'; } else rs.textContent = `Resend code in ${n}s / ${n}s baad dobara`; }, 1000); };
+  tick(30); setTimeout(() => inp.focus(), 50);
+  inp.addEventListener('input', () => { inp.value = inp.value.replace(/\D/g,'').slice(0,6); if (inp.value.length===6) go.click(); });
+  go.addEventListener('click', () => {
+    const code = inp.value.trim();
+    if (!/^\d{6}$/.test(code)){ err.textContent = 'Enter the 6-digit code. / 6 ankon ka code daalein.'; err.hidden = false; return; }
+    go.disabled = true; go.textContent = 'Checking… / Check ho raha hai…'; err.hidden = true;
+    onVerify(code).catch(x => { err.textContent = x.message; err.hidden = false; go.disabled = false; go.textContent = 'Verify / Verify karein'; inp.select(); });
+  });
+  rs.addEventListener('click', () => { rs.disabled = true; onResend().then(r => { toast('New code sent / Naya code bheja'); tick((r && r.resendIn) || 30); })
+    .catch(x => { err.textContent = x.message; err.hidden = false; rs.disabled = false; }); });
+}
 function boot(params){
+  API('config', {}).then(c => { const was = !!CONFIG.otp; CONFIG = c || {}; store.set('c12.cfg', JSON.stringify(CONFIG)); if (was !== !!CONFIG.otp && (V.screen==='gate' || V.screen==='form')) render(); }).catch(() => {});
   if (params.view==='mentor') return openMentor(params.key || '');
   const tok = store.get('c12.token');
   if (!tok) return go('gate');
@@ -1390,7 +1585,7 @@ function boot(params){
 }
 // Auto-update: when the app opens or comes back to the screen, it checks the site's version file and
 // reloads if a newer build is live. It never reloads while the student is filling the form or a check-in.
-const BUILD = '1791912621115';
+const BUILD = '1792058806160';
 if (REMOTE) {
   const checkUpdate = () => fetch('/class12/version.json?ts=' + Date.now(), {cache:'no-store'}).then(r => r.json())
     .then(v => { if (v && v.build && v.build !== BUILD && !['form','checkin'].includes(V.screen)) location.reload(); }).catch(() => {});
