@@ -30,6 +30,8 @@ a{color:#2347d6}a:hover{color:#1a37ad}
 .wide-only{display:flex}.narrow-only{display:none!important}
 @media (max-width:959px){.wide-only{display:none!important}.narrow-only{display:flex!important}}
 [hidden]{display:none!important}
+@media (max-width:900px){.probs{grid-template-columns:repeat(2,1fr)!important}}
+@media (max-width:520px){.probs{grid-template-columns:1fr!important}}
 @media (max-width:600px){
   .hero{padding-top:36px!important}
   section:not(.tight){padding-top:64px!important;padding-bottom:64px!important}
@@ -139,7 +141,7 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #2347
 <h2 style="margin:16px 0 0;font-size:clamp(32px,4.4cqi,52px);line-height:1.1;letter-spacing:-.035em;font-weight:500;text-wrap:balance">Most aspirants study without a mentor.</h2>
 <p style="margin:20px 0 0;font-size:18px;font-weight:300;color:#5b6072">No one checks their work. So they:</p>
 </div>
-<div data-reveal style="margin-top:64px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1px;background:#e3e3de;border:1px solid #e3e3de;border-radius:14px;overflow:hidden">
+<div data-reveal class="probs" style="margin-top:64px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e3e3de;border:1px solid #e3e3de;border-radius:14px;overflow:hidden">
 <div class="hv-prob prob" style="background:#fff;padding:32px 28px 34px;display:flex;flex-direction:column;gap:44px;transition:background .2s"><span class="mono" style="font-size:12px;color:#8a8fa0">01</span><p style="margin:0;font-size:19px;line-height:1.35;letter-spacing:-.01em;text-wrap:pretty"><span style="font-weight:500">Finish lectures,</span> <span style="font-weight:300;color:#5b6072">then find 6 papers don’t fit into the last month</span></p></div>
 <div class="hv-prob prob" style="background:#fff;padding:32px 28px 34px;display:flex;flex-direction:column;gap:44px;transition:background .2s"><span class="mono" style="font-size:12px;color:#8a8fa0">02</span><p style="margin:0;font-size:19px;line-height:1.35;letter-spacing:-.01em;text-wrap:pretty"><span style="font-weight:500">Skip MTPs and RTPs,</span> <span style="font-weight:300;color:#5b6072">until the exam paper looks unfamiliar</span></p></div>
 <div class="hv-prob prob" style="background:#fff;padding:32px 28px 34px;display:flex;flex-direction:column;gap:44px;transition:background .2s"><span class="mono" style="font-size:12px;color:#8a8fa0">03</span><p style="margin:0;font-size:19px;line-height:1.35;letter-spacing:-.01em;text-wrap:pretty"><span style="font-weight:500">Write answers without working notes</span> <span style="font-weight:300;color:#5b6072">and lose marks they actually knew</span></p></div>
