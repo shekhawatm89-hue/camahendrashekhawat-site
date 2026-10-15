@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Free Study Audit · CA Mahendra Shekhawat</title>
+<meta name="description" content="5-minute free study audit for Class 11, Class 12 Commerce, CA Foundation and CA Inter. See where your preparation really stands.">
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Same look as the mentorship landing page: warm paper, ink, one strong blue, yellow highlight.
+   The report itself sits on the deep-navy "bucket" panel from the audit video. */
+:root{
+  --bg:#f7f7f4; --surface:#fff; --ink:#0e1222; --ink2:#3b4054; --muted:#5b6072; --faint:#8a8fa0;
+  --line:#e3e3de; --line2:#efefea; --blue:#2347d6; --blue-h:#1a37ad; --tint:#eaeefc; --yellow:#ffd23f; --soft:#fff8d9;
+  --good:#1d7a45; --good-soft:#e2f4e8; --warn:#8a5a00; --warn-soft:#fdf1d8; --bad:#b4233c; --bad-soft:#fbe6ea;
+  --navy:#070d24; --navy2:#0d1636; --glow:#3d6bff;
+  --font:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --mono:"Poppins",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+a{color:var(--blue)}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:0 96px}
+header.top{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);margin-bottom:20px}
+.brand{font-weight:600;font-size:15px}.brand span{font-weight:300}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+h1,h2{font-family:"Poppins",var(--font)}
+h1{font-size:clamp(28px,6vw,40px);font-weight:500;letter-spacing:-.035em;line-height:1.1;margin:6px 0 10px;text-wrap:balance}
+h1 em{font-style:normal;background:var(--yellow);padding:0 6px;border-radius:6px}
+h2{font-size:22px;font-weight:500;letter-spacing:-.02em;margin:0 0 4px}
+p{margin:0 0 10px}.muted{color:var(--muted)}.small{font-size:14px}
+.steps{display:flex;gap:6px;margin:0 0 18px;overflow-x:auto}
+.steps span{flex:1;min-width:58px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);border-top:3px solid var(--line);padding-top:6px}
+.steps span.on{color:var(--blue);border-color:var(--blue)}.steps span.done{color:var(--ink2);border-color:var(--ink2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+label.lbl,.lbl{font-weight:600;font-size:15px}
+input.big{font:inherit;font-size:17px;padding:12px 14px;border:1px solid #d4d4ce;border-radius:10px;background:#fff;color:var(--ink);width:100%}
+input.big:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:15px;border:1px solid #d4d4ce;background:#fff;color:var(--ink2);border-radius:999px;padding:9px 14px;cursor:pointer;min-height:42px}
+.chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.chip:focus-visible,.btn:focus-visible,.seg button:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.course{font:inherit;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-height:96px}
+.course b{font-size:18px;font-weight:600}.course small{color:var(--muted)}
+.course:hover{border-color:var(--blue);box-shadow:0 12px 32px rgba(14,18,34,.06)}
+.btn{font:inherit;font-weight:600;font-size:16px;border:0;border-radius:10px;padding:14px 22px;cursor:pointer;background:var(--blue);color:#fff;box-shadow:0 8px 24px rgba(35,71,214,.25);min-height:50px}
+.btn:hover{background:var(--blue-h)}.btn[disabled]{opacity:.55;cursor:default;box-shadow:none}
+.btn.ghost{background:transparent;color:var(--ink2);box-shadow:none;border:1px solid #d4d4ce}
+.btn.wa{background:#25d366;color:#0e1222;box-shadow:none}
+.nav{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.err{color:var(--bad);font-weight:600;font-size:14px;margin:0}
+.subj{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.subj summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:600;background:#fbfbf9}
+.subj summary::-webkit-details-marker{display:none}
+.subj summary small{font-weight:400;color:var(--muted);font-size:13px}
+.chrow{padding:12px 16px;border-top:1px solid var(--line2);display:flex;flex-direction:column;gap:8px}
+.chrow .nm{font-size:15px}.chrow .unit{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--line2);padding:3px;border-radius:10px}
+.seg button{font:inherit;font-size:13px;border:0;background:transparent;border-radius:8px;padding:8px 2px;cursor:pointer;color:var(--ink2);min-height:38px}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(14,18,34,.15)}
+.seg button[aria-pressed="true"][data-v="0"]{color:var(--bad)}.seg button[aria-pressed="true"][data-v="3"]{color:var(--good)}
+.quick{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--line2);background:#fbfbf9}
+.quick .chip{font-size:13px;min-height:34px;padding:6px 10px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px}.check input{width:22px;height:22px;margin-top:1px;accent-color:var(--blue);flex:none}
+.otp{font-family:var(--mono);letter-spacing:.4em;font-size:22px;text-align:center}
+.note{background:var(--soft);border:1px solid #f2e09a;border-radius:10px;padding:10px 12px;font-size:14px}
+
+/* ---------- Report: one A4 page. Navy and gold band top and bottom, mentor's name on both. ---------- */
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.list li{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line2)}.list li:first-child{border-top:0}
+.tag{font-size:10px;letter-spacing:.04em;text-transform:uppercase;border-radius:5px;padding:2px 6px;background:var(--tint);color:var(--blue);flex:none;margin-right:4px}
+.num{width:24px;height:24px;border-radius:50%;background:var(--bad);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none}
+.ok{width:24px;height:24px;border-radius:50%;background:var(--good);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none}
+.hrs{margin-left:auto;font-size:12px;color:var(--muted);flex:none;padding-left:8px}
+.trk{height:10px;background:var(--line2);border-radius:6px;overflow:hidden}.trk i{display:block;height:100%;background:var(--blue);border-radius:6px}
+.rp{--rnavy:#0b1a3a;--rnavy2:#14295a;--gold:#c9a227;--gold-soft:#f7efd2;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;color:#16213d}
+.rp h3,.rp .hd{font-family:"Poppins",var(--font)}
+.rp-head{background:linear-gradient(135deg,var(--rnavy),var(--rnavy2));color:#fff;padding:18px 22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:4px solid var(--gold)}
+.rp-brand{display:flex;gap:12px;align-items:center}
+.rp-brand img{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);object-fit:cover}
+.rp-brand .t{font-family:"Poppins",var(--font);font-weight:700;font-size:20px;letter-spacing:.06em;line-height:1.1}
+.rp-brand .s{font-size:13px;color:#d6def5}.rp-brand .s2{font-size:11.5px;color:#aebce6;letter-spacing:.02em}.rp-brand .s b{color:var(--gold);font-weight:700}
+.rp-who{text-align:right;font-size:13px;color:#d6def5;line-height:1.5}.rp-who b{display:block;color:#fff;font-size:17px;font-family:"Poppins",var(--font);font-weight:600}
+.rp-body{padding:16px 22px;display:flex;flex-direction:column;gap:14px}
+.rp-sum{display:grid;grid-template-columns:1.05fr 1fr;gap:12px}
+.rp-status{border-radius:12px;padding:14px;display:flex;gap:12px;align-items:center;background:#f4f6fb}
+.rp-status svg{flex:none;width:96px;height:auto}
+.rp-status.green{background:#e8f5ee}.rp-status.yellow{background:#fdf4dd}.rp-status.red{background:#fbe9ec}
+.rp-status .lab{font-family:"Poppins",var(--font);font-weight:700;font-size:20px;margin:0 0 4px}
+.rp-status.green .lab{color:#1d7a45}.rp-status.yellow .lab{color:#8a5a00}.rp-status.red .lab{color:#b4233c}
+.rp-status p{margin:0;font-size:13.5px;line-height:1.45}
+.rp-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rp-kpi{border:1px solid #e6e9f2;border-radius:10px;padding:9px 11px}
+.rp-kpi b{display:block;font-family:"Poppins",var(--font);font-size:19px;font-weight:600;line-height:1.2}.rp-kpi span{font-size:12px;color:#5b6072}
+.rp-kpi.alert b{color:#b4233c}
+.rp-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rp-box{border:1px solid #e6e9f2;border-radius:12px;padding:12px 14px}
+.rp-box h3{margin:0 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--rnavy);font-weight:700;display:flex;align-items:center;gap:8px}
+.rp-box h3::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--gold)}
+.rp .list li{padding:6px 0;font-size:14px;gap:8px}
+.rp .num,.rp .ok{width:20px;height:20px;font-size:11px}
+.rp .tag{font-family:"Poppins",var(--font);font-size:9.5px;background:#eef1f8;color:var(--rnavy)}
+.rp .hrs{font-family:"Poppins",var(--font);font-size:11.5px}
+.rp-subj{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px 18px}
+.rp-subj .t{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;margin-bottom:3px}.rp-subj .t b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rp-subj .t span{white-space:nowrap}.rp-subj .t b{font-weight:700}
+.rp .trk{height:8px}.rp .trk i{background:linear-gradient(90deg,var(--rnavy2),#3d6bff)}
+.rp-note{background:var(--gold-soft);border-left:4px solid var(--gold);border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.5}
+.rp-note b.h{display:block;font-family:"Poppins",var(--font);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7a5d00;margin-bottom:2px}
+.rp-quote{text-align:center;padding:4px 20px 0}
+.rp-quote q{font-family:"Lora",Georgia,serif;font-style:italic;font-size:17px;color:var(--rnavy)}
+.rp-quote span{display:block;font-size:12px;color:#5b6072;margin-top:2px;letter-spacing:.04em}
+.rp-foot{background:var(--rnavy);color:#cdd6f0;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;line-height:1.5;border-top:3px solid var(--gold)}
+.rp-foot b{color:#fff;font-family:"Poppins",var(--font);font-weight:600}
+.foot{font-size:12px;color:var(--faint);text-align:center;margin:0}
+.fb-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.fb-box h3{margin:0;font-family:"Poppins",var(--font);font-size:17px;font-weight:600}
+textarea.big{font:inherit;font-size:16px;padding:10px 12px;border:1px solid #d4d4ce;border-radius:10px;width:100%;resize:vertical}
+.rp-actions{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:600px){.rp-sum,.rp-cols{grid-template-columns:1fr}.rp-who{text-align:left}}
+@media print{.rp{border:0;border-radius:0}.rp-head,.rp-foot,.rp-status,.rp-note,.rp .trk i{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-body{gap:9px;padding:12px 18px}.wrap{padding:0}
+  .rp .list li{padding:4px 0;font-size:13px}.rp-status p{font-size:12.5px}.rp-note{font-size:13px;padding:8px 12px}.rp-quote q{font-size:15px}.rp-kpi{padding:7px 10px}.rp-kpi b{font-size:17px}}
+@media (prefers-reduced-motion:no-preference){.fade{animation:fade .35s ease-out}@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}.no-print{display:none!important}.wrap{max-width:none;padding:0}
+  .hero,.cta{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sec,.tile,.hero{break-inside:avoid}
+}
+/* ---------- 4-page Study Audit Report (design from redesign.html, scoped under .r4) ---------- */
+.r4{--navy:#16213E;--navy2:#24325C;--cream:#FBF6EE;--paper:#FFFFFF;--gold:#D99A2B;--gold-soft:#F7EAD0;--ink:#1E2433;--muted:#5E6577;--line:#ECE3D3;
+  --good:#2F8F6B;--good-soft:#E3F3EC;--mid:#D98A1E;--mid-soft:#FBEBD2;--bad:#D4573B;--bad-soft:#FBE4DE;--acc:#3B5BDB;--bs:#8A55C4;--eco:#178F80;--test:#C2861F;--oth:#24325C;--oth2:#B0476A;
+  font-family:"Plus Jakarta Sans","Inter",system-ui,sans-serif;color:var(--ink);font-size:12pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.r4 *{box-sizing:border-box;margin:0;padding:0}
+/* undo the audit page styles that share these class names */
+.r4 .card{display:block;gap:0}.r4 .chip{border:0;background:none;padding:0;min-height:0;border-radius:0;cursor:default;color:inherit}.r4 .note{background:none;border:0;border-radius:0;padding:0}.r4 .foot{text-align:left}
+.r4 .page{width:210mm;height:297mm;margin:0 auto 8mm;padding:13mm 14mm 0;background:var(--cream);position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 6px 30px rgba(0,0,0,.12)}
+.r4 h1,.r4 h2,.r4 h3,.r4 .serif{font-family:"Fraunces",Georgia,serif;font-weight:700;letter-spacing:-.01em}
+.r4 h2{font-size:24pt;line-height:1.1;color:var(--navy)}
+.r4 h3{font-size:15pt;color:var(--navy)}
+.r4 .eyebrow{font-size:9.5pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.r4 .muted{color:var(--muted)}
+.r4 .card{background:var(--paper);border:1px solid var(--line);border-radius:5mm;padding:6mm}
+.r4 .sec-head{margin-bottom:5mm}.r4 .sec-head p{font-size:12pt;color:var(--muted);margin-top:1.5mm}
+.r4 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7mm}
+.r4 .brand{display:flex;align-items:center;gap:3mm}
+.r4 .mark{width:10mm;height:10mm;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:700;font-size:12pt;overflow:hidden}
+.r4 .mark img{width:100%;height:100%;object-fit:cover}
+.r4 .brand b{display:block;font-size:11pt;color:var(--navy)}.r4 .brand span{font-size:9pt;color:var(--muted)}
+.r4 .pg{font-size:9.5pt;color:var(--muted);font-weight:600}
+.r4 .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:4mm 0 6mm;font-size:9pt;color:var(--muted)}
+.r4 .tag{display:inline-block;font-size:8.5pt;font-weight:800;letter-spacing:.06em;padding:.6mm 2.2mm;border-radius:2mm;color:#fff;vertical-align:middle;white-space:nowrap;background:var(--c)}
+.r4 .s-acc{--c:var(--acc)}.r4 .s-bs{--c:var(--bs)}.r4 .s-eco{--c:var(--eco)}.r4 .s-test{--c:var(--test)}.r4 .s-other{--c:var(--oth)}.r4 .s-other2{--c:var(--oth2)}
+.r4 .pill{display:inline-flex;align-items:center;gap:2mm;font-weight:800;font-size:11pt;padding:1.6mm 4mm;border-radius:10mm}
+.r4 .pill i{width:2.6mm;height:2.6mm;border-radius:50%;background:currentColor;display:inline-block}
+.r4 .st-tight .pill{background:var(--mid-soft);color:#9A5A00}.r4 .st-behind .pill{background:var(--bad-soft);color:#A3321A}.r4 .st-ok .pill{background:var(--good-soft);color:#1E6B4F}
+/* page 1 */
+.r4 .cover-hero{background:var(--navy);color:#fff;border-radius:6mm;padding:9mm 9mm 8mm;position:relative;overflow:hidden}
+.r4 .cover-hero:after{content:"";position:absolute;right:-30mm;top:-30mm;width:90mm;height:90mm;border-radius:50%;background:radial-gradient(circle,rgba(217,154,43,.35),rgba(217,154,43,0) 70%)}
+.r4 .cover-hero .eyebrow{color:#F1C774}
+.r4 .cover-hero h1{font-size:38pt;line-height:1.02;margin:3mm 0 2.5mm}
+.r4 .cover-hero .meta{font-size:12pt;color:#C9D0E4}.r4 .cover-hero .meta b{color:#fff}
+.r4 .verdict{margin-top:6mm;background:#fff;color:var(--ink);border-radius:4mm;padding:5mm 6mm;position:relative;z-index:1}
+.r4 .verdict p{font-family:Fraunces,serif;font-size:15pt;line-height:1.25;margin-top:3mm;color:var(--navy)}
+.r4 .cover-grid{display:grid;grid-template-columns:72mm 1fr;gap:5mm;margin-top:6mm}
+.r4 .gauge{text-align:center;padding:5mm 4mm}.r4 .gauge svg{width:100%;height:auto;display:block}
+.r4 .gauge .big{font-family:Fraunces,serif;font-size:40pt;font-weight:700;color:var(--navy);line-height:1;margin-top:-17mm}
+.r4 .gauge .lbl{font-weight:700;font-size:12pt;margin-top:1mm}.r4 .gauge .sub{font-size:10pt;color:var(--muted);margin-top:2mm}
+.r4 .stats{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.r4 .stat{padding:4.5mm 5mm}
+.r4 .stat .n{font-family:Fraunces,serif;font-size:24pt;font-weight:700;color:var(--navy);line-height:1}.r4 .stat .n small{font-size:13pt}
+.r4 .stat .k{font-size:10.5pt;font-weight:700;margin-top:1.5mm}.r4 .stat .d{font-size:9.5pt;color:var(--muted)}
+.r4 .stat.warn .n{color:#B56A00}
+.r4 .timeline{margin-top:5mm;padding:6mm 7mm 7mm}
+.r4 .tl{position:relative;height:30mm;margin:2mm 2mm 0}
+.r4 .tl .bar{position:absolute;left:0;right:0;top:14mm;height:3.2mm;border-radius:2mm;background:linear-gradient(90deg,#C9D2EA,#8EA0D4)}
+.r4 .tl .rev{position:absolute;top:13.2mm;height:4.8mm;border-radius:2mm;background:repeating-linear-gradient(45deg,var(--mid),var(--mid) 1.4mm,#F2B65A 1.4mm,#F2B65A 2.8mm);left:calc(var(--f) * 1%);right:0}
+.r4 .tl .pt{position:absolute;transform:translateX(-50%);text-align:center;font-size:9.5pt;line-height:1.2;white-space:nowrap}.r4 .tl .pt b{display:block;font-size:10.5pt}
+.r4 .tl .dot{position:absolute;top:12.6mm;width:6mm;height:6mm;border-radius:50%;background:#fff;border:1.6mm solid var(--navy);transform:translateX(-50%)}
+.r4 .tl .up{bottom:19mm}.r4 .tl .down{top:21mm}.r4 .tl .edge-l{transform:none}.r4 .tl .edge-r{transform:translateX(-100%);text-align:right}
+.r4 .tl-note{font-size:11pt;margin-top:1mm}.r4 .tl-note b{color:#9A5A00}
+/* page 2 */
+.r4 .rings{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.r4 .ring{text-align:center;padding:5mm 3mm}.r4 .ring svg{width:30mm;height:30mm;display:block;margin:0 auto}
+.r4 .ring .pc{font-family:Fraunces,serif;font-size:20pt;font-weight:700}
+.r4 .ring h3{font-size:12.5pt;margin-top:2.5mm;font-family:"Plus Jakarta Sans",sans-serif;font-weight:800}
+.r4 .ring .t{display:inline-block;margin-top:1.5mm;font-size:9pt;font-weight:800;padding:.6mm 2.4mm;border-radius:3mm}
+.r4 .ring .w{font-size:10pt;color:var(--muted);margin-top:1.5mm}
+.r4 .bad{--tc:var(--bad)}.r4 .mid{--tc:var(--mid)}.r4 .good{--tc:var(--good)}
+.r4 .t.bad{background:var(--bad-soft);color:#A3321A}.r4 .t.mid{background:var(--mid-soft);color:#9A5A00}.r4 .t.good{background:var(--good-soft);color:#1E6B4F}
+.r4 .risk{margin-top:5mm}
+.r4 .risk-row{display:grid;grid-template-columns:38mm 1fr 30mm;align-items:center;gap:4mm;padding:3mm 0;border-bottom:1px dashed var(--line)}
+.r4 .risk-row:last-of-type{border-bottom:0}.r4 .risk-row .nm{font-weight:800;font-size:11.5pt}
+.r4 .track{height:7mm;background:#F1ECE2;border-radius:3.5mm;overflow:hidden;position:relative}
+.r4 .track .fill{height:100%;border-radius:3.5mm;background:var(--tc);width:calc(var(--p) * 1%);display:flex;align-items:center;justify-content:flex-end;padding-right:2.5mm;color:#fff;font-weight:800;font-size:9.5pt;min-width:9mm}
+.r4 .risk-row .wk{font-size:10.5pt;text-align:right}.r4 .risk-row .wk b{font-size:13pt;font-family:Fraunces,serif}
+.r4 .callout{margin-top:4mm;background:var(--gold-soft);border-radius:3mm;padding:3.5mm 5mm;font-weight:700;font-size:11.5pt;color:#6B4A0E}
+.r4 .strengths{margin-top:5mm;background:var(--good-soft);border-color:#CDE8DC}
+.r4 .chips{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 4mm;margin-top:3.5mm}
+.r4 .chip{display:flex;align-items:flex-start;gap:2.5mm;font-size:11pt;font-weight:600;line-height:1.3}
+.r4 .chip .ck{flex:none;width:5.2mm;height:5.2mm;border-radius:50%;background:var(--good);color:#fff;font-size:8pt;display:grid;place-items:center;margin-top:.2mm}
+.r4 .note{font-size:9.5pt;color:var(--muted);margin-top:3mm}
+.r4 .many .ring{padding:2.5mm 2mm}.r4 .many .ring svg{width:18mm;height:18mm}.r4 .many .ring .t{font-size:8pt;margin-top:1mm}.r4 .many .ring h3{font-size:11pt;margin-top:1.5mm}.r4 .many .rings{gap:3mm}
+.r4 .many .risk{margin-top:3.5mm;padding:4.5mm 6mm}.r4 .many .risk-row{padding:1.4mm 0;grid-template-columns:22mm 1fr 34mm}.r4 .many .track{height:5.5mm}
+.r4 .many .ring .w,.r4 .many .note{display:none}.r4 .many .sec-head{margin-bottom:3.5mm}
+.r4 .many .strengths{margin-top:3.5mm;padding:4.5mm 6mm}.r4 .many .chips{gap:1.8mm 4mm}.r4 .many .chip{font-size:10pt}
+/* page 3 */
+.r4 .pc-row{display:grid;grid-template-columns:8mm 1fr 52mm;gap:3mm;align-items:center;padding:2.2mm 0;border-bottom:1px dashed var(--line)}
+.r4 .pc-row:last-child{border-bottom:0}
+.r4 .rank{width:7.5mm;height:7.5mm;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:10pt;display:grid;place-items:center}
+.r4 .pc-row .ch{font-weight:700;font-size:11.5pt;line-height:1.25}.r4 .pc-row .ch .tag{margin-right:1.5mm}
+.r4 .hbar{display:flex;align-items:center;gap:2.5mm}
+.r4 .hbar .b{height:5mm;border-radius:2.5mm;background:var(--c);opacity:.85;width:calc(var(--p) * .36mm)}
+.r4 .hbar span{font-weight:800;font-size:11pt;white-space:nowrap}
+.r4 .split{margin-top:3.5mm;padding:4.5mm 6mm}
+.r4 .split .stack{display:flex;height:9mm;border-radius:3mm;overflow:hidden;margin-top:2.5mm}
+.r4 .split .stack div{background:var(--c);color:#fff;font-weight:800;font-size:9.5pt;display:flex;align-items:center;justify-content:center;width:calc(var(--p) * 1%)}
+.r4 .split .legend{display:flex;gap:5mm;margin-top:2.5mm;font-size:10pt;flex-wrap:wrap}
+.r4 .split .legend i{display:inline-block;width:3mm;height:3mm;border-radius:1mm;background:var(--c);margin-right:1.2mm}
+.r4 .fixes{display:grid;gap:3mm;margin-top:4mm}
+.r4 .fix{display:grid;grid-template-columns:12mm 1fr;gap:4mm;padding:3.6mm 5.5mm}
+.r4 .fix .num{width:12mm;height:12mm;border-radius:3.5mm;background:var(--gold);color:#fff;font-family:Fraunces,serif;font-size:18pt;font-weight:700;display:grid;place-items:center}
+.r4 .fix h3{font-size:13.5pt;line-height:1.2}.r4 .fix p{font-size:10.5pt;line-height:1.38;margin-top:1mm;color:#363C4C}
+/* page 4 */
+.r4 .parent{background:#fff;border:1px solid var(--line);border-left:2mm solid var(--navy);border-radius:5mm;padding:5mm 6.5mm}
+.r4 .parent dl{display:grid;grid-template-columns:34mm 1fr;gap:2mm 4mm;margin-top:3mm;font-size:10.8pt}
+.r4 .parent dt{font-weight:800;color:var(--navy)}.r4 .parent dd{line-height:1.4}
+.r4 .teacher{display:grid;grid-template-columns:26mm 1fr;gap:5mm;margin-top:4mm;background:var(--gold-soft);border-radius:5mm;padding:5mm 6.5mm}
+.r4 .photo{width:26mm;height:26mm;border-radius:50%;overflow:hidden;background:#E3D5B8;border:1mm solid #fff}
+.r4 .photo img{width:100%;height:100%;object-fit:cover}
+.r4 .teacher .q{font-family:Fraunces,serif;font-size:12pt;line-height:1.38;color:#3A2E14;font-weight:500}
+.r4 .who{font-size:10pt;line-height:1.3;margin-top:3mm}.r4 .who b{font-size:11pt}
+.r4 .cta{margin-top:4mm;background:var(--navy);color:#fff;border-radius:6mm;padding:5.5mm 7mm;display:grid;grid-template-columns:1fr 34mm;gap:6mm;align-items:center}
+.r4 .cta h2{color:#fff;font-size:20pt}.r4 .cta p{color:#D2D8EA;font-size:11pt;margin-top:1.5mm}
+.r4 .wa{display:inline-flex;align-items:center;gap:2.5mm;margin-top:3.5mm;background:#25D366;color:#0B2E17;font-weight:800;font-size:12.5pt;padding:3mm 5.5mm;border-radius:10mm;text-decoration:none}
+.r4 .wa svg{width:5.5mm;height:5.5mm}
+.r4 .qr{width:34mm;height:34mm;background:#fff;border-radius:3mm;display:grid;place-items:center;padding:2mm}
+.r4 .qr img,.r4 .qr canvas{width:100%!important;height:100%!important}
+.r4 .qr-cap{font-size:8.5pt;color:#AEB7D0;text-align:center;margin-top:1.5mm}
+.r4 .offer{margin-top:4mm;display:grid;grid-template-columns:1fr 1fr;gap:2mm 5mm;font-size:10.2pt;color:#E6EAF5}
+.r4 .offer div:before{content:"✓";color:var(--gold);font-weight:800;margin-right:2mm}
+.r4 .price{margin-top:3.5mm;font-size:10.5pt;color:#AEB7D0}.r4 .price b{color:#F1C774;font-size:13pt}
+.r4 .method{font-size:8.6pt;color:var(--muted);margin-top:3mm;line-height:1.35}
+/* tighter page 2 and 3 so long chapter names never push past the page */
+.r4 .sec-head{margin-bottom:4mm}.r4 .ring{padding:4mm 3mm}.r4 .ring svg{width:26mm;height:26mm}
+.r4 .risk{margin-top:4mm;padding:5mm 6mm}.r4 .risk-row{padding:2.2mm 0}
+.r4 .strengths{margin-top:4mm;padding:5mm 6mm}.r4 .chips{gap:2mm 4mm;margin-top:2.5mm}.r4 .chip{font-size:10.5pt}
+.r4 .chip>span:last-child{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.r4 .pc-row .ch{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.r4 .fixes{gap:2.5mm;margin-top:3mm}.r4 .fix{padding:3.2mm 5mm}.r4 .fix p{font-size:10.2pt}
+.r4 .many .rings{grid-template-columns:repeat(6,1fr);gap:2.5mm}.r4 .many .ring{padding:2.5mm 1mm}.r4 .many .ring svg{width:17mm;height:17mm}.r4 .many .ring h3{font-size:9.5pt}.r4 .many .ring .t{font-size:7pt;padding:.4mm 1.4mm}
+/* phone view (the PDF is unaffected) */
+@media screen and (max-width:820px){
+  .r4{font-size:15px}
+  .r4 .page{width:auto;height:auto;margin:0 0 10px;padding:22px 16px;box-shadow:none;border-radius:12px}
+  .r4 .cover-grid,.r4 .stats,.r4 .rings,.r4 .many .rings,.r4 .chips,.r4 .offer,.r4 .cta{grid-template-columns:1fr}
+  .r4 .cover-hero h1{font-size:34px}
+  .r4 .pc-row{grid-template-columns:8mm 1fr}.r4 .pc-row .hbar{grid-column:2}
+  .r4 .risk-row,.r4 .many .risk-row{grid-template-columns:1fr}.r4 .risk-row .wk{text-align:left}
+  .r4 .parent dl{grid-template-columns:1fr}.r4 .teacher{grid-template-columns:1fr}
+  .r4 .tl{height:36mm}.r4 .tl .pt{font-size:11px}
+}
+@media print{
+  @page{size:A4;margin:0}
+  html,body{background:#fff!important}
+  .r4 .page{margin:0;box-shadow:none;page-break-after:always;break-after:page}
+  .r4 .page:last-child{page-break-after:auto;break-after:auto}
+}
+
+.wrap.wide{max-width:232mm}
+@media print{.wrap>header,.wrap>.foot{display:none!important}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top no-print"><img src="/favicon.png" alt="" width="32" height="32" style="border-radius:50%"><div class="brand">CA Mahendra Shekhawat</div></header>
+  <main id="app"></main>
+  <p class="foot no-print">Your answers are used only to make your report and to contact you about it. · camahendrashekhawat.com</p>
+</div>
+<script>
+// =====================================================================
+// Free Study Audit: course → profile → goals → time → every chapter → WhatsApp (OTP) → report.
+// Answers are saved on Sir's server (Google Sheet "Free Audit Leads") once the number is verified.
+// =====================================================================
+const COURSES = {"c11":{"label":"Class 11 Commerce","sub":"CBSE · Accounts, BST, Eco","exam":"2027-02-15","target":"2027-01-31","syl":[{"subject":"Accountancy","unit":"Theoretical Framework","chapter":"Introduction to Accounting","base":4,"kind":"th"},{"subject":"Accountancy","unit":"Theoretical Framework","chapter":"Theory Base of Accounting","base":5,"kind":"th"},{"subject":"Accountancy","unit":"Accounting Process","chapter":"Source Documents, Vouchers & Accounting Equation","base":8,"kind":"num"},{"subject":"Accountancy","unit":"Accounting Process","chapter":"Journal","base":10,"kind":"num"},{"subject":"Accountancy","unit":"Accounting Process","chapter":"Special Purpose Books (Cash Book etc.)","base":10,"kind":"num"},{"subject":"Accountancy","unit":"Accounting Process","chapter":"Ledger","base":6,"kind":"num"},{"subject":"Accountancy","unit":"Accounting Process","chapter":"Bank Reconciliation Statement","base":7,"kind":"num"},{"subject":"Accountancy","unit":"Accounting Process","chapter":"Depreciation, Provisions & Reserves","base":12,"kind":"num"},{"subject":"Accountancy","unit":"Accounting Process","chapter":"Trial Balance & Rectification of Errors","base":10,"kind":"num"},{"subject":"Accountancy","unit":"Financial Statements of Sole Proprietorship","chapter":"Final Accounts without Adjustments","base":8,"kind":"num"},{"subject":"Accountancy","unit":"Financial Statements of Sole Proprietorship","chapter":"Final Accounts with Adjustments","base":14,"kind":"num"},{"subject":"Accountancy","unit":"Financial Statements of Sole Proprietorship","chapter":"Incomplete Records","base":6,"kind":"num"},{"subject":"Business Studies","unit":"Evolution & Forms of Business","chapter":"Evolution and Fundamentals of Business","base":4,"kind":"th"},{"subject":"Business Studies","unit":"Evolution & Forms of Business","chapter":"Forms of Business Organisation","base":7,"kind":"th"},{"subject":"Business Studies","unit":"Enterprises & Business Services","chapter":"Public, Private & Global Enterprises","base":5,"kind":"th"},{"subject":"Business Studies","unit":"Enterprises & Business Services","chapter":"Business Services","base":5,"kind":"th"},{"subject":"Business Studies","unit":"Emerging Modes & Social Responsibility","chapter":"Emerging Modes of Business","base":3,"kind":"th"},{"subject":"Business Studies","unit":"Emerging Modes & Social Responsibility","chapter":"Social Responsibility & Business Ethics","base":4,"kind":"th"},{"subject":"Business Studies","unit":"Business Finance & Small Business","chapter":"Sources of Business Finance","base":6,"kind":"th"},{"subject":"Business Studies","unit":"Business Finance & Small Business","chapter":"Small Business & Entrepreneurship","base":4,"kind":"th"},{"subject":"Business Studies","unit":"Internal & International Trade","chapter":"Internal Trade","base":5,"kind":"th"},{"subject":"Business Studies","unit":"Internal & International Trade","chapter":"International Business","base":6,"kind":"th"},{"subject":"Economics","unit":"Stats: Introduction & Data","chapter":"Introduction & Collection of Data","base":4,"kind":"th"},{"subject":"Economics","unit":"Stats: Introduction & Data","chapter":"Organisation & Presentation of Data","base":6,"kind":"num"},{"subject":"Economics","unit":"Stats: Statistical Tools","chapter":"Measures of Central Tendency","base":8,"kind":"num"},{"subject":"Economics","unit":"Stats: Statistical Tools","chapter":"Correlation","base":7,"kind":"num"},{"subject":"Economics","unit":"Stats: Statistical Tools","chapter":"Index Numbers","base":5,"kind":"num"},{"subject":"Economics","unit":"Micro: Introduction","chapter":"Introduction to Microeconomics","base":3,"kind":"th"},{"subject":"Economics","unit":"Micro: Consumer Equilibrium & Demand","chapter":"Consumer Equilibrium & Demand","base":10,"kind":"num"},{"subject":"Economics","unit":"Micro: Producer Behaviour & Supply","chapter":"Production, Cost, Revenue & Supply","base":12,"kind":"num"},{"subject":"Economics","unit":"Micro: Perfect Competition","chapter":"Perfect Competition & Price Determination","base":6,"kind":"num"}],"short":{"Accountancy":"Acc","Business Studies":"BS","Economics":"Eco"}},"c12":{"label":"Class 12 Commerce","sub":"CBSE boards · Accounts, BST, Eco","exam":"2027-02-15","target":"2027-01-31","syl":[{"subject":"Accountancy","unit":"Partnership Firms","chapter":"Partnership: Fundamentals","base":12,"kind":"num"},{"subject":"Accountancy","unit":"Partnership Firms","chapter":"Goodwill & Change in Profit-sharing Ratio","base":8,"kind":"num"},{"subject":"Accountancy","unit":"Partnership Firms","chapter":"Admission of a Partner","base":14,"kind":"num"},{"subject":"Accountancy","unit":"Partnership Firms","chapter":"Retirement & Death of a Partner","base":14,"kind":"num"},{"subject":"Accountancy","unit":"Partnership Firms","chapter":"Dissolution of a Partnership Firm","base":7,"kind":"num"},{"subject":"Accountancy","unit":"Company Accounts","chapter":"Accounting for Share Capital","base":14,"kind":"num"},{"subject":"Accountancy","unit":"Company Accounts","chapter":"Issue of Debentures","base":7,"kind":"num"},{"subject":"Accountancy","unit":"Analysis of Financial Statements","chapter":"Company Financial Statements (Schedule III)","base":4,"kind":"num"},{"subject":"Accountancy","unit":"Analysis of Financial Statements","chapter":"Comparative & Common-size Statements","base":5,"kind":"num"},{"subject":"Accountancy","unit":"Analysis of Financial Statements","chapter":"Accounting Ratios","base":8,"kind":"num"},{"subject":"Accountancy","unit":"Cash Flow Statement","chapter":"Cash Flow Statement","base":10,"kind":"num"},{"subject":"Business Studies","unit":"Nature, Principles & Environment","chapter":"Nature & Significance of Management","base":4,"kind":"th"},{"subject":"Business Studies","unit":"Nature, Principles & Environment","chapter":"Principles of Management","base":5,"kind":"th"},{"subject":"Business Studies","unit":"Nature, Principles & Environment","chapter":"Business Environment","base":4,"kind":"th"},{"subject":"Business Studies","unit":"Planning & Organising","chapter":"Planning","base":4,"kind":"th"},{"subject":"Business Studies","unit":"Planning & Organising","chapter":"Organising","base":6,"kind":"th"},{"subject":"Business Studies","unit":"Staffing, Directing & Controlling","chapter":"Staffing","base":5,"kind":"th"},{"subject":"Business Studies","unit":"Staffing, Directing & Controlling","chapter":"Directing","base":7,"kind":"th"},{"subject":"Business Studies","unit":"Staffing, Directing & Controlling","chapter":"Controlling","base":3,"kind":"th"},{"subject":"Business Studies","unit":"Financial Management & Markets","chapter":"Financial Management","base":7,"kind":"th"},{"subject":"Business Studies","unit":"Financial Management & Markets","chapter":"Financial Markets","base":5,"kind":"th"},{"subject":"Business Studies","unit":"Marketing & Consumer Protection","chapter":"Marketing Management","base":7,"kind":"th"},{"subject":"Business Studies","unit":"Marketing & Consumer Protection","chapter":"Consumer Protection","base":3,"kind":"th"},{"subject":"Economics","unit":"Macro: National Income","chapter":"National Income & Related Aggregates","base":10,"kind":"num"},{"subject":"Economics","unit":"Macro: Money & Banking","chapter":"Money & Banking","base":5,"kind":"th"},{"subject":"Economics","unit":"Macro: Income & Employment","chapter":"Determination of Income & Employment","base":9,"kind":"num"},{"subject":"Economics","unit":"Macro: Government Budget","chapter":"Government Budget & the Economy","base":4,"kind":"th"},{"subject":"Economics","unit":"Macro: Balance of Payments","chapter":"Balance of Payments & Exchange Rate","base":5,"kind":"th"},{"subject":"Economics","unit":"IED: Development & Reforms","chapter":"Indian Economy on the Eve of Independence","base":3,"kind":"th"},{"subject":"Economics","unit":"IED: Development & Reforms","chapter":"Indian Economy 1950-90","base":4,"kind":"th"},{"subject":"Economics","unit":"IED: Development & Reforms","chapter":"Liberalisation, Privatisation & Globalisation","base":4,"kind":"th"},{"subject":"Economics","unit":"IED: Current Challenges","chapter":"Human Capital Formation","base":3,"kind":"th"},{"subject":"Economics","unit":"IED: Current Challenges","chapter":"Rural Development","base":3,"kind":"th"},{"subject":"Economics","unit":"IED: Current Challenges","chapter":"Employment","base":3,"kind":"th"},{"subject":"Economics","unit":"IED: Current Challenges","chapter":"Environment & Sustainable Development","base":3,"kind":"th"},{"subject":"Economics","unit":"IED: India & Neighbours","chapter":"Comparative Development: India, China, Pakistan","base":4,"kind":"th"}],"short":{"Accountancy":"Acc","Business Studies":"BS","Economics":"Eco"}},"cafc":{"label":"CA Foundation","sub":"ICAI · 4 papers","attempts":{"Jan 2027":{"exam":"2027-01-01","examLabel":"January 2027","target":"2026-12-15"},"May 2027":{"exam":"2027-05-01","examLabel":"May 2027","target":"2027-04-15"},"Sept 2027":{"exam":"2027-09-01","examLabel":"September 2027","target":"2027-08-15"}},"syl":[{"subject":"Accounting","unit":"Module 1","chapter":"Theoretical Framework","base":6,"kind":"th"},{"subject":"Accounting","unit":"Module 1","chapter":"Accounting Process (incl. Rectification of Errors)","base":14,"kind":"num"},{"subject":"Accounting","unit":"Module 1","chapter":"Bank Reconciliation Statement","base":5,"kind":"num"},{"subject":"Accounting","unit":"Module 1","chapter":"Inventories","base":5,"kind":"num"},{"subject":"Accounting","unit":"Module 1","chapter":"Depreciation and Amortisation","base":8,"kind":"num"},{"subject":"Accounting","unit":"Module 1","chapter":"Bills of Exchange and Promissory Notes","base":6,"kind":"num"},{"subject":"Accounting","unit":"Module 1","chapter":"Final Accounts of Sole Proprietors","base":12,"kind":"num"},{"subject":"Accounting","unit":"Module 2","chapter":"Not-for-Profit Organisations","base":8,"kind":"num"},{"subject":"Accounting","unit":"Module 2","chapter":"Accounts from Incomplete Records","base":6,"kind":"num"},{"subject":"Accounting","unit":"Module 2","chapter":"Partnership and LLP Accounts","base":20,"kind":"num"},{"subject":"Accounting","unit":"Module 2","chapter":"Company Accounts","base":16,"kind":"num"},{"subject":"Business Laws","unit":"Business Laws","chapter":"Indian Regulatory Framework","base":2,"kind":"th"},{"subject":"Business Laws","unit":"Business Laws","chapter":"The Indian Contract Act, 1872","base":24,"kind":"th"},{"subject":"Business Laws","unit":"Business Laws","chapter":"The Sale of Goods Act, 1930","base":8,"kind":"th"},{"subject":"Business Laws","unit":"Business Laws","chapter":"The Indian Partnership Act, 1932","base":6,"kind":"th"},{"subject":"Business Laws","unit":"Business Laws","chapter":"The LLP Act, 2008","base":4,"kind":"th"},{"subject":"Business Laws","unit":"Business Laws","chapter":"The Companies Act, 2013","base":8,"kind":"th"},{"subject":"Business Laws","unit":"Business Laws","chapter":"The Negotiable Instruments Act, 1881","base":8,"kind":"th"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Ratio & Proportion, Indices, Logarithms","base":5,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Equations","base":4,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Linear Inequalities","base":2,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Mathematics of Finance","base":6,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Permutations and Combinations","base":5,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Sequence and Series","base":4,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Sets, Relations, Functions, Limits","base":4,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Business Mathematics","chapter":"Differential and Integral Calculus","base":6,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Logical Reasoning","chapter":"Number Series, Coding-Decoding, Odd Man Out","base":3,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Logical Reasoning","chapter":"Direction Tests","base":2,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Logical Reasoning","chapter":"Seating Arrangements","base":2,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Logical Reasoning","chapter":"Blood Relations","base":2,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Statistics","chapter":"Statistical Representation of Data & Sampling","base":3,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Statistics","chapter":"Central Tendency and Dispersion","base":6,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Statistics","chapter":"Probability","base":5,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Statistics","chapter":"Theoretical Distributions","base":5,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Statistics","chapter":"Correlation and Regression","base":5,"kind":"num"},{"subject":"Quantitative Aptitude","unit":"Statistics","chapter":"Index Numbers","base":3,"kind":"num"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Nature & Scope of Business Economics","base":3,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Theory of Demand and Supply","base":8,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Theory of Production and Cost","base":6,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Price Determination in Different Markets","base":7,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Business Cycles","base":2,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Determination of National Income","base":6,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Public Finance","base":5,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Money Market","base":5,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"International Trade","base":5,"kind":"th"},{"subject":"Business Economics","unit":"Business Economics","chapter":"Indian Economy","base":3,"kind":"th"}],"short":{"Accounting":"Acc","Business Laws":"Law","Quantitative Aptitude":"QA","Business Economics":"Eco"}},"cainter":{"label":"CA Intermediate","sub":"ICAI · 6 papers, both groups","attempts":{"Jan 2027":{"exam":"2027-01-01","examLabel":"January 2027","target":"2026-12-15"},"May 2027":{"exam":"2027-05-01","examLabel":"May 2027","target":"2027-04-15"},"Sept 2027":{"exam":"2027-09-01","examLabel":"September 2027","target":"2027-08-15"}},"syl":[{"subject":"Advanced Accounting","unit":"Group I","chapter":"Introduction to Accounting Standards","base":2,"kind":"th"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Framework for Preparation & Presentation of Financial Statements","base":3,"kind":"th"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Applicability of Accounting Standards","base":3,"kind":"th"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Presentation & Disclosure based AS (AS 1, 3, 17, 18, 20, 24)","base":14,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Assets based AS (AS 2, 10, 13, 16, 19, 26, 28)","base":16,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Liabilities based AS (AS 15, 29)","base":6,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"AS on items impacting Financial Statements (AS 4, 5, 11, 22)","base":10,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Revenue based AS (AS 7, 9)","base":6,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Other AS (AS 12, 14)","base":5,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"AS for Consolidated Financial Statements (AS 21, 23, 27)","base":12,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Financial Statements of Companies","base":10,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Buy-back of Securities","base":5,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Amalgamation of Companies","base":10,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Accounting for Reconstruction of Companies","base":6,"kind":"num"},{"subject":"Advanced Accounting","unit":"Group I","chapter":"Accounting for Branches incl. Foreign Branches","base":8,"kind":"num"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Preliminary (Companies Act)","base":3,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Incorporation of Company & Matters Incidental","base":6,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Prospectus & Allotment of Securities","base":6,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Share Capital & Debentures","base":7,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Acceptance of Deposits by Companies","base":3,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Registration of Charges","base":2,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Management & Administration","base":7,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Declaration & Payment of Dividend","base":3,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Accounts of Companies","base":4,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Audit & Auditors","base":5,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Companies Incorporated Outside India","base":2,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"The LLP Act, 2008","base":4,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"The General Clauses Act, 1897","base":3,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"Interpretation of Statutes","base":3,"kind":"th"},{"subject":"Corporate and Other Laws","unit":"Group I","chapter":"The Foreign Exchange Management Act, 1999","base":4,"kind":"th"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Basic Concepts","base":3,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Residence & Scope of Total Income","base":4,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Salaries","base":6,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Income from House Property","base":3,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Profits & Gains of Business or Profession","base":8,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Capital Gains","base":7,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Income from Other Sources","base":3,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Income of Other Persons included (Clubbing)","base":2,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Set-off & Carry Forward of Losses","base":3,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Deductions from Gross Total Income","base":4,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Advance Tax, TDS & TCS","base":4,"kind":"num"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Return of Income & Self-assessment","base":2,"kind":"th"},{"subject":"Taxation","unit":"Group I · Income Tax","chapter":"Income Tax Liability: Computation & Optimisation","base":4,"kind":"num"},{"subject":"Taxation","unit":"Group I · GST","chapter":"GST in India: Introduction","base":1,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Supply under GST","base":3,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Charge of GST","base":3,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Place of Supply","base":3,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Exemptions from GST","base":3,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Time of Supply","base":2,"kind":"num"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Value of Supply","base":3,"kind":"num"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Input Tax Credit","base":4,"kind":"num"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Registration","base":2,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Tax Invoice, Credit & Debit Notes","base":2,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Accounts & Records; E-way Bill","base":2,"kind":"th"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Payment of Tax; TDS & TCS","base":3,"kind":"num"},{"subject":"Taxation","unit":"Group I · GST","chapter":"Returns","base":2,"kind":"th"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Introduction to Cost & Management Accounting","base":3,"kind":"th"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Material Cost","base":6,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Employee Cost & Direct Expenses","base":5,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Overheads: Absorption Costing","base":6,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Activity Based Costing","base":4,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Cost Sheet","base":3,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Cost Accounting Systems","base":4,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Unit & Batch Costing","base":2,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Job Costing","base":2,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Process & Operation Costing","base":6,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Joint Products & By-products","base":3,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Service Costing","base":4,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Standard Costing","base":6,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Marginal Costing","base":6,"kind":"num"},{"subject":"Cost and Management Accounting","unit":"Group II","chapter":"Budgets & Budgetary Control","base":4,"kind":"num"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Nature, Objective & Scope of Audit","base":4,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Audit Strategy, Planning & Programme","base":4,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Risk Assessment & Internal Control","base":6,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Audit Evidence","base":5,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Audit of Items of Financial Statements","base":6,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Audit Documentation","base":2,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Completion & Review","base":3,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Audit Report","base":5,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Special Features of Audit of Different Entities","base":5,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Audit of Banks","base":4,"kind":"th"},{"subject":"Auditing and Ethics","unit":"Group II","chapter":"Ethics & Terms of Audit Engagements","base":6,"kind":"th"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Scope & Objectives of Financial Management","base":2,"kind":"th"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Types of Financing","base":3,"kind":"th"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Ratio Analysis","base":4,"kind":"num"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Cost of Capital","base":5,"kind":"num"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Capital Structure","base":4,"kind":"num"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Leverages","base":3,"kind":"num"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Capital Budgeting","base":6,"kind":"num"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Dividend Decision","base":3,"kind":"num"},{"subject":"FM and SM","unit":"Group II · Financial Management","chapter":"Management of Working Capital","base":6,"kind":"num"},{"subject":"FM and SM","unit":"Group II · Strategic Management","chapter":"Introduction to Strategic Management","base":2,"kind":"th"},{"subject":"FM and SM","unit":"Group II · Strategic Management","chapter":"Strategic Analysis: External Environment","base":3,"kind":"th"},{"subject":"FM and SM","unit":"Group II · Strategic Management","chapter":"Strategic Analysis: Internal Environment","base":3,"kind":"th"},{"subject":"FM and SM","unit":"Group II · Strategic Management","chapter":"Strategic Choices","base":3,"kind":"th"},{"subject":"FM and SM","unit":"Group II · Strategic Management","chapter":"Strategy Implementation & Evaluation","base":3,"kind":"th"}],"short":{"Advanced Accounting":"Adv Acc","Corporate and Other Laws":"Law","Taxation":"Tax","Cost and Management Accounting":"Costing","Auditing and Ethics":"Audit","FM and SM":"FM-SM"}}};
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmz8Zgg_uPL3sYrkm49ZRWFEZ7Ab3UR9TfKfzZJmyamJQW9rsg2rWxp2f0rAFZ8xNY/exec';
+const LIVE = /(^|\.)camahendrashekhawat\.com$/.test(location.hostname);
+// Where the "talk to us" and "join" buttons go. Fill before launch.
+const WA_CHAT = '';                 // e.g. '919xxxxxxxxx' (a phone that Sir's team reads); empty = button hidden
+const JOIN_URL = '/mentorship/';    // fallback: course chooser
+const JOIN_URLS = { c11: '/class-11-12/', c12: '/class-11-12/', cafc: '/ca-foundation/', cainter: '/ca-inter/' };
+const joinUrl = () => JOIN_URLS[A.course] || JOIN_URL;
+
+const STATUS = ['Not started','Read once','Revised','Fully ready'];
+const LEFT = [1.6, .6, .2, 0];      // work still needed, in multiples of the chapter's first-study hours
+const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const app = document.getElementById('app');
+const UTM = (() => { const q = new URLSearchParams(location.search); return ['utm_source','utm_medium','utm_campaign','utm_content'].map(k => q.get(k) ? k.slice(4)+'='+q.get(k) : '').filter(Boolean).join('&').slice(0,200); })();
+
+let A = (() => { try { return JSON.parse(store.get('audit.answers')) || {}; } catch(e){ return {}; } })();
+A.ch = A.ch || {};
+A.fb = A.fb || {};
+const FB = A.fb;   // report feedback: {kind: 'spot'|'off'|'talk', text, sent}
+let STEP = A.done ? 6 : (A.course ? Number(store.get('audit.step') || 1) : 0);
+const save = () => { store.set('audit.answers', JSON.stringify(A)); store.set('audit.step', String(STEP)); };
+
+function api(name, args){
+  if (!LIVE) return new Promise((res, rej) => setTimeout(() => { try { res(MOCK[name](args)); } catch(e){ rej(new Error(String(e.message).split(' / ')[0])); } }, 300));
+  return fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({name, args}), redirect:'follow', credentials:'omit'})
+    .catch(() => { throw new Error('No internet. Check your network and try again.'); })
+    .then(r => r.json()).then(j => { if (j.error) throw new Error(String(j.error).split(' / ')[0]); return j.result; });
+}
+// Preview only: the code is always 123456 and nothing leaves the browser.
+const MOCK = {
+  auditConfig: () => ({otp: true}),
+  auditOtp: () => ({ok: true, resendIn: 30}),
+  auditFeedback: () => ({ok: true}),
+  auditSave: a => { if (a.code !== '123456') throw new Error('Wrong code. 4 tries left. / Galat code. 4 koshish baaki.'); return {ok: true}; },
+};
+
+const C = () => COURSES[A.course];
+const D0 = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+const dayDiff = (a, b) => Math.round((b - a) / 86400000);
+const fmtD = d => d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getFullYear();
+// Exam and target (date by which the syllabus + one revision should be done) for this student.
+const plan = () => C().attempts ? (C().attempts[A.attempt] || Object.values(C().attempts)[0]) : C();
+const examDate = () => new Date(plan().exam + 'T00:00:00');
+const targetDate = () => new Date(plan().target + 'T00:00:00');
+const examName = () => plan().examLabel || fmtD(examDate());
+
+// ---------------------------------------------------------------- screens
+const STEPS = ['Course','Profile','Goals','Time','Chapters','Report'];
+function stepBar(){ const i = Math.min(STEP, 5); return `<div class="steps" aria-hidden="true">${STEPS.map((s,k) => `<span class="${k<i?'done':k===i?'on':''}">0${k+1} ${s}</span>`).join('')}</div>`; }
+const chips = (key, opts, multi) => `<div class="chips" role="group">${opts.map(o => `<button type="button" class="chip" data-k="${key}" data-v="${esc(o)}" aria-pressed="${multi ? (A[key]||[]).includes(o) : A[key]===o}">${esc(o)}</button>`).join('')}</div>`;
+
+function render(){
+  save();
+  document.querySelector('.wrap').classList.toggle('wide', STEP === 6);
+  window.scrollTo(0, 0);
+  if (STEP === 0) return renderCourse();
+  if (STEP === 1) return renderForm('Profile', 'Tell us about yourself', profileFields());
+  if (STEP === 2) return renderForm('Goals', 'What is your target?', goalFields());
+  if (STEP === 3) return renderForm('Time', 'How much time do you have for study?', timeFields());
+  if (STEP === 4) return renderChapters();
+  if (STEP === 5) return renderUnlock();
+  return renderReport();
+}
+
+function renderCourse(){
+  app.innerHTML = `<div class="fade">${stepBar()}
+    <p class="eyebrow">Free study audit · 5 minute</p>
+    <h1>See where your <em>real preparation</em> stands</h1>
+    <p class="muted">Mark every chapter. Your report shows what is ready, where the gaps are, and when your syllabus will finish at your current pace.</p>
+    <p class="lbl" style="margin-top:18px">Which course are you in?</p>
+    <div class="courses">${Object.entries(COURSES).map(([k, c]) => `<button type="button" class="course" data-course="${k}"><b>${esc(c.label)}</b><small>${esc(c.sub)}</small></button>`).join('')}</div></div>`;
+  app.querySelectorAll('[data-course]').forEach(b => b.addEventListener('click', () => { if (A.course !== b.dataset.course) { A.ch = {}; A.attempt = ''; } A.course = b.dataset.course; STEP = 1; render(); }));
+}
+
+function profileFields(){
+  return `<div class="field"><label class="lbl" for="f_name">Your name</label><input id="f_name" class="big" type="text" autocomplete="name" maxlength="60" value="${esc(A.name||'')}"></div>
+    <div class="field"><label class="lbl" for="f_school">${C().attempts ? 'Coaching / institute' : 'School'} <span class="muted small">(optional)</span></label><input id="f_school" class="big" type="text" maxlength="80" value="${esc(A.school||'')}"></div>
+    <div class="field"><label class="lbl" for="f_city">City</label><input id="f_city" class="big" type="text" maxlength="40" value="${esc(A.city||'')}"></div>
+    ${C().attempts ? `<div class="field"><span class="lbl">Which attempt are you preparing for?</span>${chips('attempt', Object.keys(C().attempts))}</div>` : ''}`;
+}
+function goalFields(){
+  return C().attempts
+    ? `<div class="field"><span class="lbl">Your target in the exam</span>${chips('target', ['Pass in first attempt','Both groups together','Exemption in subjects','All India Rank'])}</div>`
+    : `<div class="field"><span class="lbl">Your target % in the board exams</span>${chips('target', ['95% +','90–95%','80–90%','70–80%','A good pass'])}</div>
+       <div class="field"><span class="lbl">What do you want to do after Class 12?</span>${chips('career', ['CA','CS / CMA','B.Com / BBA','Not decided yet'])}</div>`;
+}
+function timeFields(){
+  return `<div class="field"><span class="lbl">How many hours can you study on ${C().attempts ? 'a normal day' : 'a school day'}? <span class="muted small">(apart from school / coaching)</span></span>${chips('wd', ['1','2','3','4','5','6','8','10+'])}</div>
+    <div class="field"><span class="lbl">How many hours on Sunday?</span>${chips('sun', ['0','2','4','6','8','10+'])}</div>
+    <div class="field"><span class="lbl">How are you studying now?</span>${chips('mode', C().attempts ? ['Coaching','Self study','Coaching + self study'] : ['School only','School + tuition','School + coaching'])}</div>`;
+}
+const NEED = {1:['name','city'], 2:['target'], 3:['wd','sun','mode']};
+function renderForm(step, title, body){
+  app.innerHTML = `<div class="fade">${stepBar()}<div class="card"><div><p class="eyebrow">${esc(C().label)} · ${step}</p><h2>${esc(title)}</h2></div>${body}
+    <p class="err" id="err" hidden></p>
+    <div class="nav"><button class="btn ghost" type="button" id="back">← Back</button><button class="btn" type="button" id="next">Next →</button></div></div></div>`;
+  app.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { A[b.dataset.k] = b.dataset.v; app.querySelectorAll(`.chip[data-k="${b.dataset.k}"]`).forEach(x => x.setAttribute('aria-pressed', x===b)); save(); }));
+  app.querySelectorAll('input.big').forEach(i => i.addEventListener('input', () => { A[i.id.slice(2)] = i.value; save(); }));
+  document.getElementById('back').addEventListener('click', () => { STEP--; render(); });
+  document.getElementById('next').addEventListener('click', () => {
+    const need = (NEED[STEP] || []).concat(STEP===1 && C().attempts ? ['attempt'] : []).concat(STEP===2 && !C().attempts ? ['career'] : []);
+    const miss = need.filter(k => !String(A[k]||'').trim());
+    if (miss.length){ const e = document.getElementById('err'); e.textContent = 'Please answer every question to continue.'; e.hidden = false; return; }
+    STEP++; render();
+  });
+}
+
+const chKey = c => c.subject + ' | ' + c.chapter;
+function renderChapters(){
+  const list = C().syl, subjects = [...new Set(list.map(c => c.subject))];
+  const marked = list.filter(c => A.ch[chKey(c)] != null).length;
+  app.innerHTML = `<div class="fade">${stepBar()}<div class="card"><div><p class="eyebrow">${esc(C().label)} · Chapters</p><h2>Mark every chapter honestly</h2>
+    <p class="muted small">The more honest you are, the more useful your report. No one else sees this.</p>
+    <p class="small"><b id="cnt">${marked}</b> / ${list.length} chapters marked</p></div>
+    ${subjects.map((s, si) => { const cs = list.filter(c => c.subject===s), m = cs.filter(c => A.ch[chKey(c)] != null).length;
+      return `<details class="subj" ${si===0 || (m && m<cs.length) ? 'open' : ''}><summary><span>${esc(s)}</span><small id="sc_${si}">${m}/${cs.length}</small></summary>
+        <div class="quick"><span class="muted small" style="align-self:center">All chapters:</span>${STATUS.map((t,v) => `<button type="button" class="chip" data-all="${si}" data-v="${v}">${t}</button>`).join('')}</div>
+        ${cs.map(c => { const k = chKey(c), v = A.ch[k];
+          return `<div class="chrow"><div><div class="unit">${esc(c.unit)}</div><div class="nm">${esc(c.chapter)}</div></div>
+            <div class="seg" role="group" aria-label="${esc(c.chapter)}">${STATUS.map((t,i) => `<button type="button" data-ch="${esc(k)}" data-si="${si}" data-v="${i}" aria-pressed="${v===i}">${t}</button>`).join('')}</div></div>`; }).join('')}
+      </details>`; }).join('')}
+    <p class="err" id="err" hidden></p>
+    <div class="nav"><button class="btn ghost" type="button" id="back">← Back</button><button class="btn" type="button" id="next">See my report →</button></div></div></div>`;
+  const recount = () => { document.getElementById('cnt').textContent = list.filter(c => A.ch[chKey(c)] != null).length;
+    subjects.forEach((s, si) => { const cs = list.filter(c => c.subject===s); document.getElementById('sc_'+si).textContent = cs.filter(c => A.ch[chKey(c)] != null).length + '/' + cs.length; }); save(); };
+  app.querySelectorAll('[data-ch]').forEach(b => b.addEventListener('click', () => {
+    A.ch[b.dataset.ch] = Number(b.dataset.v);
+    b.parentNode.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x===b)); recount(); }));
+  app.querySelectorAll('[data-all]').forEach(b => b.addEventListener('click', () => {
+    const s = subjects[b.dataset.all], v = Number(b.dataset.v);
+    list.filter(c => c.subject===s).forEach(c => { A.ch[chKey(c)] = v; });
+    b.closest('details').querySelectorAll('[data-ch]').forEach(x => x.setAttribute('aria-pressed', Number(x.dataset.v)===v)); recount(); }));
+  document.getElementById('back').addEventListener('click', () => { STEP--; render(); });
+  document.getElementById('next').addEventListener('click', () => {
+    const left = list.length - list.filter(c => A.ch[chKey(c)] != null).length;
+    if (left > 0){ const e = document.getElementById('err'); e.textContent = `${left} chapter${left===1?" is":"s are"} not marked yet. Mark every chapter (choose "Not started" if you have not begun it).`; e.hidden = false; return; }
+    STEP = 5; render();
+  });
+}
+
+let OTP_ON = true, resendT = null;
+function renderUnlock(){
+  app.innerHTML = `<div class="fade">${stepBar()}<div class="card"><div><p class="eyebrow">Last step</p><h2>Your report is ready 🎯</h2>
+    <p class="muted">Enter your WhatsApp number. We will send a code; enter it to open your report.</p></div>
+    <div class="field"><label class="lbl" for="f_phone">Your WhatsApp number</label><input id="f_phone" class="big" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" value="${esc(A.phone||'')}"></div>
+    <div class="field"><label class="lbl" for="f_parent">Parent's WhatsApp <span class="muted small">(optional, they get the report too)</span></label><input id="f_parent" class="big" type="tel" inputmode="numeric" maxlength="10" value="${esc(A.parent||'')}"></div>
+    <label class="check"><input type="checkbox" id="f_ok" ${A.consent ? "checked" : ""}><span>Send my report and study updates to me on WhatsApp.</span></label>
+    <div id="codeBox" hidden class="field"><label class="lbl" for="f_code">The 6-digit code from WhatsApp</label><input id="f_code" class="big otp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"><span class="muted small" id="resend"></span></div>
+    <p class="err" id="err" hidden></p>
+    ${LIVE ? '' : '<p class="note">Preview: no message is sent. Enter the code <b>123456</b>.</p>'}
+    <div class="nav"><button class="btn ghost" type="button" id="back">← Back</button><button class="btn" type="button" id="go">Send code</button></div></div></div>`;
+  const $ = id => document.getElementById(id), err = $('err'), go = $('go');
+  const fail = m => { err.textContent = m; err.hidden = false; go.disabled = false; };
+  ['phone','parent'].forEach(k => $('f_'+k).addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,10); A[k] = e.target.value; save(); }));
+  $('back').addEventListener('click', () => { STEP = 4; render(); });
+  let sent = false;
+  const sendCode = () => {
+    const ph = A.phone || '';
+    if (!/^[6-9]\d{9}$/.test(ph)) return fail('Enter a valid 10-digit WhatsApp number.');
+    if (A.parent && !/^[6-9]\d{9}$/.test(A.parent)) return fail('Enter a valid parent number, or leave it empty.');
+    if (!$('f_ok').checked) return fail('Tick the box so we can send your report on WhatsApp.');
+    A.consent = true; err.hidden = true; go.disabled = true; go.textContent = 'Sending…';
+    api('auditConfig', {}).then(c => { OTP_ON = !!(c && c.otp); if (!OTP_ON) return finish('');
+      return api('auditOtp', {phone: ph}).then(r => { sent = true; $('codeBox').hidden = false; $('f_code').focus(); go.disabled = false; go.textContent = 'Open my report →';
+        let s = (r && r.resendIn) || 30; const tick = () => { $('resend').textContent = s > 0 ? `No code yet? You can ask again in ${s} seconds.` : ''; if (s-- > 0) resendT = setTimeout(tick, 1000); else { $('resend').innerHTML = '<button type="button" class="chip" id="again">Send the code again</button>'; $('again').addEventListener('click', () => { sent = false; sendCode(); }); } };
+        clearTimeout(resendT); tick(); }); })
+      .catch(x => { go.textContent = sent ? 'Open my report →' : 'Send code'; fail(x.message); });
+  };
+  const finish = code => {
+    go.disabled = true; go.textContent = 'Making your report…';
+    const R = compute();
+    return api('auditSave', {code, answers: answersForServer(), summary: summaryForServer(R)})
+      .then(() => { A.done = true; A.when = new Date().toISOString(); STEP = 6; render(); })
+      .catch(x => { go.textContent = 'Open my report →'; fail(x.message); });
+  };
+  go.addEventListener('click', () => {
+    if (!sent) return sendCode();
+    const code = ($('f_code').value || '').replace(/\D/g,'');
+    if (code.length !== 6) return fail('Enter the 6-digit code from WhatsApp.');
+    err.hidden = true; finish(code);
+  });
+}
+function answersForServer(){
+  return {course: A.course, courseLabel: C().label, name: (A.name||'').trim(), school: (A.school||'').trim(), city: (A.city||'').trim(), attempt: A.attempt||'',
+    target: A.target||'', career: A.career||'', wd: A.wd, sun: A.sun, mode: A.mode, phone: A.phone, parent: A.parent||'', consent: !!A.consent, utm: UTM,
+    chapters: C().syl.map(c => [c.subject, c.chapter, STATUS[A.ch[chKey(c)]] || '']) };
+}
+function summaryForServer(R){
+  return {status: R.status.label, syllabus: R.pct + '%', finish: R.finishTxt, exam: examName(), target: fmtD(R.target), weekNeed: R.needWeek, weekHave: R.haveWeek,
+    gaps: R.gaps.map(g => g.chapter).join('; '), strengths: R.strong.map(g => g.chapter).join('; ')};
+}
+
+// ---------------------------------------------------------------- the report
+function compute(){
+  const list = C().syl.map(c => Object.assign({}, c, {v: A.ch[chKey(c)] ?? 0}));
+  const total = list.reduce((x,c) => x + c.base*LEFT[0], 0), left = list.reduce((x,c) => x + c.base*LEFT[c.v], 0);
+  const pct = total ? Math.round((1 - left/total)*100) : 0;
+  const num = s => s === '10+' ? 10 : Number(s) || 0;
+  const haveWeek = Math.round((num(A.wd)*6 + num(A.sun)) * .8);   // 80%: real life takes some days away
+  const exam = examDate(), daysLeft = Math.max(0, dayDiff(D0, exam));
+  const weeksNeeded = haveWeek ? left / haveWeek : Infinity;
+  const finish = isFinite(weeksNeeded) ? new Date(D0.getTime() + Math.ceil(weeksNeeded*7)*86400000) : null;
+  const target = targetDate(), buffer = finish ? dayDiff(finish, exam) : -999, early = finish ? dayDiff(finish, target) : -999;
+  const status = left === 0 ? {key:'green', label:'Fully prepared', icon:'🟢'} : early >= 0 ? {key:'green', label:'On track', icon:'🟢'} : buffer >= 0 ? {key:'yellow', label:'No safety margin', icon:'🟡'} : {key:'red', label:'Behind schedule', icon:'🔴'};
+  const needWeek = Math.ceil(left / Math.max(1, dayDiff(D0, target) / 7));
+  // Spread across subjects: the best pick from every subject first, then the next best, up to 6 lines.
+  const spread = (items, cmp, max) => {
+    const by = {}, order = [...new Set(list.map(c => c.subject))], out = [];
+    items.slice().sort(cmp).forEach(c => (by[c.subject] = by[c.subject] || []).push(c));
+    for (let round = 0; out.length < max && order.some(s => (by[s]||[]).length > round); round++)
+      order.forEach(s => { const c = (by[s]||[])[round]; if (c && out.length < max) out.push(c); });
+    return out.sort((a,b) => order.indexOf(a.subject) - order.indexOf(b.subject));
+  };
+  const gaps = spread(list.filter(c => c.v <= 1), (a,b) => a.v - b.v || (a.kind==='num' ? 0 : 1) - (b.kind==='num' ? 0 : 1) || b.base - a.base, 6)
+    .map(c => Object.assign(c, {hrs: Math.max(1, Math.round(c.base*LEFT[c.v]))}));
+  const strong = spread(list.filter(c => c.v >= 2), (a,b) => b.v - a.v || b.base - a.base, 6);
+  const holes = list.filter(c => c.v <= 1).length;
+  const subjects = [...new Set(list.map(c => c.subject))].map(s => { const cs = list.filter(c => c.subject===s), t = cs.reduce((x,c)=>x+c.base*LEFT[0],0), l = cs.reduce((x,c)=>x+c.base*LEFT[c.v],0);
+    return {s, pct: t ? Math.round((1-l/t)*100) : 0, holes: cs.filter(c => c.v <= 1).length, n: cs.length}; });
+  const finishTxt = left === 0 ? 'Done' : finish ? fmtD(finish) : '—';
+  return {list, pct, left: Math.round(left), haveWeek, needWeek, exam, target, early, daysLeft, finish, finishTxt, buffer, status, gaps, strong, holes, subjects};
+}
+// The bucket from the audit video: water level = syllabus filled, red dots = holes (weak chapters).
+function bucket(pct, holes){
+  const lvl = 128 - Math.max(4, Math.min(100, pct)) * 1.0, dots = Math.min(holes, 9), pos = [];
+  for (let i = 0; i < dots; i++) pos.push([42 + (i % 5) * 14 + (Math.floor(i/5) ? 7 : 0), 124 - Math.floor(i/5) * 11]);
+  return `<svg viewBox="0 0 140 150" width="150" height="160" role="img" aria-label="Syllabus bucket ${pct}% filled, ${holes} weak chapters">
+    <defs><clipPath id="cup"><path d="M28 30 L112 30 L102 132 Q70 140 38 132 Z"/></clipPath><linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f86ff"/><stop offset="1" stop-color="#1f45c8"/></linearGradient></defs>
+    <g clip-path="url(#cup)"><rect x="20" y="${lvl}" width="100" height="140" fill="url(#wat)" opacity=".9"/>${pos.map(([x,y]) => `<circle cx="${x}" cy="${y}" r="4.5" fill="#ff5d73" stroke="#fff" stroke-width="1.5"/>`).join('')}</g>
+    <path d="M28 30 L112 30 L102 132 Q70 140 38 132 Z" fill="none" stroke="#14295a" stroke-width="2.5"/>
+    <ellipse cx="70" cy="30" rx="42" ry="6" fill="none" stroke="#14295a" stroke-width="2"/>
+    <text x="70" y="${lvl + 20 <= 100 ? lvl + 20 : lvl - 8}" text-anchor="middle" fill="${lvl + 20 <= 100 ? '#fff' : '#14295a'}" font-size="18" font-weight="700" font-family="Poppins,system-ui">${pct}%</text></svg>`;
+}
+// ---------------------------------------------------------------- 4-page Study Audit Report
+// Cover · Subject health · Priorities + top 3 fixes · Parents + next step. Every number comes from the student's answers
+// (compute()); every sentence is picked by rules from those numbers. Print = 4 A4 pages.
+const R4 = {
+  waNumber: '919468767477', waDisplay: '+91 94687 67477',
+  offer: ['Study audit report', 'Daily study planner', 'Daily tracking, 1 minute', 'Weekly report to parents', 'Stuck? Connect with us', '1-to-1 on day 1 + every month', 'Book-wise tests, 2 pre-boards, checked copies', 'Revision plan + career guidance'],
+  cls: ['s-acc', 's-bs', 's-eco', 's-test', 's-other', 's-other2'],
+};
+const shortD = d => d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+function report4Data(){
+  const R = compute(), first = (A.name||'').trim().split(/\s+/)[0] || 'You';
+  const subjOrder = R.subjects.map(s => s.s), clsOf = s => R4.cls[subjOrder.indexOf(s) % R4.cls.length], code = s => short(s).toUpperCase();
+  const exam = examDate(), target = targetDate(), examTxt = examName(), today = D0;
+  const examShort = C().attempts ? examTxt.replace(/^(\w{3})\w* /, '$1 ') : shortD(exam);
+  const daysToFinish = R.finish ? dayDiff(today, R.finish) : 9999;
+  const st = R.left === 0 || R.early >= 0 ? 'ok' : R.buffer >= 0 ? 'tight' : 'behind';
+  const stLabel = {ok: R.left === 0 ? 'Fully prepared' : 'On track', tight: 'No safety margin', behind: 'Behind schedule'}[st];
+  const finishTxt = R.left === 0 ? 'Done' : R.finish ? fmtD(R.finish) : '—';
+  const revision = R.finish ? Math.max(0, dayDiff(R.finish, exam)) : 0;
+  // "+2 hours a week" scenario
+  const boostWeek = R.haveWeek + 2, boostFinish = boostWeek ? new Date(today.getTime() + Math.ceil(R.left / boostWeek * 7) * 86400000) : null;
+  const boostRevision = boostFinish ? Math.max(0, dayDiff(boostFinish, exam)) : 0;
+  const verdict = R.left === 0 ? 'Every chapter is marked ready. Now the job is tests and revision.'
+    : st === 'ok' ? `At your current pace you finish by ${finishTxt}, ${plural(R.early, 'day')} before your target. Keep this pace and your revision is safe.`
+    : st === 'tight' ? `You will finish by ${finishTxt}, ${plural(-R.early, 'day')} after your target. Revision gets squeezed unless you speed up now.`
+    : `At this pace the syllabus runs past your exam (${examTxt}). The plan has to change this week, not next month.`;
+  const subjects = R.subjects.map(s => ({...s, cls: clsOf(s.s), tone: s.pct < 40 ? 'bad' : s.pct < 70 ? 'mid' : 'good'}));
+  subjects.forEach(s => { s.toneLabel = {bad: 'Needs work', mid: 'Getting there', good: 'Strong'}[s.tone]; });
+  const byRisk = subjects.slice().sort((a,b) => a.pct - b.pct || b.holes - a.holes);
+  const worst = byRisk[0], second = byRisk[1], best = byRisk[byRisk.length - 1];
+  const riskCallout = worst.pct >= 70 ? `Every subject is above 70%. Keep the weak chapters moving and test yourself weekly.`
+    : `${worst.s} is your biggest risk: ${100 - worst.pct}% is not ready yet, across ${plural(worst.holes, 'weak chapter')}. Start there.`;
+  // priorities: spread over subjects, up to 8 (6 when there are many subjects)
+  const spread = (items, cmp, max) => { const by = {}, out = []; items.slice().sort(cmp).forEach(c => (by[c.subject] = by[c.subject] || []).push(c));
+    for (let r = 0; out.length < max && subjOrder.some(s => (by[s]||[]).length > r); r++) subjOrder.forEach(s => { const c = (by[s]||[])[r]; if (c && out.length < max) out.push(c); }); return out; };
+  const weak = R.list.filter(c => c.v <= 1);
+  const pri = spread(weak, (a,b) => a.v - b.v || (a.kind==='num' ? 0 : 1) - (b.kind==='num' ? 0 : 1) || b.base - a.base, 6)
+    .map(c => ({...c, hours: Math.max(1, Math.round(c.base * LEFT[c.v]))})).sort((a,b) => b.hours - a.hours);
+  const maxH = Math.max(1, ...pri.map(p => p.hours));
+  pri.forEach((p, i) => { p.rank = i + 1; p.bar = Math.round(p.hours / maxH * 100); p.cls = clsOf(p.subject); p.code = code(p.subject); });
+  const priTotal = pri.reduce((x,p) => x + p.hours, 0), priWeeks = R.haveWeek ? Math.max(1, Math.ceil(priTotal / R.haveWeek)) : '—';
+  const split = subjOrder.map(s => ({s, cls: clsOf(s), hours: pri.filter(p => p.subject === s).reduce((x,p) => x + p.hours, 0)})).filter(x => x.hours)
+    .map(x => ({...x, share: Math.round(x.hours / Math.max(1, priTotal) * 100)}));
+  const strengths = spread(R.list.filter(c => c.v >= 2), (a,b) => b.v - a.v || b.base - a.base, 6).map(c => ({...c, cls: clsOf(c.subject), code: code(c.subject)}));
+  // top 3 fixes, chosen by the numbers
+  const worstGaps = pri.filter(p => p.subject === worst.s).slice(0, 2);
+  const once = R.list.filter(c => c.v === 1), notStarted = R.list.filter(c => c.v === 0), gapH = R.needWeek - R.haveWeek;
+  const fixes = [];
+  if (worstGaps.length) fixes.push({title: `Start with ${worst.s}`, body: `${worst.s} is ${worst.pct}% ready with ${plural(worst.holes, 'weak chapter')}. Put your first hours this week into ${worstGaps.map(g => g.chapter).join(' and ')} (about ${worstGaps.reduce((x,g)=>x+g.hours,0)} h).`});
+  if (gapH > 0) fixes.push({title: `Add ${gapH} hour${gapH===1?'':'s'} a week`, body: `You give about ${R.haveWeek} h a week; finishing by ${fmtD(target)} needs ${R.needWeek} h. Even 2 more hours a week moves your finish to ${boostFinish ? fmtD(boostFinish) : '—'} and gives ${plural(boostRevision, 'day')} for revision.`});
+  else fixes.push({title: `Protect your ${R.haveWeek} hours`, body: `Time is enough (${R.haveWeek} h a week, ${R.needWeek} needed). The real risk is missed days: fix one daily slot and never skip two days in a row.`});
+  if (once.length >= 3) fixes.push({title: 'Revise what you read only once', body: `${plural(once.length, 'chapter')} ${once.length===1?'is':'are'} read just once. One proper revision each (about ${Math.round(once.reduce((x,c)=>x+c.base*LEFT[1],0))} h in all) turns them into marks.`});
+  else if (notStarted.length >= R.list.length / 3) fixes.push({title: 'Finish the first reading early', body: `${plural(notStarted.length, 'chapter')} ${notStarted.length===1?'has':'have'} not started yet. Read each once quickly first, then come back for practice; a half-read syllabus is the biggest exam risk.`});
+  else fixes.push({title: 'Test yourself every week', body: `${plural(strengths.length, 'chapter')} ${strengths.length===1?'is':'are'} already strong. One short test a week keeps them strong; spend all new hours on the priority list.`});
+  if (fixes.length < 3) fixes.push({title: `Bring ${second ? second.s : 'every subject'} along`, body: `${second ? second.s + ' is ' + second.pct + '% ready.' : ''} Give it one slot every day so it does not fall behind while you fix ${worst.s}.`});
+  // parents + teacher
+  const help = {behind: `Sit with ${first} for 10 minutes tonight and agree on fixed study hours for the week.`, tight: `Ask every evening which chapter was finished today; small daily checks help most.`, ok: `Praise the regular effort and keep the phone away during study hours.`}[st];
+  const parent = [
+    ['Where they stand', `${R.pct}% of the syllabus is ready; ${plural(R.holes, 'chapter')} still need work.`],
+    ['Exam timeline', R.left === 0 ? `Exam: ${examTxt}. All chapters are marked ready.` : `Exam: ${examTxt}. At the current pace the syllabus finishes by ${finishTxt} (target ${fmtD(target)}).`],
+    ['Weekly study', `About ${R.haveWeek} hours a week now; ${R.needWeek} hours a week are needed.`],
+    ['Biggest risk', worst.pct >= 70 ? 'No single subject is behind.' : `${worst.s} (${worst.pct}% ready).`],
+    ['How you can help', help],
+  ];
+  const strongOne = strengths[0] ? ` Your work in ${strengths[0].chapter} shows you can do it.` : '';
+  const note = st === 'ok'
+    ? `${first}, you are ahead of many students at this stage.${strongOne} Now bring ${worst.s} up to the level of ${best.s}, keep reporting every day, and we will reach the exam with time to spare.`
+    : st === 'tight'
+    ? `${first}, you are close, but there is no room for missed weeks.${strongOne} ${worst.s} needs the most attention, so start there this week. A clear daily plan will give you back your revision time.`
+    : `${first}, this report is not bad news, it is early news.${strongOne} ${worst.s}${second && second !== worst ? ' and ' + second.s : ''} need most of your hours now. With a fixed daily plan we can still finish before the exam, but the change has to start this week.`;
+  const waText = `Hi, I am ${A.name || ''}. I did the free study audit (${C().label}). My report: ${stLabel}, ${R.pct}% ready. Please guide me.`;
+  return {R, examShort, first, st, stLabel, verdict, exam, examTxt, target, finishTxt, revision, boostRevision, today,
+    pos: R.left === 0 ? 4 : !R.finish || R.buffer < 0 ? 96 : Math.max(4, Math.min(92, Math.round(daysToFinish / Math.max(1, R.daysLeft) * 100))),
+    margin: R.haveWeek === R.needWeek ? 'just enough' : R.haveWeek > R.needWeek ? `${R.haveWeek - R.needWeek} h to spare` : `${R.needWeek - R.haveWeek} h short`,
+    subjects, byRisk, riskCallout, strengths, pri, priTotal, priWeeks, split, fixes: fixes.slice(0, 3), parent, note,
+    many: subjects.length > 3, waLink: `https://wa.me/${R4.waNumber}?text=${encodeURIComponent(waText)}`,
+    price: C().attempts ? `till your ${A.attempt || 'next'} attempt` : 'till your board exams',
+    examLabel: C().attempts ? (C().label + ' exams') : (A.course === 'c11' ? 'Annual exams' : 'Board exams')};
+}
+function renderReport(){
+  const D = report4Data(), R = D.R, name = esc(A.name || ''), course = esc(C().label + (A.attempt ? ' · ' + A.attempt : '')), date = fmtD(new Date(A.when || Date.now()));
+  const brand = (who, sub) => `<div class="brand"><div class="mark"><img src="/favicon.png" alt=""></div><div><b>${who}</b><span>${sub}</span></div></div>`;
+  const foot = (l, r) => `<div class="foot"><span>${l}</span><span>${r}</span></div>`;
+  const tag = (cls, code) => `<span class="tag ${cls}">${esc(code)}</span>`;
+  app.innerHTML = `<div class="fade">
+  <div class="r4" id="r4">
+  <section class="page st-${D.st}">
+    <div class="top">${brand('CA Mahendra Shekhawat', '15+ years of experience · 22K+ YouTube subscribers')}<div class="pg">FREE STUDY AUDIT · 1/4</div></div>
+    <div class="cover-hero"><div class="eyebrow">Study Audit Report · ${date}</div><div class="eyebrow" style="opacity:.75;margin:6px 0 -4px">Prepared for student</div><h1>${name}</h1>
+      <div class="meta"><b>${course}</b> · ${esc(D.examLabel)}: <b>${esc(D.examTxt)}</b></div>
+      <div class="verdict"><span class="pill"><i></i>${D.stLabel}</span><p>${esc(D.verdict)}</p></div></div>
+    <div class="cover-grid">
+      <div class="card gauge"><svg viewBox="0 0 220 120" aria-hidden="true"><path d="M20 110 A90 90 0 0 1 200 110" fill="none" stroke="#F1ECE2" stroke-width="20" stroke-linecap="round"/>
+        <path d="M20 110 A90 90 0 0 1 200 110" fill="none" stroke="url(#g1)" stroke-width="20" stroke-linecap="round" pathLength="100" stroke-dasharray="${R.pct} 100"/>
+        <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#D99A2B"/><stop offset="1" stop-color="#16213E"/></linearGradient></defs></svg>
+        <div class="big">${R.pct}%</div><div class="lbl">of syllabus ready</div><div class="sub">${100 - R.pct}% still to go · ${plural(R.holes, 'chapter')} need work</div></div>
+      <div class="stats">
+        <div class="card stat"><div class="n">${R.daysLeft} <small>days</small></div><div class="k">Until your exam</div><div class="d">${esc(D.examTxt)}</div></div>
+        <div class="card stat warn"><div class="n">${D.revision} <small>days</small></div><div class="k">Left for revision</div><div class="d">after you finish on ${esc(D.finishTxt)}</div></div>
+        <div class="card stat"><div class="n">${R.haveWeek}<small> / ${R.needWeek} h</small></div><div class="k">Study hours per week</div><div class="d">yours / needed · ${D.margin}</div></div>
+        <div class="card stat"><div class="n">${R.holes}</div><div class="k">Chapters to fix</div><div class="d">Top ${D.pri.length} are on page 3</div></div>
+      </div></div>
+    <div class="card timeline"><div class="eyebrow">Your road to ${D.examShort}</div>
+      <div class="tl" style="--f:${D.pos}"><div class="bar"></div><div class="rev"></div>
+        <div class="dot" style="left:0"></div><div class="dot" style="left:${D.pos}%;border-color:var(--mid)"></div><div class="dot" style="left:100%;border-color:var(--bad)"></div>
+        <div class="pt up edge-l" style="left:0"><b>Today</b>${shortD(D.today)}</div>
+        <div class="pt up" style="left:${D.pos}%"><b>You finish</b>${R.finish ? shortD(R.finish) : '—'} (target ${shortD(D.target)})</div>
+        <div class="pt down edge-r" style="left:100%"><b>Exam</b>${D.examShort}</div>
+        <div class="pt down edge-r" style="left:calc(${D.pos}% + 2mm)"><b style="color:#9A5A00">Revision: ${plural(D.revision, 'day')} →</b></div></div>
+      <p class="tl-note">At your current pace, revision gets only the <b>last ${plural(D.revision, 'day')}</b>. Page 3 shows how to get <b>${plural(D.boostRevision, 'day')}</b>.</p></div>
+    ${foot('Prepared by CA Mahendra Shekhawat · 15+ years of experience', 'camahendrashekhawat.com')}
+  </section>
+
+  <section class="page${D.many ? ' many' : ''}">
+    <div class="top">${brand('CA Mahendra Shekhawat', '15+ years of experience · 22K+ YouTube subscribers')}<div class="pg">Student: ${name} · 2/4</div></div>
+    <div class="sec-head"><div class="eyebrow">Subject health check</div><h2>Where you stand, subject by subject</h2><p>Readiness = how much of each subject you told us is ready.</p></div>
+    <div class="rings">${D.subjects.map(s => `<div class="card ring ${s.tone}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40" fill="none" stroke="#F1ECE2" stroke-width="12"/>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="var(--tc)" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="${s.pct} 100" transform="rotate(-90 50 50)"/>
+      <text x="50" y="58" text-anchor="middle" class="pc" fill="#16213E">${s.pct}%</text></svg><h3>${esc(D.many ? short(s.s) : s.s)}</h3><span class="t ${s.tone}">${s.toneLabel}</span><div class="w">${plural(s.holes, 'weak chapter')}</div></div>`).join('')}</div>
+    <div class="card risk"><h3>Where your marks are at risk</h3><p class="muted" style="font-size:10.5pt;margin:1mm 0 2mm">Bar = part of the subject not ready yet (100% − readiness)</p>
+      ${D.byRisk.map(s => `<div class="risk-row ${s.tone}"><div class="nm">${esc(D.many ? short(s.s) : s.s)}</div><div class="track"><div class="fill" style="--p:${100 - s.pct}">${100 - s.pct}%</div></div><div class="wk"><b>${s.holes}</b> weak chapters</div></div>`).join('')}
+      <div class="callout">${esc(D.riskCallout)}</div></div>
+    <div class="card strengths"><h3 style="color:#1E6B4F">Already strong: keep these warm</h3>
+      <div class="chips">${D.strengths.length ? D.strengths.map(c => `<div class="chip"><span class="ck">✓</span><span>${tag(c.cls, c.code)} ${esc(c.chapter)}</span></div>`).join('') : '<div class="chip"><span class="ck">✓</span><span>None yet. Your first strong chapter comes this week.</span></div>'}</div></div>
+    <p class="note">You told us you are strong in these chapters. One quick revision a week is enough; spend new hours on the weak list.</p>
+    ${foot('camahendrashekhawat.com', name + ' · ' + date)}
+  </section>
+
+  <section class="page">
+    <div class="top">${brand('CA Mahendra Shekhawat', '15+ years of experience · 22K+ YouTube subscribers')}<div class="pg">Student: ${name} · 3/4</div></div>
+    <div class="sec-head"><div class="eyebrow">Priority chapters</div><h2>Fix these ${D.pri.length} first</h2><p>Bar = estimated study hours (for an average student).</p></div>
+    <div class="card" style="padding:3mm 6mm">${D.pri.length ? D.pri.map(p => `<div class="pc-row ${p.cls}"><div class="rank">${p.rank}</div><div class="ch">${tag(p.cls, p.code)}${esc(p.chapter)}</div><div class="hbar"><div class="b" style="--p:${p.bar}"></div><span>~${p.hours} h</span></div></div>`).join('') : '<p style="padding:3mm 0">No weak chapters. Keep testing yourself.</p>'}</div>
+    ${D.pri.length ? `<div class="card split"><h3>~${D.priTotal} hours in total ≈ ${D.priWeeks} week${D.priWeeks===1?'':'s'} at your ${R.haveWeek} h/week</h3>
+      <div class="stack">${D.split.map(x => `<div class="${x.cls}" style="--p:${x.share}">${x.share >= 8 ? x.share + '%' : ''}</div>`).join('')}</div>
+      <div class="legend">${D.split.map(x => `<span class="${x.cls}"><i></i>${esc(x.s)} · ${x.hours} h</span>`).join('')}</div></div>` : ''}
+    <div class="fixes"><div class="eyebrow" style="margin-top:1mm">Your top 3 fixes</div>
+      ${D.fixes.map((f, i) => `<div class="card fix"><div class="num">${i + 1}</div><div><h3>${esc(f.title)}</h3><p>${esc(f.body)}</p></div></div>`).join('')}</div>
+    ${foot('camahendrashekhawat.com', 'Hours are estimates, not a prediction of marks')}
+  </section>
+
+  <section class="page">
+    <div class="top">${brand('CA Mahendra Shekhawat', '15+ years of experience · 22K+ YouTube subscribers')}<div class="pg">Student: ${name} · 4/4</div></div>
+    <div class="parent"><div class="eyebrow" style="color:var(--navy)">For parents · 1-minute summary</div>
+      <dl>${D.parent.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>
+    <div class="teacher"><div class="photo"><img src="/favicon.png" alt="CA Mahendra Shekhawat"></div>
+      <div><div class="eyebrow">A note from your teacher</div><p class="q" style="margin-top:2mm">${esc(D.note)}</p>
+        <div class="who"><b>CA Mahendra Shekhawat</b><br>Commerce mentor · 15+ years of experience</div></div></div>
+    <div class="cta"><div><div class="eyebrow" style="color:#F1C774">Next step</div><h2>Talk to us on WhatsApp</h2>
+      <p>Send us a message. We will go through this report with you and your parents and tell you what to do next. No pressure.</p>
+      <a class="wa" href="${D.waLink}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="#0B2E17"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.6 2.1 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg>WhatsApp ${R4.waDisplay}</a>
+      <div class="offer">${R4.offer.map(o => `<div>${esc(o)}</div>`).join('')}</div>
+      <div class="price">Full mentorship: <b>${({cafc:"₹5,999",cainter:"₹6,999"})[A.course] || "₹4,999"}</b> · one fee ${D.price}.</div></div>
+      <div><div class="qr" id="r4qr"></div><div class="qr-cap">Scan to message us</div></div></div>
+    <p class="method"><b>How this report was made:</b> from the answers ${esc(D.first)} gave in the audit on ${date}. Readiness is self-reported, chapter hours are estimates for an average student, and finish dates assume the same weekly hours. It is a study-planning guide, not a prediction of marks.</p>
+    ${foot('CA Mahendra Shekhawat · 15+ years of experience · 22K+ YouTube subscribers', 'camahendrashekhawat.com')}
+  </section>
+  </div>
+  ${feedbackAndActions(D)}
+  </div>`;
+  try { if (window.QRCode) new QRCode(document.getElementById('r4qr'), {text: D.waLink, width: 256, height: 256, correctLevel: QRCode.CorrectLevel.M}); } catch(e){}
+  wireReportActions(D);
+}
+
+// Under the report (screen only): feedback box and buttons.
+function feedbackAndActions(D){
+  return `<div class="no-print" style="display:flex;flex-direction:column;gap:14px;max-width:210mm;margin:0 auto">
+    <section class="fb-box" aria-label="Your feedback on the report">
+      <h3>How does your report feel?</h3>
+      <p class="muted small">Every student is different. Tell us, and we will fine-tune your report.</p>
+      <div class="chips" role="group">${[['spot','👍 Spot on'],['off','🤔 Something looks different'],['talk','💬 I want to discuss it']].map(([k,l]) => `<button type="button" class="chip" data-fb="${k}" aria-pressed="${FB.kind===k}">${l}</button>`).join('')}</div>
+      <div id="fbMore" ${FB.kind && FB.kind !== 'spot' && !FB.sent ? '' : 'hidden'}>
+        <label class="lbl" for="fbText" style="display:block;margin:10px 0 6px">${FB.kind==='talk' ? 'What would you like to discuss?' : 'What looks different from your real preparation?'}</label>
+        <textarea id="fbText" class="big" rows="3" maxlength="600" placeholder="For example: Accounts is better than this, I have finished 2 more chapters.">${esc(FB.text||'')}</textarea>
+        <button class="btn" type="button" id="fbSend" style="margin-top:8px">Send to CA Mahendra Shekhawat's team</button>
+      </div>
+      <p class="small" id="fbMsg" role="status" ${FB.sent ? '' : 'hidden'}>${FB.sent ? (FB.kind==='spot' ? 'Thank you! Glad the report is spot on. 🙌' : 'Thank you! Our team will look at your report and reply on WhatsApp.') : ''}</p>
+      <p class="err" id="fbErr" hidden></p>
+    </section>
+    <div class="rp-actions">
+      <button class="btn" type="button" id="pdf">⬇ Download PDF (4 pages)</button>
+      <a class="btn wa" href="${D.waLink}" target="_blank" rel="noopener">Discuss my report on WhatsApp</a>
+      <a class="btn ghost" href="${esc(joinUrl())}">Join the mentorship →</a>
+      <button class="btn ghost" type="button" id="redo">Redo the audit</button>
+    </div></div>`;
+}
+function wireReportActions(D){
+  document.getElementById('pdf').addEventListener('click', () => window.print());
+  const fbSend = (kind, text) => { const e = document.getElementById('fbErr'); e.hidden = true;
+    return api('auditFeedback', {phone: A.phone, name: A.name, course: C().label, kind, text: text || '', status: D.stLabel, syllabus: D.R.pct + '%'})
+      .then(() => { FB.sent = true; FB.kind = kind; FB.text = text || ''; save(); renderReport(); })
+      .catch(x => { e.textContent = x.message; e.hidden = false; }); };
+  app.querySelectorAll('[data-fb]').forEach(b => b.addEventListener('click', () => {
+    FB.kind = b.dataset.fb; FB.sent = false; save();
+    if (FB.kind === 'spot') return fbSend('spot');
+    renderReport(); const t = document.getElementById('fbText'); if (t) t.focus(); }));
+  const sendBtn = document.getElementById('fbSend');
+  if (sendBtn) sendBtn.addEventListener('click', () => { const t = document.getElementById('fbText').value.trim(); FB.text = t;
+    if (!t) { const e = document.getElementById('fbErr'); e.textContent = 'Write a few words so we know what to check.'; e.hidden = false; return; }
+    sendBtn.disabled = true; sendBtn.textContent = 'Sending…'; fbSend(FB.kind, t).finally(() => { if (document.body.contains(sendBtn)) { sendBtn.disabled = false; sendBtn.textContent = "Send to CA Mahendra Shekhawat's team"; } }); });
+  document.getElementById('redo').addEventListener('click', () => { A.done = false; Object.keys(FB).forEach(k => delete FB[k]); STEP = 4; render(); });
+}
+
+const short = s => (C().short || {})[s] || s;
+render();
+</script>
+</body>
+</html>
