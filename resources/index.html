@@ -86,6 +86,59 @@
   .note:empty { display: none; }
 
   .empty { color: var(--muted); font-size: 14px; text-align: center; padding: 20px 0 4px; }
+
+  /* page layout: resource card + "Free tools" box (beside it on desktop, below it on phones) */
+  .layout { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 16px; }
+  .tools {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px;
+    box-shadow: 0 10px 30px -18px rgba(35, 71, 214, .35);
+  }
+  .tools { background: linear-gradient(180deg, #eef1fd, #fff 60%); }
+  .tools h2 {
+    display: flex; align-items: center; gap: 10px; margin: 0 0 14px;
+    font-size: 15px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent);
+  }
+  .tools h2::after { content: ""; flex: 0 0 40px; height: 2px; border-radius: 2px; background: #a5b4fc; }
+
+  /* gradient tool cards */
+  .tcard {
+    position: relative; overflow: hidden; display: flex; align-items: center; gap: 12px;
+    min-height: 84px; padding: 14px 16px; border-radius: 14px; color: #fff; text-decoration: none; cursor: pointer;
+    box-shadow: 0 10px 22px -14px rgba(15, 23, 42, .55); transition: transform .15s, box-shadow .15s;
+  }
+  .tcard:hover { transform: translateY(-2px); box-shadow: 0 14px 26px -14px rgba(15, 23, 42, .6); }
+  /* gradient stops kept dark enough for white text (≥ 4.5:1 everywhere) */
+  .tcard.audit { background: linear-gradient(120deg, #1e3fc4 0%, #2f4fd8 55%, #3352d9 100%); }
+  .tcard.planner { background: linear-gradient(120deg, #065f46 0%, #047857 55%, #05805f 100%); }
+  .ticon {
+    flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    background: rgba(255, 255, 255, .2); border: 1px solid rgba(255, 255, 255, .35);
+  }
+  .ticon svg { width: 24px; height: 24px; }
+  .ttext { position: relative; z-index: 1; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .ttext b { font-size: 15px; line-height: 1.25; }
+  .ttext small { font-size: 12px; line-height: 1.35; }
+  .tgo {
+    position: relative; z-index: 1; flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+    background: #fff; font-weight: 700; font-size: 16px;
+  }
+  .audit .tgo { color: #2347d6; }
+  .planner .tgo { color: #047857; transition: transform .15s; }
+  .tart { position: absolute; right: 8px; bottom: -10px; width: 64px; height: 64px; opacity: .28; pointer-events: none; }
+  .ttext { padding-right: 18px; }
+
+  .cal { margin-top: 12px; }
+  .cal > summary { list-style: none; }
+  .cal > summary::-webkit-details-marker { display: none; }
+  .cal[open] .tgo { transform: rotate(90deg); }
+  .cal .btns { margin-top: 10px; gap: 8px; }
+  .cal .btns .btn { flex: 1 1 0; min-height: 44px; padding: 10px 8px; font-size: 13px; border-color: #a7e8d3; color: #0b7a5e; }
+  .cal .btns .btn:hover { background: #ecfdf5; }
+  @media (min-width: 900px) {
+    .layout { max-width: 840px; flex-direction: row; align-items: flex-start; }
+    .layout .card { flex: 1; min-width: 0; }
+    .tools { width: 340px; flex: none; position: sticky; top: 24px; }
+  }
   footer { margin-top: 20px; color: var(--muted); font-size: 12px; text-align: center; }
   footer a { color: inherit; }
 
@@ -135,6 +188,7 @@
 </head>
 <body>
 
+<div class="layout">
 <main class="card">
   <header>
     <a href="/" class="logo" aria-label="Home"><img src="mahendra-sir.jpg" alt="CA Mahendra Shekhawat" width="52" height="52"></a>
@@ -174,6 +228,30 @@
 
   <div class="empty" id="nothing" hidden></div>
 </main>
+
+<aside class="tools" aria-labelledby="toolsTitle">
+  <h2 id="toolsTitle">Free tools</h2>
+  <a class="tcard audit" href="https://camahendrashekhawat.com/audit/?utm_source=portal&amp;utm_medium=sidebar&amp;utm_campaign=audit" target="_blank" rel="noopener">
+    <span class="ticon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM8.5 11.5l1.5 1.5 2.5-2.5M14 12h2M8.5 16.5l1.5 1.5 2.5-2.5M14 17h2"/></svg></span>
+    <span class="ttext"><b>Take Free Study Audit</b><small>Know your strengths. Focus on what matters.</small></span>
+    <span class="tgo" aria-hidden="true">→</span>
+    <svg class="tart" viewBox="0 0 80 80" aria-hidden="true"><rect x="14" y="8" width="44" height="58" rx="6" fill="#fff" opacity=".9"/><rect x="22" y="18" width="28" height="4" rx="2" fill="#93a8f4"/><rect x="22" y="28" width="20" height="4" rx="2" fill="#c7d2fe"/><rect x="24" y="44" width="6" height="14" rx="1" fill="#6d8bf0"/><rect x="33" y="38" width="6" height="20" rx="1" fill="#2347d6"/><rect x="42" y="48" width="6" height="10" rx="1" fill="#a5b4fc"/><circle cx="60" cy="60" r="12" fill="#fff" opacity=".95"/><path d="M60 52a8 8 0 1 1-8 8h8z" fill="#f59e0b"/></svg>
+  </a>
+  <details class="cal">
+    <summary class="tcard planner">
+      <span class="ticon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M7.5 13h2M11 13h2M14.5 13h2M7.5 16.5h2M11 16.5h2"/></svg></span>
+      <span class="ttext"><b>Free Daily Study Calendar</b><small>Plan smart. Study better. Achieve more.</small></span>
+      <span class="tgo" aria-hidden="true">→</span>
+      <svg class="tart" viewBox="0 0 80 80" aria-hidden="true"><rect x="10" y="16" width="56" height="50" rx="7" fill="#fff" opacity=".92"/><rect x="10" y="16" width="56" height="12" rx="6" fill="#bfdbfe"/><rect x="20" y="10" width="5" height="12" rx="2.5" fill="#64748b"/><rect x="51" y="10" width="5" height="12" rx="2.5" fill="#64748b"/><g fill="#93c5fd"><rect x="17" y="34" width="9" height="7" rx="1.5"/><rect x="30" y="34" width="9" height="7" rx="1.5"/><rect x="43" y="34" width="9" height="7" rx="1.5"/><rect x="17" y="45" width="9" height="7" rx="1.5"/><rect x="43" y="45" width="9" height="7" rx="1.5"/><rect x="17" y="56" width="9" height="5" rx="1.5"/></g><rect x="30" y="45" width="9" height="7" rx="1.5" fill="#22c55e"/></svg>
+    </summary>
+    <div class="btns">
+      <a class="btn" href="https://camahendrashekhawat.com/class11/?utm_source=portal&amp;utm_medium=sidebar&amp;utm_campaign=planner" target="_blank" rel="noopener">Class 11</a>
+      <a class="btn" href="https://camahendrashekhawat.com/class12/?utm_source=portal&amp;utm_medium=sidebar&amp;utm_campaign=planner" target="_blank" rel="noopener">Class 12</a>
+      <a class="btn" href="https://camahendrashekhawat.com/cafc/?utm_source=portal&amp;utm_medium=sidebar&amp;utm_campaign=planner" target="_blank" rel="noopener">CA Foundation</a>
+    </div>
+  </details>
+</aside>
+</div>
 
 <footer>© <span id="year"></span> CA Mahendra Shekhawat · <a href="/privacy/">Privacy</a></footer>
 
