@@ -321,8 +321,23 @@
   }
   ["course", "subject", "resource", "item"].forEach((k) => sel[k].addEventListener("change", () => update(k)));
 
+  // QR codes printed on the papers open e.g. /resources/?s=Accounting&r=Chapter+Test&n=01
+  // (n = chapter number before " – ", or the mock test number) with that paper already chosen.
+  function fromLink(list) {
+    const q = new URLSearchParams(location.search), s = q.get("s"), r = q.get("r"), n = (q.get("n") || "").trim();
+    if (!s || !r || !n) return null;
+    for (const c of list) {
+      const sub = c.subjects.find((x) => x.name === s);
+      const res = sub && sub.resources.find((x) => x.name === r);
+      const it = res && res.items.find((i) => i.title.split(" – ")[0].trim() === n || i.title === "Mock Test " + n);
+      if (it) return { course: c.name, subject: s, resource: r, item: it.title };
+    }
+    return null;
+  }
+
   function showCatalog(list) {
-    const keep = { course: state.course && state.course.name, subject: state.subject && state.subject.name,
+    const link = !state.course && fromLink(list || []);
+    const keep = link || { course: state.course && state.course.name, subject: state.subject && state.subject.name,
                    resource: state.resource && state.resource.name, item: state.item && state.item.title };
     courses = list || [];
     $("picker").hidden = !courses.length;
