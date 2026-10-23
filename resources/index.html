@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Resources · CA Mahendra Shekhawat</title>
+<meta name="description" content="Free chapter tests, mock tests, ICAI RTPs, MTPs and model test papers with solutions for CA Foundation. Download as PDF.">
+<link rel="icon" href="/favicon.png">
+<script src="/track.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f7f4;
+    --card: #ffffff;
+    --ink: #14181f;
+    --muted: #6b7280;
+    --line: #e4e4de;
+    --accent: #2347d6;
+    --accent-ink: #1a37ad;
+    --accent-soft: #eef1fd;
+    --ok: #16a34a;
+    --err: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 15px/1.5 Geist, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 40px 16px;
+  }
+  .card {
+    width: 100%; max-width: 460px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 16px; padding: 28px 24px;
+    box-shadow: 0 10px 30px -18px rgba(35, 71, 214, .35);
+  }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 10px; flex: none;
+    background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 700;
+  }
+  h1 { font-size: 18px; margin: 0; letter-spacing: -.2px; }
+  header p { margin: 1px 0 0; color: var(--muted); font-size: 13px; }
+  header a { color: inherit; text-decoration: none; }
+
+  .field { margin-bottom: 14px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  label .n {
+    display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent); font-size: 11px; margin-right: 6px;
+  }
+  select, input {
+    width: 100%; font: inherit; color: var(--ink); background: #fff;
+    border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  select {
+    appearance: none; cursor: pointer; padding-right: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%236b7280' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+  select:disabled { background-color: #f8f8f6; color: #a3a9b5; cursor: not-allowed; }
+  select:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+  .result { margin-top: 20px; padding: 16px; border-radius: 12px; background: var(--accent-soft); display: none; }
+  .result.on { display: block; }
+  .result .k { font-size: 12px; color: var(--muted); }
+  .result .t { font-weight: 600; margin: 2px 0 2px; }
+  .result .src { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .result .src:empty { margin-bottom: 10px; }
+  .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    appearance: none; cursor: pointer; font: inherit; font-size: 14px; font-weight: 600;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 16px; border-radius: 10px; text-decoration: none; white-space: nowrap;
+    border: 1px solid var(--accent); color: var(--accent); background: #fff; flex: 1;
+  }
+  .btn.p { background: var(--accent); color: #fff; }
+  .btn.p:hover { background: var(--accent-ink); }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  .btn svg { width: 15px; height: 15px; }
+  @media (max-width: 400px) { .btn { padding: 10px 10px; font-size: 13px; } }
+  .who { margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .link { background: none; border: 0; padding: 0; font: inherit; color: var(--accent); cursor: pointer; text-decoration: underline; }
+  .note { font-size: 13px; color: var(--err); margin: 10px 0 0; }
+  .note:empty { display: none; }
+
+  .empty { color: var(--muted); font-size: 14px; text-align: center; padding: 20px 0 4px; }
+  footer { margin-top: 20px; color: var(--muted); font-size: 12px; text-align: center; }
+  footer a { color: inherit; }
+
+  /* modal */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, .45);
+    display: none; align-items: center; justify-content: center; padding: 16px; z-index: 20;
+  }
+  .overlay.on { display: flex; }
+  .modal {
+    width: 100%; max-width: 420px; max-height: calc(100vh - 32px); overflow-y: auto;
+    background: #fff; border-radius: 16px; padding: 24px;
+  }
+  .modal h2 { margin: 0 0 4px; font-size: 18px; }
+  .modal .sub { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .phone { display: flex; }
+  .phone span {
+    border: 1px solid var(--line); border-right: 0; border-radius: 10px 0 0 10px;
+    padding: 11px 10px; background: #f8f8f6; color: var(--muted);
+  }
+  .phone input { border-radius: 0 10px 10px 0; }
+  .otp { letter-spacing: 8px; font-size: 20px; text-align: center; font-weight: 600; }
+  .msg { font-size: 13px; margin: -4px 0 12px; }
+  .msg.err { color: var(--err); }
+  .msg.ok { color: var(--ok); }
+  .msg.wait { color: var(--muted); }
+  .consent { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .actions { display: flex; gap: 8px; margin-top: 6px; }
+  .ghost { border-color: var(--line); color: var(--muted); }
+  .tick {
+    width: 52px; height: 52px; border-radius: 50%; background: #dcfce7; color: var(--ok);
+    display: grid; place-items: center; margin: 4px auto 12px; font-size: 26px; font-weight: 700;
+  }
+  .center { text-align: center; }
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    body { padding: 20px 12px; }
+    .card { padding: 22px 16px; }
+    .row2 { grid-template-columns: 1fr; gap: 0; }
+  }
+</style>
+</head>
+<body>
+
+<main class="card">
+  <header>
+    <a href="/" class="logo" aria-label="Home">MS</a>
+    <div>
+      <h1><a href="/">CA Mahendra Shekhawat</a></h1>
+      <p>Free chapter tests, mock tests, RTPs, MTPs &amp; model test papers, with solutions.</p>
+    </div>
+  </header>
+
+  <div id="picker">
+    <div class="field">
+      <label for="course"><span class="n">1</span>Course</label>
+      <select id="course"><option>Loading papers…</option></select>
+    </div>
+    <div class="field">
+      <label for="subject"><span class="n">2</span>Subject</label>
+      <select id="subject" disabled></select>
+    </div>
+    <div class="field">
+      <label for="resource"><span class="n">3</span>Resource</label>
+      <select id="resource" disabled></select>
+    </div>
+    <div class="field">
+      <label for="item"><span class="n">4</span><span id="itemLabel">Chapter / Paper</span></label>
+      <select id="item" disabled></select>
+    </div>
+
+    <div class="result" id="result">
+      <div class="k" id="rPath"></div>
+      <div class="t" id="rTitle"></div>
+      <div class="src" id="rSrc"></div>
+      <div class="btns" id="rBtns"></div>
+      <p class="note" id="rNote"></p>
+      <div class="who" id="who" hidden></div>
+    </div>
+  </div>
+
+  <div class="empty" id="nothing" hidden></div>
+</main>
+
+<footer>© <span id="year"></span> CA Mahendra Shekhawat · <a href="/privacy/">Privacy</a></footer>
+
+<!-- Details + OTP modal -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modal">
+
+    <!-- step 1: details -->
+    <form id="stepDetails" novalidate>
+      <h2 id="mTitle">Almost there!</h2>
+      <p class="sub">Enter your details once to download. We'll verify your number with an OTP on WhatsApp.</p>
+      <div class="field">
+        <label for="fName">Full name</label>
+        <input id="fName" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="fPhone">WhatsApp number</label>
+        <div class="phone"><span>+91</span><input id="fPhone" inputmode="numeric" maxlength="10" autocomplete="tel-national" required></div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="fCity">City</label>
+          <input id="fCity" autocomplete="address-level2" required>
+        </div>
+        <div class="field">
+          <label for="fLevel">Level</label>
+          <select id="fLevel" required></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="fSchool" id="schoolLabel">School</label>
+        <input id="fSchool" required>
+      </div>
+      <p class="msg err" id="dErr"></p>
+      <p class="consent">We will send your login code and study updates on WhatsApp.</p>
+      <div class="actions">
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn p">Send OTP</button>
+      </div>
+    </form>
+
+    <!-- step 2: OTP -->
+    <form id="stepOtp" novalidate hidden>
+      <h2>Verify your number</h2>
+      <p class="sub">Enter the 6-digit OTP sent on WhatsApp to <b id="oPhone"></b>. <button type="button" class="link" id="changeNo">Change</button></p>
+      <div class="field">
+        <input id="fOtp" class="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" aria-label="OTP">
+      </div>
+      <p class="msg" id="oMsg"></p>
+      <div class="actions">
+        <button type="button" class="btn ghost" id="resend">Resend OTP</button>
+        <button type="submit" class="btn p" id="verifyBtn">Verify</button>
+      </div>
+    </form>
+
+    <!-- step 3: done -->
+    <div id="stepDone" class="center" hidden>
+      <div class="tick">✓</div>
+      <h2>You're verified!</h2>
+      <p class="sub">Tap below to download.</p>
+      <div class="btns" id="doneBtns"></div>
+      <p class="note" id="doneNote"></p>
+      <p style="margin:16px 0 0"><button type="button" class="link" data-close>Close</button></p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // "PDF Portal Backend" Apps Script web app (lists papers, WhatsApp OTP, private downloads, download log).
+  const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzeF-vxIyX4RBkrcldxg2rLp0One6PCKlG0Kh_j7CRE9_mhMLltO9HHe4CrMTGYO_I0ZA/exec";
+
+  const TOPIC_BASED = ["Notes", "Chapter Test"];
+  const LEVELS = ["CA Foundation", "CA Inter", "Class 11 Commerce", "Class 12 Commerce", "CUET (Commerce)", "Other"];
+  const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>';
+  const USER_KEY = "msPortalUser", CATALOG_KEY = "msPortalCatalog";
+  const TOKEN_LIFE = 55 * 60 * 1000;   // the backend's token lasts 60 min; re-verify a little before
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+    set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+  $("year").textContent = new Date().getFullYear();
+
+  /* ---------- backend ----------
+     POST as text/plain so the browser needs no CORS preflight (Apps Script can't answer one). */
+  class ApiError extends Error {}
+  async function api(action, body = {}, opts = {}) {
+    const r = await fetch(BACKEND_URL, {
+      method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action, ...body }), ...opts,
+    });
+    if (opts.mode === "no-cors") return;
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok || data.ok !== true) throw new ApiError(data.message || "Something went wrong. Please try again.");
+    return data;
+  }
+  const errText = (err, fallback) => (err instanceof ApiError ? err.message : fallback);
+  let warmed = false;
+  function warmUp() {   // wakes the OTP service while the student fills the form
+    if (warmed) return; warmed = true;
+    api("warm", {}, { mode: "no-cors", keepalive: true }).catch(() => {});
+  }
+
+  /* ---------- catalog: shown instantly from cache, refreshed in the background ---------- */
+  let courses = [];
+  const sel = { course: $("course"), subject: $("subject"), resource: $("resource"), item: $("item") };
+  const state = {};
+
+  function fill(el, placeholder, options, keep) {
+    el.innerHTML = `<option value="">${placeholder}</option>` +
+      options.map((o, i) => `<option value="${i}">${esc(o)}</option>`).join("");
+    el.disabled = !options.length;
+    const k = options.indexOf(keep);
+    if (k >= 0) el.value = String(k);
+    else if (options.length === 1) el.value = "0";      // auto-pick when there is only one choice
+  }
+
+  function update(from, keep = {}) {
+    const c = courses[sel.course.value];
+    state.course = c;
+    if (from === "course") fill(sel.subject, c ? "Select subject" : "Select course first", c ? c.subjects.map((s) => s.name) : [], keep.subject);
+    const s = c && c.subjects[sel.subject.value];
+    state.subject = s;
+    if (from === "course" || from === "subject") fill(sel.resource, s ? "Select resource" : "Select subject first", s ? s.resources.map((r) => r.name) : [], keep.resource);
+    const r = s && s.resources[sel.resource.value];
+    state.resource = r;
+    const topicBased = !r || TOPIC_BASED.includes(r.name);
+    $("itemLabel").textContent = !r ? "Chapter / Paper" : topicBased ? "Chapter" : "Paper";
+    if (from !== "item") fill(sel.item, r ? (topicBased ? "Select chapter" : "Select paper") : "Select resource first", r ? r.items.map((i) => i.title) : [], keep.item);
+    state.item = r && r.items[sel.item.value];
+    renderResult();
+  }
+  ["course", "subject", "resource", "item"].forEach((k) => sel[k].addEventListener("change", () => update(k)));
+
+  function showCatalog(list) {
+    const keep = { course: state.course && state.course.name, subject: state.subject && state.subject.name,
+                   resource: state.resource && state.resource.name, item: state.item && state.item.title };
+    courses = list || [];
+    $("picker").hidden = !courses.length;
+    $("nothing").hidden = !!courses.length;
+    $("nothing").textContent = "Papers are being uploaded. Please check back soon.";
+    fill(sel.course, "Select course", courses.map((c) => c.name), keep.course);
+    update("course", keep);
+  }
+
+  async function loadCatalog() {
+    const cached = store.get(CATALOG_KEY);
+    if (cached && cached.courses) showCatalog(cached.courses);
+    try {
+      const r = await fetch(BACKEND_URL + "?action=catalog");
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.message);
+      if (!cached || JSON.stringify(cached.courses) !== JSON.stringify(data.courses)) showCatalog(data.courses);
+      store.set(CATALOG_KEY, { t: Date.now(), courses: data.courses });
+    } catch (e) {
+      if (!cached) { $("picker").hidden = true; $("nothing").hidden = false; $("nothing").textContent = "Couldn't load the papers. Please check your internet and refresh."; }
+    }
+  }
+
+  /* ---------- result + download ---------- */
+  const mb = (n) => (n >= 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
+  function downloads(it) {
+    if (!it) return [];
+    const notes = state.resource.name === "Notes";
+    const out = [];
+    if (it.paper) out.push({ label: notes ? "Download Notes" : "Download Paper", file: it.paper, kind: notes ? "notes" : "paper" });
+    if (it.solution) out.push({ label: "Download Solution", file: it.solution, kind: "solution" });
+    out[0].primary = true;
+    return out;
+  }
+  const buttons = (it) => downloads(it).map((d, i) =>
+    `<button class="btn${d.primary ? " p" : ""}" data-dl="${i}" title="${mb(d.file.size)}">${ICON}${d.label}</button>`).join("");
+
+  function renderResult() {
+    const { course, subject, resource, item } = state;
+    $("result").classList.toggle("on", !!item);
+    if (!item) return;
+    $("rPath").textContent = `${course.name} › ${subject.name} › ${resource.name}`;
+    $("rTitle").textContent = item.title;
+    $("rSrc").textContent = resource.label || "";
+    $("rBtns").innerHTML = buttons(item);
+    $("rNote").textContent = "";
+    const u = getUser();
+    $("who").hidden = !u;
+    if (u) $("who").innerHTML = `Downloading as <b>${esc(u.name)}</b> (+91 ${esc(u.phone)}) · <button class="link" id="notMe">Not you?</button>`;
+  }
+
+  function getUser() { return store.get(USER_KEY); }
+  function setUser(u) { store.set(USER_KEY, u); }
+  const hasSession = (u) => !!u && !!u.token && Date.now() - u.tokenAt < TOKEN_LIFE;
+
+  async function startDownload(d, btn, noteEl) {
+    const u = getUser(), label = btn.innerHTML;
+    btn.disabled = true; btn.textContent = "Preparing PDF…"; noteEl.textContent = "";
+    try {
+      const res = await api("download", {
+        token: u.token, id: d.file.id,
+        name: u.name, phone: u.phone, city: u.city, school: u.school, level: u.level,
+        course: state.course.name, subject: state.subject.name, resource: state.resource.name,
+        title: state.item.title, file: d.kind,
+      });
+      const bytes = Uint8Array.from(atob(res.data), (c) => c.charCodeAt(0));
+      const url = URL.createObjectURL(new Blob([bytes], { type: res.mimeType || "application/pdf" }));
+      const a = document.createElement("a");
+      a.href = url; a.download = res.fileName || state.item.title + ".pdf";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      window.cmsTrack && window.cmsTrack("resource_download", { resource: state.resource.name, file: d.kind });
+    } catch (err) {
+      if (/expired/i.test(err.message)) { setUser({ ...u, token: null }); closeModal(); openModal(); return; }
+      noteEl.textContent = errText(err, "Download failed. Please check your internet and try again.");
+    } finally { btn.disabled = false; btn.innerHTML = label; }
+  }
+
+  $("result").addEventListener("click", (e) => {
+    if (e.target.id === "notMe") { setUser(null); renderResult(); return; }
+    const b = e.target.closest("[data-dl]");
+    if (!b) return;
+    if (hasSession(getUser())) startDownload(downloads(state.item)[b.dataset.dl], b, $("rNote"));
+    else openModal();
+  });
+
+  /* ---------- details + OTP modal ---------- */
+  $("fLevel").innerHTML = `<option value="">Select</option>` + LEVELS.map((l) => `<option>${esc(l)}</option>`).join("");
+  let pending = null;
+
+  function show(step) { ["stepDetails", "stepOtp", "stepDone"].forEach((id) => ($(id).hidden = id !== step)); }
+
+  /* CA students → coaching institute; Class 11/12/CUET → school */
+  function syncSchoolField() {
+    const lv = $("fLevel").value, isCA = lv.startsWith("CA ");
+    const label = isCA ? "Coaching institute" : lv === "Other" || !lv ? "School / Coaching" : "School";
+    $("schoolLabel").textContent = label;
+    $("fSchool").placeholder = isCA ? "Where are you preparing for CA?" : label === "School" ? "Your school name" : "";
+  }
+  $("fLevel").addEventListener("change", syncSchoolField);
+
+  function openModal() {
+    warmUp();
+    // A returning student whose session ran out only needs a fresh OTP; keep their details.
+    const u = getUser();
+    if (u) { $("fName").value = u.name; $("fPhone").value = u.phone; $("fCity").value = u.city; $("fSchool").value = u.school; }
+    $("fLevel").value = u && u.level ? u.level : LEVELS.includes(state.course.name) ? state.course.name : "";
+    syncSchoolField();
+    $("dErr").textContent = ""; setMsg("", "");
+    show("stepDetails");
+    $("overlay").classList.add("on");
+    setTimeout(() => (u ? $("fPhone") : $("fName")).focus(), 50);
+  }
+  function closeModal() { $("overlay").classList.remove("on"); renderResult(); }
+  document.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", closeModal));
+  $("overlay").addEventListener("click", (e) => { if (e.target.id === "overlay") closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+  $("fPhone").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
+  $("fOtp").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
+  function setMsg(text, kind) { $("oMsg").textContent = text; $("oMsg").className = "msg " + kind; }
+
+  // The OTP screen opens straight away; the code is sent in the background.
+  async function sendCode() {
+    setMsg("Sending code on WhatsApp…", "wait");
+    $("verifyBtn").disabled = true; $("resend").disabled = true;
+    try {
+      await api("sendOtp", { phone: "91" + pending.phone });
+      setMsg("Code sent on WhatsApp ✓", "ok");
+      return true;
+    } catch (err) {
+      setMsg(errText(err, "Couldn't send the code. Please check your internet and try again."), "err");
+      return false;
+    } finally { $("verifyBtn").disabled = false; $("resend").disabled = false; }
+  }
+
+  $("stepDetails").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const u = {
+      name: $("fName").value.trim(), phone: $("fPhone").value.trim(), city: $("fCity").value.trim(),
+      school: $("fSchool").value.trim(), level: $("fLevel").value,
+    };
+    let err = "";
+    if (!u.name) err = "Please enter your name.";
+    else if (!/^[6-9]\d{9}$/.test(u.phone)) err = "Please enter a valid 10-digit mobile number.";
+    else if (!u.city) err = "Please enter your city.";
+    else if (!u.level) err = "Please select your level.";
+    else if (!u.school) err = `Please enter your ${$("schoolLabel").textContent.toLowerCase()}.`;
+    $("dErr").textContent = err;
+    if (err) return;
+    pending = u;
+    $("oPhone").textContent = "+91 " + u.phone;
+    $("fOtp").value = "";
+    show("stepOtp");
+    $("fOtp").focus();
+    sendCode();
+  });
+
+  $("stepOtp").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const code = $("fOtp").value;
+    if (code.length !== 6) { setMsg("Please enter the 6-digit OTP.", "err"); return; }
+    const b = $("verifyBtn");
+    b.disabled = true; b.textContent = "Verifying…";
+    let res;
+    try { res = await api("verifyOtp", { phone: "91" + pending.phone, code }); }
+    catch (err) { setMsg(errText(err, "Couldn't verify right now. Please check your internet and try again."), "err"); return; }
+    finally { b.disabled = false; b.textContent = "Verify"; }
+    if (!res.verified) { setMsg(res.message || "Incorrect OTP. Please try again.", "err"); return; }
+    setUser({ ...pending, token: res.token, tokenAt: Date.now() });
+    window.cmsTrack && window.cmsTrack("generate_lead", { content_name: "resources" });
+    $("doneBtns").innerHTML = buttons(state.item);
+    $("doneNote").textContent = "";
+    show("stepDone");
+  });
+
+  $("doneBtns").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-dl]");
+    if (b) startDownload(downloads(state.item)[b.dataset.dl], b, $("doneNote"));
+  });
+  $("resend").addEventListener("click", sendCode);
+  $("changeNo").addEventListener("click", () => show("stepDetails"));
+
+  loadCatalog();
+</script>
+</body>
+</html>
