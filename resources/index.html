@@ -157,7 +157,7 @@
       <select id="resource" disabled></select>
     </div>
     <div class="field">
-      <label for="item"><span class="n">4</span><span id="itemLabel">Chapter / Paper</span></label>
+      <label for="item"><span class="n">4</span><span id="itemLabel">Chapter / Test</span></label>
       <select id="item" disabled></select>
     </div>
 
@@ -245,7 +245,16 @@
   // "PDF Portal Backend" Apps Script web app (lists papers, WhatsApp OTP, private downloads, download log).
   const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzeF-vxIyX4RBkrcldxg2rLp0One6PCKlG0Kh_j7CRE9_mhMLltO9HHe4CrMTGYO_I0ZA/exec";
 
-  const TOPIC_BASED = ["Notes", "Chapter Test"];
+  // How each resource reads on the page, and what the 4th dropdown asks for.
+  const RESOURCE_UI = {
+    "Notes":            { name: "Notes – Mahendra Sir",         pick: "Chapter",      placeholder: "Select chapter" },
+    "Chapter Test":     { name: "Chapter Tests – Mahendra Sir", pick: "Chapter",      placeholder: "Select chapter" },
+    "Mock Test":        { name: "Mock Tests – Mahendra Sir",    pick: "Test number",  placeholder: "Select test" },
+    "RTP":              { name: "ICAI RTP",                     pick: "Exam attempt", placeholder: "Select attempt" },
+    "MTP":              { name: "ICAI MTP",                     pick: "Exam attempt", placeholder: "Select attempt" },
+    "Model Test Paper": { name: "ICAI Model Test Papers",       pick: "Test number",  placeholder: "Select test" },
+  };
+  const ui = (r) => RESOURCE_UI[r.name] || { name: r.name, pick: "Paper", placeholder: "Select paper" };
   const LEVELS = ["CA Foundation", "CA Inter", "Class 11 Commerce", "Class 12 Commerce", "CUET (Commerce)", "Other"];
   const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>';
   const USER_KEY = "msPortalUser", CATALOG_KEY = "msPortalCatalog";
@@ -299,12 +308,11 @@
     if (from === "course") fill(sel.subject, c ? "Select subject" : "Select course first", c ? c.subjects.map((s) => s.name) : [], keep.subject);
     const s = c && c.subjects[sel.subject.value];
     state.subject = s;
-    if (from === "course" || from === "subject") fill(sel.resource, s ? "Select resource" : "Select subject first", s ? s.resources.map((r) => r.name) : [], keep.resource);
+    if (from === "course" || from === "subject") fill(sel.resource, s ? "Select resource" : "Select subject first", s ? s.resources.map((r) => ui(r).name) : [], keep.resource && ui({ name: keep.resource }).name);
     const r = s && s.resources[sel.resource.value];
     state.resource = r;
-    const topicBased = !r || TOPIC_BASED.includes(r.name);
-    $("itemLabel").textContent = !r ? "Chapter / Paper" : topicBased ? "Chapter" : "Paper";
-    if (from !== "item") fill(sel.item, r ? (topicBased ? "Select chapter" : "Select paper") : "Select resource first", r ? r.items.map((i) => i.title) : [], keep.item);
+    $("itemLabel").textContent = r ? ui(r).pick : "Chapter / Test";
+    if (from !== "item") fill(sel.item, r ? ui(r).placeholder : "Select resource first", r ? r.items.map((i) => i.title) : [], keep.item);
     state.item = r && r.items[sel.item.value];
     renderResult();
   }
@@ -353,7 +361,7 @@
     const { course, subject, resource, item } = state;
     $("result").classList.toggle("on", !!item);
     if (!item) return;
-    $("rPath").textContent = `${course.name} › ${subject.name} › ${resource.name}`;
+    $("rPath").textContent = `${course.name} › ${subject.name} › ${ui(resource).name}`;
     $("rTitle").textContent = item.title;
     $("rSrc").textContent = resource.label || "";
     $("rBtns").innerHTML = buttons(item);
