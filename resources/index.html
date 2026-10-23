@@ -326,6 +326,7 @@
     "Notes":            { name: "Notes – Mahendra Sir",         pick: "Chapter",      placeholder: "Select chapter" },
     "Chapter Test":     { name: "Chapter Tests – Mahendra Sir", pick: "Chapter",      placeholder: "Select chapter" },
     "Mock Test":        { name: "Mock Tests – Mahendra Sir",    pick: "Test number",  placeholder: "Select test" },
+    "Sample Paper":     { name: "Sample Papers – Mahendra Sir", pick: "Paper number", placeholder: "Select paper" },
     "RTP":              { name: "ICAI RTP",                     pick: "Exam attempt", placeholder: "Select attempt" },
     "MTP":              { name: "ICAI MTP",                     pick: "Exam attempt", placeholder: "Select attempt" },
     "Model Test Paper": { name: "ICAI Model Test Papers",       pick: "Test number",  placeholder: "Select test" },
@@ -402,7 +403,7 @@
     for (const c of list) {
       const sub = c.subjects.find((x) => x.name === s);
       const res = sub && sub.resources.find((x) => x.name === r);
-      const it = res && res.items.find((i) => i.title.split(" – ")[0].trim() === n || i.title === "Mock Test " + n);
+      const it = res && res.items.find((i) => i.title.split(" – ")[0].trim() === n || i.title === "Mock Test " + n || i.title === "Sample Paper " + n);
       if (it) return { course: c.name, subject: s, resource: r, item: it.title };
     }
     return null;
