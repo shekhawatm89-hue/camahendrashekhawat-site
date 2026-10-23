@@ -114,6 +114,9 @@
   .msg.ok { color: var(--ok); }
   .msg.wait { color: var(--muted); }
   .consent { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .consent a { color: var(--accent); }
+  .check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; font-weight: 400; margin: 0 0 10px; cursor: pointer; }
+  .check input { width: 16px; height: 16px; margin: 2px 0 0; flex: none; accent-color: var(--accent); }
   .actions { display: flex; gap: 8px; margin-top: 6px; }
   .ghost { border-color: var(--line); color: var(--muted); }
   .tick {
@@ -204,8 +207,10 @@
         <label for="fSchool" id="schoolLabel">School</label>
         <input id="fSchool" required>
       </div>
+      <label class="check"><input type="checkbox" id="fAdult"> I am 18 or older, or my parent/guardian agrees to me using this site.</label>
+      <label class="check"><input type="checkbox" id="fUpdates"> Send me study tips and new papers on WhatsApp (optional).</label>
       <p class="msg err" id="dErr"></p>
-      <p class="consent">We will send your login code and study updates on WhatsApp.</p>
+      <p class="consent">We'll send your login code on WhatsApp. Your details are used as described in our <a href="/privacy/#resources" target="_blank" rel="noopener">Privacy Policy</a>.</p>
       <div class="actions">
         <button type="button" class="btn ghost" data-close>Cancel</button>
         <button type="submit" class="btn p">Send OTP</button>
@@ -371,14 +376,14 @@
 
   function getUser() { return store.get(USER_KEY); }
   function setUser(u) { store.set(USER_KEY, u); }
-  const hasSession = (u) => !!u && !!u.token && Date.now() - u.tokenAt < TOKEN_LIFE;
+  const hasSession = (u) => !!u && !!u.token && u.adult === true && Date.now() - u.tokenAt < TOKEN_LIFE;
 
   async function startDownload(d, btn, noteEl) {
     const u = getUser(), label = btn.innerHTML;
     btn.disabled = true; btn.textContent = "Preparing PDF…"; noteEl.textContent = "";
     try {
       const res = await api("download", {
-        token: u.token, id: d.file.id,
+        token: u.token, key: d.file.key, adult: u.adult === true, updates: u.updates === true,
         name: u.name, phone: u.phone, city: u.city, school: u.school, level: u.level,
         course: state.course.name, subject: state.subject.name, resource: state.resource.name,
         title: state.item.title, file: d.kind,
@@ -424,6 +429,8 @@
     // A returning student whose session ran out only needs a fresh OTP; keep their details.
     const u = getUser();
     if (u) { $("fName").value = u.name; $("fPhone").value = u.phone; $("fCity").value = u.city; $("fSchool").value = u.school; }
+    $("fAdult").checked = !!(u && u.adult);
+    $("fUpdates").checked = !!(u && u.updates);
     $("fLevel").value = u && u.level ? u.level : LEVELS.includes(state.course.name) ? state.course.name : "";
     syncSchoolField();
     $("dErr").textContent = ""; setMsg("", "");
@@ -458,6 +465,7 @@
     const u = {
       name: $("fName").value.trim(), phone: $("fPhone").value.trim(), city: $("fCity").value.trim(),
       school: $("fSchool").value.trim(), level: $("fLevel").value,
+      adult: $("fAdult").checked, updates: $("fUpdates").checked,
     };
     let err = "";
     if (!u.name) err = "Please enter your name.";
@@ -465,6 +473,7 @@
     else if (!u.city) err = "Please enter your city.";
     else if (!u.level) err = "Please select your level.";
     else if (!u.school) err = `Please enter your ${$("schoolLabel").textContent.toLowerCase()}.`;
+    else if (!u.adult) err = "Please confirm you are 18 or older, or that your parent/guardian agrees.";
     $("dErr").textContent = err;
     if (err) return;
     pending = u;
