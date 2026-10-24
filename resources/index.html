@@ -412,8 +412,12 @@
     return null;
   }
 
+  // Opened from a paper's QR code ("Detailed Solution"): the solution is what the student wants.
+  let qr = null, pendingDl = null;
+
   function showCatalog(list) {
     const link = !state.course && fromLink(list || []);
+    if (link && !qr) qr = { done: false };
     const keep = link || { course: state.course && state.course.name, subject: state.subject && state.subject.name,
                    resource: state.resource && state.resource.name, item: state.item && state.item.title };
     courses = list || [];
@@ -422,6 +426,7 @@
     $("nothing").textContent = "Papers are being uploaded. Please check back soon.";
     fill(sel.course, "Select course", courses.map((c) => c.name), keep.course);
     update("course", keep);
+    if (qr && !qr.done && state.item) { qr.done = true; getSolution(); }
   }
 
   async function loadCatalog() {
@@ -446,6 +451,7 @@
     const out = [];
     if (it.paper) out.push({ label: notes ? "Download Notes" : "Download Paper", file: it.paper, kind: notes ? "notes" : "paper" });
     if (it.solution) out.push({ label: "Download Solution", file: it.solution, kind: "solution" });
+    if (qr && out.length > 1 && out[1].kind === "solution") out.reverse();
     out[0].primary = true;
     return out;
   }
@@ -488,9 +494,16 @@
       setTimeout(() => URL.revokeObjectURL(url), 60000);
       window.cmsTrack && window.cmsTrack("resource_download", { resource: state.resource.name, file: d.kind });
     } catch (err) {
-      if (/expired/i.test(err.message)) { setUser({ ...u, token: null }); closeModal(); openModal(); return; }
+      if (/expired/i.test(err.message)) { setUser({ ...u, token: null }); closeModal(); pendingDl = d.kind; openModal(); return; }
       noteEl.textContent = errText(err, "Download failed. Please check your internet and try again.");
     } finally { btn.disabled = false; btn.innerHTML = label; }
+  }
+
+  function getSolution() {
+    const list = downloads(state.item), i = list.findIndex((d) => d.kind === "solution");
+    if (i < 0) return;
+    if (hasSession(getUser())) startDownload(list[i], $("rBtns").querySelector(`[data-dl="${i}"]`), $("rNote"));
+    else { pendingDl = "solution"; openModal(); }
   }
 
   $("result").addEventListener("click", (e) => {
@@ -530,7 +543,7 @@
     $("overlay").classList.add("on");
     setTimeout(() => (u ? $("fPhone") : $("fName")).focus(), 50);
   }
-  function closeModal() { $("overlay").classList.remove("on"); renderResult(); }
+  function closeModal() { pendingDl = null; $("overlay").classList.remove("on"); renderResult(); }
   document.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", closeModal));
   $("overlay").addEventListener("click", (e) => { if (e.target.id === "overlay") closeModal(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
@@ -592,6 +605,11 @@
     $("doneBtns").innerHTML = buttons(state.item);
     $("doneNote").textContent = "";
     show("stepDone");
+    if (pendingDl) {
+      const i = downloads(state.item).findIndex((d) => d.kind === pendingDl);
+      pendingDl = null;
+      if (i >= 0) startDownload(downloads(state.item)[i], $("doneBtns").querySelector(`[data-dl="${i}"]`), $("doneNote"));
+    }
   });
 
   $("doneBtns").addEventListener("click", (e) => {
