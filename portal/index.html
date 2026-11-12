@@ -85,7 +85,7 @@
   /* the live portal in a hand-drawn phone */
   .stage { position: relative; display: flex; justify-content: center; }
   .tape {
-    position: absolute; top: -12px; left: 50%; width: 120px; height: 30px; z-index: 3;
+    position: absolute; top: -12px; left: 30%; width: 120px; height: 30px; z-index: 3;
     transform: translateX(-50%) rotate(-3deg); background: rgba(233, 196, 106, .7);
   }
   .phone {
@@ -101,12 +101,12 @@
   }
   .lock p { margin: 0; font-family: var(--f-hand); font-size: 1.2rem; line-height: 1.3; }
   .stamp {
-    position: absolute; top: 74px; right: -6px; z-index: 4; transform: rotate(8deg);
+    position: absolute; top: -10px; right: 12%; z-index: 4; transform: rotate(6deg);
     font-family: var(--f-head); font-weight: 700; font-size: 1rem; color: #fff; background: var(--red);
     padding: 4px 12px; border: 2px solid var(--line); border-radius: 6px;
   }
   .note { font-family: var(--f-hand); font-size: 1.05rem; color: var(--muted); text-align: center; margin: 10px 0 0; }
-  @media (max-width: 420px) { .phone { height: 580px; } .stamp { right: 2px; } }
+  @media (max-width: 420px) { .phone { height: 580px; } }
 
   /* form */
   .card {
@@ -129,6 +129,7 @@
   .err { color: var(--red); margin: 0; font-weight: 500; }
   .small { font-size: .88rem; color: var(--muted); margin: 0; }
   .done h2 { color: var(--green); }
+  .done:focus { outline: none; }
   .done .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 
   /* sections */
@@ -157,7 +158,7 @@
   <div class="wrap">
     <header class="top">
       <a class="brand" href="https://www.parthuai.com/">PARTHU.AI</a>
-      <a class="top-cta" href="#form">See the sample portal</a>
+      <a class="top-cta" href="#form">See your portal</a>
     </header>
 
     <main>
@@ -177,8 +178,8 @@
         <div class="ask">
           <div class="card" id="form">
             <form id="leadForm" novalidate>
-              <h2>Yes, I want to see the sample portal</h2>
-              <p class="sub">Fill in 4 details and try the real portal right here.</p>
+              <h2>See your portal, with your coaching's name</h2>
+              <p class="sub">Fill in 4 details. The real portal opens right here, under your coaching's name.</p>
               <div class="fields">
                 <label>Your name
                   <input name="name" autocomplete="name" required>
@@ -196,16 +197,16 @@
               <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
               <div class="form-foot">
                 <p class="err" id="leadErr" role="alert" hidden></p>
-                <button class="btn" type="submit">Open the sample portal →</button>
+                <button class="btn" type="submit">Show my portal →</button>
                 <p class="small">Your number goes only to the PARTHU.AI team. <a href="/privacy/">Privacy policy</a></p>
               </div>
             </form>
 
             <div class="done" id="leadDone" tabindex="-1" hidden>
               <h2>Thank you<span id="leadName"></span>!</h2>
-              <p class="sub">The portal is now open. Try it: pick a course, subject and test, and get the paper and solution in one click. Our team will contact you on WhatsApp.</p>
+              <p class="sub">This is how your portal will look. Pick a course, subject and test, then tap Download to see the form your students fill. Our team will contact you on WhatsApp.</p>
               <div class="row">
-                <a class="btn" href="/resources/" target="_blank" rel="noopener">Open the portal full screen</a>
+                <a class="btn" id="fullBtn" href="/resources/?preview=1" target="_blank" rel="noopener">Open it full screen</a>
                 <a class="btn wa" id="waBtn" href="https://wa.me/919216652471?text=Hi%2C%20I%20want%20a%20resource%20portal%20for%20my%20coaching." target="_blank" rel="noopener">Chat on WhatsApp</a>
               </div>
             </div>
@@ -219,15 +220,15 @@
             <span class="stamp">Real portal</span>
             <div class="phone">
               <div class="screen">
-                <iframe id="portal" src="/resources/" title="Sample resource portal" loading="lazy" tabindex="-1"></iframe>
+                <iframe id="portal" src="/resources/?preview=1&amp;brand=Your%20Coaching%20Name" title="Sample resource portal" loading="lazy" tabindex="-1"></iframe>
                 <div class="lock" id="lock">
-                  <p>This is a real portal.<br>Fill in 4 details to try it.</p>
+                  <p>This is a real portal.<br>Fill in 4 details to see it with your coaching's name.</p>
                   <a class="btn" href="#form" id="lockBtn">Yes, show me</a>
                 </div>
               </div>
             </div>
           </div>
-          <p class="note">Sample: CA Mahendra Sir's portal. Yours will carry your coaching's name.</p>
+          <p class="note">Real papers and solutions. Your logo, name and city go on top.</p>
         </div>
       </div>
 
@@ -251,8 +252,8 @@
 
       <section class="block final">
         <h2 class="sec">Get <span class="u">your own portal</span></h2>
-        <p>Try the sample portal first. If you like it, we build yours in your coaching's name.</p>
-        <a class="btn" href="#form" id="finalBtn">See the sample portal</a>
+        <p>See it with your coaching's name first. If you like it, we build it for you.</p>
+        <a class="btn" href="#form" id="finalBtn">See my portal</a>
         <p class="price">Starts at just <b>₹7,500</b> per class</p>
       </section>
     </main>
@@ -270,19 +271,25 @@
   var LEAD_URL = 'https://script.google.com/macros/s/AKfycbwiIvG4oa207FQMvCyI7_xnw4NpRwN7543ADNgzWsU98fk0biDhueXXJNSS7CAW6INgRA/exec';
   var form = $('leadForm'), err = $('leadErr'), KEY = 'parthu.portal.lead';
 
-  function unlock(name) {
+  function portalUrl(p) {
+    return '/resources/?preview=1&brand=' + encodeURIComponent(p.institute || '') + '&city=' + encodeURIComponent(p.city || '');
+  }
+  function unlock(p) {
+    var url = portalUrl(p);
+    $('portal').src = url;
+    $('fullBtn').href = url;
     $('lock').hidden = true;
     $('portal').removeAttribute('tabindex');
-    if (name) $('leadName').textContent = ', ' + name;
+    if (p.first) $('leadName').textContent = ', ' + p.first;
     form.hidden = true;
     $('leadDone').hidden = false;
     $('lockBtn').hidden = true;
-    $('finalBtn').textContent = 'Open the portal full screen';
-    $('finalBtn').href = '/resources/';
+    $('finalBtn').textContent = 'Open my portal full screen';
+    $('finalBtn').href = url;
     $('finalBtn').target = '_blank';
   }
   // A returning visitor who already filled the form goes straight to the portal.
-  try { var saved = localStorage.getItem(KEY); if (saved) unlock(saved); } catch (e) {}
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved && saved.institute) unlock(saved); } catch (e) {}
 
   function focusForm(e) {
     if (!form.hidden) { e.preventDefault(); $('form').scrollIntoView({ behavior: 'smooth', block: 'center' }); form.name.focus({ preventScroll: true }); }
@@ -318,14 +325,14 @@
     btn.textContent = 'Sending…';
     fetch(LEAD_URL, { method: 'POST', mode: 'no-cors', body: data }).then(function () {
       if (window.cmsTrack) window.cmsTrack('generate_lead', { page: 'portal', source: src });
-      var first = form.name.value.trim().split(' ')[0];
-      try { localStorage.setItem(KEY, first); } catch (e) {}
+      var p = { first: form.name.value.trim().split(' ')[0], institute: form.institute.value.trim(), city: form.city.value.trim() };
+      try { localStorage.setItem(KEY, JSON.stringify(p)); } catch (e) {}
       $('waBtn').href = 'https://wa.me/919216652471?text=' + encodeURIComponent('Hi, I am ' + form.name.value.trim() + ' from ' + form.institute.value.trim() + ' (' + form.city.value.trim() + '). I want a resource portal for my coaching.');
-      unlock(first);
+      unlock(p);
       $('leadDone').focus();
     }).catch(function () {
       btn.disabled = false;
-      btn.textContent = 'Open the sample portal →';
+      btn.textContent = 'Show my portal →';
       err.textContent = 'That didn\u2019t go through. Please check your internet and try again.';
       err.hidden = false;
     });

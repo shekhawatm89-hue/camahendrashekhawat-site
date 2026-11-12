@@ -134,6 +134,16 @@
   .cal .btns { margin-top: 10px; gap: 8px; }
   .cal .btns .btn { flex: 1 1 0; min-height: 44px; padding: 10px 8px; font-size: 13px; border-color: #a7e8d3; color: #0b7a5e; }
   .cal .btns .btn:hover { background: #ecfdf5; }
+  /* preview mode (opened from /portal with ?preview=1) */
+  .pv-ribbon { display: none; }
+  body.pv .pv-ribbon {
+    display: block; width: 100%; max-width: 460px; margin: -12px auto 14px; text-align: center;
+    font-size: 12px; font-weight: 600; letter-spacing: .02em; color: #8a4b00;
+    background: #fff4e0; border: 1px dashed #e98a1c; border-radius: 999px; padding: 6px 12px;
+  }
+  body.pv .tools { display: none; }
+  .logo .ini { display: grid; place-items: center; width: 100%; height: 100%; font-weight: 700; font-size: 19px; color: #fff; background: var(--accent); }
+  .demo-note { margin: 0 0 12px; padding: 10px 12px; border-radius: 10px; background: #fff4e0; color: #6b3d00; font-size: 13px; }
   footer { margin-top: 20px; color: var(--muted); font-size: 12px; text-align: center; }
   footer a { color: inherit; }
 
@@ -183,6 +193,7 @@
 </head>
 <body>
 
+<div class="pv-ribbon" id="pvRibbon">Preview of your portal</div>
 <div class="layout">
 <main class="card">
   <header>
@@ -256,6 +267,7 @@
 
     <!-- step 1: details -->
     <form id="stepDetails" novalidate>
+      <p class="demo-note" id="demoNote" hidden>Demo: this is the form your students fill before every download. Try it with any details.</p>
       <h2 id="mTitle">Almost there!</h2>
       <p class="sub">Enter your details once to download. We'll verify your number with an OTP on WhatsApp.</p>
       <div class="field">
@@ -336,13 +348,34 @@
     "CBSE Board Paper":       { name: "CBSE Board Papers",       pick: "Session", placeholder: "Select session" },
     "CBSE Compartment Paper": { name: "CBSE Compartment Papers", pick: "Session", placeholder: "Select session" },
   };
-  const ui = (r) => RESOURCE_UI[r.name] || { name: r.name, pick: "Paper", placeholder: "Select paper" };
+  const ui0 = (r) => RESOURCE_UI[r.name] || { name: r.name, pick: "Paper", placeholder: "Select paper" };
+  const ui = (r) => { const u = ui0(r); return PV ? { ...u, name: u.name.replace("Mahendra Sir", PV.brand) } : u; };
   const LEVELS = ["CA Foundation", "CA Inter", "Class 11 Commerce", "Class 12 Commerce", "CUET (Commerce)", "Other"];
   const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>';
   const USER_KEY = "msPortalUser", CATALOG_KEY = "msPortalCatalog";
   const TOKEN_LIFE = 55 * 60 * 1000;   // the backend's token lasts 60 min; re-verify a little before
 
   const $ = (id) => document.getElementById(id);
+
+  // Preview mode: the /portal landing page shows this portal under the visitor's coaching name.
+  // Nothing is sent to the backend except the public paper list; the OTP form is only a demo.
+  const PV = (() => {
+    const q = new URLSearchParams(location.search);
+    if (q.get("preview") !== "1") return null;
+    const clean = (v, n) => (v || "").replace(/[<>"]/g, "").replace(/\s+/g, " ").trim().slice(0, n);
+    return { brand: clean(q.get("brand"), 40) || "Your Coaching", city: clean(q.get("city"), 30) };
+  })();
+  if (PV) {
+    document.body.classList.add("pv");
+    document.title = PV.brand + " · Free tests and papers";
+    const ini = PV.brand.split(" ").filter((w) => /^[A-Za-z0-9]/.test(w)).slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "C";
+    const logo = document.querySelector("header .logo");
+    logo.removeAttribute("href"); logo.innerHTML = '<span class="ini"></span>'; logo.firstChild.textContent = ini;
+    const h = document.querySelector("header h1 a"); h.removeAttribute("href"); h.textContent = PV.brand;
+    document.querySelector("header p").textContent = "Free chapter tests, mock tests and sample papers, with solutions" + (PV.city ? ", from " + PV.city : "") + ".";
+    document.querySelector("footer").innerHTML = "© <span id=\"year\"></span> ";
+    document.querySelector("footer").appendChild(document.createTextNode(PV.brand + " · Preview by PARTHU.AI"));
+  }
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const store = {
     get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
@@ -474,7 +507,7 @@
     $("rSrc").textContent = resource.label || "";
     $("rBtns").innerHTML = buttons(item);
     $("rNote").textContent = "";
-    const u = getUser();
+    const u = PV ? null : getUser();
     $("who").hidden = !u;
     if (u) $("who").innerHTML = `Downloading as <b>${esc(u.name)}</b> (+91 ${esc(u.phone)}) · <button class="link" id="notMe">Not you?</button>`;
   }
@@ -507,6 +540,7 @@
   }
 
   function getSolution() {
+    if (PV) return;
     const list = downloads(state.item), i = list.findIndex((d) => d.kind === "solution");
     if (i < 0) return;
     if (hasSession(getUser())) startDownload(list[i], $("rBtns").querySelector(`[data-dl="${i}"]`), $("rNote"));
@@ -517,6 +551,7 @@
     if (e.target.id === "notMe") { setUser(null); renderResult(); return; }
     const b = e.target.closest("[data-dl]");
     if (!b) return;
+    if (PV) { openModal(); return; }
     if (hasSession(getUser())) startDownload(downloads(state.item)[b.dataset.dl], b, $("rNote"));
     else openModal();
   });
@@ -537,15 +572,16 @@
   $("fLevel").addEventListener("change", syncSchoolField);
 
   function openModal() {
-    warmUp();
+    if (!PV) warmUp();
     // A returning student whose session ran out only needs a fresh OTP; keep their details.
-    const u = getUser();
+    const u = PV ? null : getUser();
     if (u) { $("fName").value = u.name; $("fPhone").value = u.phone; $("fCity").value = u.city; $("fSchool").value = u.school; }
     $("fAdult").checked = !!(u && u.adult);
     $("fUpdates").checked = !!(u && u.updates);
     $("fLevel").value = u && u.level ? u.level : LEVELS.includes(state.course.name) ? state.course.name : "";
     syncSchoolField();
     $("dErr").textContent = ""; setMsg("", "");
+    $("demoNote").hidden = !PV;
     show("stepDetails");
     $("overlay").classList.add("on");
     setTimeout(() => (u ? $("fPhone") : $("fName")).focus(), 50);
@@ -593,6 +629,7 @@
     $("fOtp").value = "";
     show("stepOtp");
     $("fOtp").focus();
+    if (PV) { setMsg("Demo: on your portal a real OTP goes to the student's WhatsApp. Here, type any 6 digits.", "ok"); return; }
     sendCode();
   });
 
@@ -600,6 +637,15 @@
     e.preventDefault();
     const code = $("fOtp").value;
     if (code.length !== 6) { setMsg("Please enter the 6-digit OTP.", "err"); return; }
+    if (PV) {
+      $("doneBtns").innerHTML = "";
+      $("stepDone").querySelector("h2").textContent = "Student verified!";
+      $("stepDone").querySelector(".sub").textContent = "On your portal the PDF downloads now.";
+      $("doneNote").style.color = "#15803d";
+      $("doneNote").textContent = "And this student's details reach you: " + pending.name + ", +91 " + pending.phone + ", " + pending.city + ", " + pending.level + ", " + pending.school + ".";
+      show("stepDone");
+      return;
+    }
     const b = $("verifyBtn");
     b.disabled = true; b.textContent = "Verifying…";
     let res;
@@ -623,7 +669,7 @@
     const b = e.target.closest("[data-dl]");
     if (b) startDownload(downloads(state.item)[b.dataset.dl], b, $("doneNote"));
   });
-  $("resend").addEventListener("click", sendCode);
+  $("resend").addEventListener("click", () => { if (!PV) sendCode(); });
   $("changeNo").addEventListener("click", () => show("stepDetails"));
 
   loadCatalog();
