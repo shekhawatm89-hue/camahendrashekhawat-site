@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your coaching's own resource portal · PARTHU.AI</title>
+<meta name="description" content="A resource portal in your coaching's name: chapter tests, full course tests and a solution for every paper. Every download gives you the student's name and WhatsApp number. From ₹7,500 per class.">
+<meta property="og:title" content="Your coaching's own resource portal">
+<meta property="og:description" content="Students study from your portal. Their names and numbers come to you. See a sample portal.">
+<meta property="og:image" content="https://camahendrashekhawat.com/favicon.png">
+<link rel="icon" href="/favicon.png">
+<script src="/track.js"></script>
+<script>
+  // The PARTHU.AI pixel as well, so ads from the PARTHU ad account see these leads.
+  if (window.fbq) window.fbq('init', '1413870850721594');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Patrick+Hand&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Same paper-and-ink look as the "Udaan Portal" doodle ad, so the ad and the page feel like one story. */
+  :root {
+    --paper: #f7f4ec;
+    --card: #fffdf7;
+    --ink: #22252b;
+    --muted: #5d6068;
+    --line: #22252b;
+    --blue: #2f6fde;
+    --blue-ink: #1f56b8;
+    --orange: #e98a1c;
+    --green: #1f9d55;
+    --red: #d64545;
+    --f-head: Kalam, "Comic Sans MS", cursive;
+    --f-hand: "Patrick Hand", Kalam, cursive;
+    --f-body: Hind, "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 17px/1.55 var(--f-body); -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--blue-ink); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  /* header */
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+  .brand { font-family: var(--f-head); font-weight: 700; font-size: 1.35rem; color: var(--blue); letter-spacing: .02em; text-decoration: none; }
+  .top-cta { font-family: var(--f-hand); font-size: 1.1rem; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--orange); }
+
+  /* hero */
+  .hero { display: grid; gap: 28px; padding: 12px 0 40px; align-items: start; }
+  .hero > .copy { grid-area: copy; } .hero > .show { grid-area: show; } .hero > .ask { grid-area: ask; }
+  .hero { grid-template-areas: "copy" "show" "ask"; }
+  @media (min-width: 900px) { .hero { grid-template-columns: 1.05fr .95fr; grid-template-areas: "copy show" "ask show"; column-gap: 56px; row-gap: 0; padding-top: 28px; } .hero > .show { position: sticky; top: 20px; } }
+  .eyebrow { font-family: var(--f-hand); font-size: 1.15rem; color: var(--orange); margin: 0 0 6px; }
+  h1 {
+    font-family: var(--f-head); font-weight: 700; line-height: 1.12; margin: 0 0 14px;
+    font-size: clamp(2.05rem, 6.4vw, 3.3rem); text-wrap: balance;
+  }
+  h1 .u { color: var(--blue); background: linear-gradient(transparent 72%, rgba(233,138,28,.35) 72%); }
+  .lead { font-size: 1.08rem; color: var(--muted); margin: 0 0 20px; max-width: 46ch; }
+  .ticks { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 8px; }
+  .ticks li { display: flex; gap: 10px; align-items: baseline; font-family: var(--f-hand); font-size: 1.25rem; line-height: 1.3; }
+  .ticks li::before { content: "✓"; color: var(--green); font-weight: 700; font-family: var(--f-head); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--f-head); font-weight: 700; font-size: 1.2rem; line-height: 1.2;
+    padding: 14px 22px; min-height: 52px; border-radius: 14px; cursor: pointer;
+    color: #fff; background: var(--blue); border: 2px solid var(--line);
+    box-shadow: 3px 3px 0 var(--line); text-decoration: none;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--line); }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+  .btn:focus-visible, input:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn.wa { background: #1fae5b; }
+  .btn.ghost { background: var(--card); color: var(--ink); }
+  .btn[disabled] { opacity: .65; cursor: wait; }
+  .price { margin: 14px 0 0; font-family: var(--f-hand); font-size: 1.15rem; color: var(--muted); }
+  .price b { font-family: var(--f-head); color: var(--ink); font-size: 1.35rem; }
+
+  /* the live portal in a hand-drawn phone */
+  .stage { position: relative; display: flex; justify-content: center; }
+  .tape {
+    position: absolute; top: -12px; left: 50%; width: 120px; height: 30px; z-index: 3;
+    transform: translateX(-50%) rotate(-3deg); background: rgba(233, 196, 106, .7);
+  }
+  .phone {
+    position: relative; width: min(100%, 372px); height: 640px; border: 3px solid var(--line);
+    border-radius: 34px; padding: 12px; background: #2a2d34; box-shadow: 6px 6px 0 rgba(34,37,43,.18);
+  }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 22px; overflow: hidden; background: #f7f7f4; }
+  .screen iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .lock {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    padding: 22px 18px; gap: 10px; text-align: center;
+    background: linear-gradient(to bottom, rgba(247,244,236,0) 30%, rgba(247,244,236,.94) 62%);
+  }
+  .lock p { margin: 0; font-family: var(--f-hand); font-size: 1.2rem; line-height: 1.3; }
+  .stamp {
+    position: absolute; top: 74px; right: -6px; z-index: 4; transform: rotate(8deg);
+    font-family: var(--f-head); font-weight: 700; font-size: 1rem; color: #fff; background: var(--red);
+    padding: 4px 12px; border: 2px solid var(--line); border-radius: 6px;
+  }
+  .note { font-family: var(--f-hand); font-size: 1.05rem; color: var(--muted); text-align: center; margin: 10px 0 0; }
+  @media (max-width: 420px) { .phone { height: 580px; } .stamp { right: 2px; } }
+
+  /* form */
+  .card {
+    background: var(--card); border: 2px solid var(--line); border-radius: 18px;
+    box-shadow: 4px 4px 0 var(--line); padding: 22px 18px;
+  }
+  @media (min-width: 600px) { .card { padding: 26px 26px; } }
+  .card h2 { font-family: var(--f-head); font-size: 1.6rem; line-height: 1.2; margin: 0 0 4px; }
+  .card .sub { margin: 0 0 16px; color: var(--muted); }
+  .fields { display: grid; gap: 12px; }
+  @media (min-width: 600px) { .fields { grid-template-columns: 1fr 1fr; } }
+  label { display: grid; gap: 4px; font-family: var(--f-hand); font-size: 1.12rem; }
+  input {
+    font: inherit; font-family: var(--f-body); font-size: 1rem; color: var(--ink);
+    padding: 12px 12px; min-height: 48px; border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[aria-invalid="true"] { border-color: var(--red); background: #fff5f5; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-foot { margin-top: 16px; display: grid; gap: 10px; }
+  .err { color: var(--red); margin: 0; font-weight: 500; }
+  .small { font-size: .88rem; color: var(--muted); margin: 0; }
+  .done h2 { color: var(--green); }
+  .done .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+
+  /* sections */
+  section.block { padding: 36px 0; border-top: 2px dashed rgba(34,37,43,.18); }
+  h2.sec { font-family: var(--f-head); font-size: clamp(1.6rem, 4.6vw, 2.2rem); line-height: 1.15; margin: 0 0 18px; }
+  h2.sec .u { color: var(--blue); }
+  .steps { display: grid; gap: 16px; counter-reset: s; }
+  @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .step { background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 18px; position: relative; }
+  .step::before {
+    counter-increment: s; content: counter(s);
+    display: inline-grid; place-items: center; width: 38px; height: 38px; margin-bottom: 8px;
+    font-family: var(--f-head); font-weight: 700; font-size: 1.25rem;
+    border: 2px solid var(--line); border-radius: 50%; background: var(--orange); color: #fff;
+  }
+  .step h3 { font-family: var(--f-head); font-size: 1.25rem; margin: 0 0 4px; line-height: 1.25; }
+  .step p { margin: 0; color: var(--muted); }
+  .final { text-align: center; }
+  .final p { color: var(--muted); max-width: 52ch; margin: 0 auto 18px; }
+  footer { padding: 28px 0 40px; text-align: center; font-size: .88rem; color: var(--muted); }
+  footer a { color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="https://www.parthuai.com/">PARTHU.AI</a>
+      <a class="top-cta" href="#form">See the sample portal</a>
+    </header>
+
+    <main>
+      <div class="hero">
+        <div class="copy">
+          <p class="eyebrow">For coaching owners</p>
+          <h1>Students study from <span class="u">your portal</span>. Their names and numbers come to you.</h1>
+          <p class="lead">A resource portal in your coaching's name. Before every download, the student verifies their name, WhatsApp number and city with an OTP.</p>
+          <ul class="ticks">
+            <li>Chapter-wise tests</li>
+            <li>Full course tests</li>
+            <li>A solution for every paper</li>
+            <li>Every student's name and number, sent to you</li>
+          </ul>
+        </div>
+
+        <div class="ask">
+          <div class="card" id="form">
+            <form id="leadForm" novalidate>
+              <h2>Yes, I want to see the sample portal</h2>
+              <p class="sub">Fill in 4 details and try the real portal right here.</p>
+              <div class="fields">
+                <label>Your name
+                  <input name="name" autocomplete="name" required>
+                </label>
+                <label>WhatsApp number
+                  <input name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="10 digits">
+                </label>
+                <label>Coaching name
+                  <input name="institute" autocomplete="organization" required>
+                </label>
+                <label>City
+                  <input name="city" autocomplete="address-level2" required>
+                </label>
+              </div>
+              <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+              <div class="form-foot">
+                <p class="err" id="leadErr" role="alert" hidden></p>
+                <button class="btn" type="submit">Open the sample portal →</button>
+                <p class="small">Your number goes only to the PARTHU.AI team. <a href="/privacy/">Privacy policy</a></p>
+              </div>
+            </form>
+
+            <div class="done" id="leadDone" tabindex="-1" hidden>
+              <h2>Thank you<span id="leadName"></span>!</h2>
+              <p class="sub">The portal is now open. Try it: pick a course, subject and test, and get the paper and solution in one click. Our team will contact you on WhatsApp.</p>
+              <div class="row">
+                <a class="btn" href="/resources/" target="_blank" rel="noopener">Open the portal full screen</a>
+                <a class="btn wa" id="waBtn" href="https://wa.me/919216652471?text=Hi%2C%20I%20want%20a%20resource%20portal%20for%20my%20coaching." target="_blank" rel="noopener">Chat on WhatsApp</a>
+              </div>
+            </div>
+          </div>
+          <p class="price">Starts at just <b>₹7,500</b> per class</p>
+        </div>
+
+        <div class="show">
+          <div class="stage">
+            <span class="tape" aria-hidden="true"></span>
+            <span class="stamp">Real portal</span>
+            <div class="phone">
+              <div class="screen">
+                <iframe id="portal" src="/resources/" title="Sample resource portal" loading="lazy" tabindex="-1"></iframe>
+                <div class="lock" id="lock">
+                  <p>This is a real portal.<br>Fill in 4 details to try it.</p>
+                  <a class="btn" href="#form" id="lockBtn">Yes, show me</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="note">Sample: CA Mahendra Sir's portal. Yours will carry your coaching's name.</p>
+        </div>
+      </div>
+
+      <section class="block">
+        <h2 class="sec">One portal, <span class="u">three wins</span></h2>
+        <div class="steps">
+          <div class="step">
+            <h3>Students come to you</h3>
+            <p>Students looking for practice papers, tests and solutions land on your portal and see your coaching's name.</p>
+          </div>
+          <div class="step">
+            <h3>Every download = a new name</h3>
+            <p>Before each download: name, WhatsApp number and city, verified by OTP. Every name comes straight to you.</p>
+          </div>
+          <div class="step">
+            <h3>One message at admission time</h3>
+            <p>When the new session starts, send one message to all these numbers: Admission Open.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="block final">
+        <h2 class="sec">Get <span class="u">your own portal</span></h2>
+        <p>Try the sample portal first. If you like it, we build yours in your coaching's name.</p>
+        <a class="btn" href="#form" id="finalBtn">See the sample portal</a>
+        <p class="price">Starts at just <b>₹7,500</b> per class</p>
+      </section>
+    </main>
+
+    <footer>
+      PARTHU.AI · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a>
+    </footer>
+  </div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  // Same Apps Script web app as the parthuai.com/free-check form: rows land in the
+  // "Website leads" tab of the PARTHU Leads Tracker, Source = "resource portal".
+  var LEAD_URL = 'https://script.google.com/macros/s/AKfycbwiIvG4oa207FQMvCyI7_xnw4NpRwN7543ADNgzWsU98fk0biDhueXXJNSS7CAW6INgRA/exec';
+  var form = $('leadForm'), err = $('leadErr'), KEY = 'parthu.portal.lead';
+
+  function unlock(name) {
+    $('lock').hidden = true;
+    $('portal').removeAttribute('tabindex');
+    if (name) $('leadName').textContent = ', ' + name;
+    form.hidden = true;
+    $('leadDone').hidden = false;
+    $('lockBtn').hidden = true;
+    $('finalBtn').textContent = 'Open the portal full screen';
+    $('finalBtn').href = '/resources/';
+    $('finalBtn').target = '_blank';
+  }
+  // A returning visitor who already filled the form goes straight to the portal.
+  try { var saved = localStorage.getItem(KEY); if (saved) unlock(saved); } catch (e) {}
+
+  function focusForm(e) {
+    if (!form.hidden) { e.preventDefault(); $('form').scrollIntoView({ behavior: 'smooth', block: 'center' }); form.name.focus({ preventScroll: true }); }
+  }
+  $('lockBtn').addEventListener('click', focusForm);
+  $('finalBtn').addEventListener('click', function (e) { if (!form.hidden) focusForm(e); });
+
+  var src = 'resource portal';
+  var u = window.cmsUtm || {};
+  if (u.source || u.content) src += ' · ' + [u.source, u.content].filter(Boolean).join(' ');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var bad = [].filter.call(form.querySelectorAll('[required]'), function (f) {
+      var ok = f.value.trim() !== '' && (f.name !== 'phone' || f.value.replace(/\D/g, '').length >= 10);
+      f.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      return !ok;
+    });
+    if (bad.length) {
+      err.textContent = bad[0].name === 'phone' && bad[0].value.trim() ? 'Please enter a WhatsApp number with at least 10 digits.' : 'Please fill in the highlighted fields.';
+      err.hidden = false;
+      bad[0].focus();
+      return;
+    }
+    err.hidden = true;
+    if (form.website.value) return;
+    var data = new URLSearchParams(new FormData(form));
+    data.delete('website');
+    data.set('ref', src);
+    data.set('region', 'in');
+    var btn = form.querySelector('button');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    fetch(LEAD_URL, { method: 'POST', mode: 'no-cors', body: data }).then(function () {
+      if (window.cmsTrack) window.cmsTrack('generate_lead', { page: 'portal', source: src });
+      var first = form.name.value.trim().split(' ')[0];
+      try { localStorage.setItem(KEY, first); } catch (e) {}
+      $('waBtn').href = 'https://wa.me/919216652471?text=' + encodeURIComponent('Hi, I am ' + form.name.value.trim() + ' from ' + form.institute.value.trim() + ' (' + form.city.value.trim() + '). I want a resource portal for my coaching.');
+      unlock(first);
+      $('leadDone').focus();
+    }).catch(function () {
+      btn.disabled = false;
+      btn.textContent = 'Open the sample portal →';
+      err.textContent = 'That didn\u2019t go through. Please check your internet and try again.';
+      err.hidden = false;
+    });
+  });
+  form.addEventListener('input', function (e) { e.target.removeAttribute('aria-invalid'); });
+})();
+</script>
+</body>
+</html>
