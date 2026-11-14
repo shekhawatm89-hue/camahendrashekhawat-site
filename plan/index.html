@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Free 5-5-2 Study Plan till 31 December · CA Mahendra Shekhawat</title>
+<meta name="description" content="Pick your 3 weakest CA Foundation subjects and get a dated day-by-day plan till 31 December, with every test date. Free, by CA Mahendra Shekhawat, IPA Institute.">
+<meta property="og:title" content="Your 5-5-2 plan till 31 December">
+<meta property="og:description" content="Free dated CA Foundation study plan by CA Mahendra Shekhawat, IPA Institute.">
+<meta property="og:image" content="https://camahendrashekhawat.com/plan/mahendra-sir.jpg">
+<link rel="icon" href="/favicon.png">
+<script src="/track.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: slim dark icon rail (desktop). Main column: hero with subject picker, dated journey to 31 Dec, stats, targets, day sheet by phase, rules. */
+:root{
+  --bg:#FBF8F5; --card:#FFFFFF; --ink:#111111; --muted:#6B6460; --line:#EFE7E1; --soft:#FFF3EC;
+  --or:#FF5A14; --or-2:#FF8A3D; --or-ink:#C2410C;
+  --w1:#FF5A14; --w2:#1E1E1E; --w3:#F6B07A; --w3-ink:#B4530B; --w4:#8A7F78; --rev:#FFD9C2;
+  --dark:#161412; --dark-2:#24201D; --on-dark:#FFFFFF; --on-dark-mute:#B9B0AA;
+  --glow:rgba(255,106,30,.20);
+  --shadow:0 1px 2px rgba(60,30,10,.04),0 12px 32px -12px rgba(120,60,20,.14);
+  --display:"Anton","Impact","Arial Narrow",sans-serif;
+  --body:"Geist","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121010; --card:#1C1917; --ink:#F7F2EE; --muted:#A79E98; --line:#2E2926; --soft:#2A1F18;
+  --or:#FF6B2B; --or-2:#FF9A5A; --or-ink:#FF9A5A;
+  --w1:#FF6B2B; --w2:#EDE6E0; --w3:#F6B07A; --w3-ink:#F6B07A; --w4:#A79E98; --rev:#5A3A28;
+  --dark:#0A0908; --dark-2:#1F1B18; --glow:rgba(255,106,30,.12);
+  --shadow:0 12px 32px -12px rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121010; --card:#1C1917; --ink:#F7F2EE; --muted:#A79E98; --line:#2E2926; --soft:#2A1F18;
+  --or:#FF6B2B; --or-2:#FF9A5A; --or-ink:#FF9A5A;
+  --w1:#FF6B2B; --w2:#EDE6E0; --w3:#F6B07A; --w3-ink:#F6B07A; --w4:#A79E98; --rev:#5A3A28;
+  --dark:#0A0908; --dark-2:#1F1B18; --glow:rgba(255,106,30,.12);
+  --shadow:0 12px 32px -12px rgba(0,0,0,.6); color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
+  background-image:radial-gradient(60vw 50vw at 100% -10%,var(--glow),transparent 60%),radial-gradient(40vw 40vw at -10% 110%,var(--glow),transparent 60%);
+  background-attachment:fixed;min-height:100vh}
+button{font:inherit;color:inherit}
+/* rail */
+.rail{position:fixed;left:16px;top:16px;bottom:16px;width:64px;background:var(--dark);border-radius:22px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0;z-index:5}
+.rail .mark{width:36px;height:36px;border-radius:11px;background:var(--or);color:#fff;font-family:var(--display);font-size:15px;display:grid;place-items:center;margin-bottom:18px}
+.rail button{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:var(--on-dark-mute);background:none;border:0;cursor:pointer;transition:background .15s,color .15s}
+.rail button:hover,.rail button:focus-visible{background:var(--dark-2);color:#fff;outline:none}
+.rail button.on{color:var(--or)}
+.rail svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.main{padding:28px max(16px,env(safe-area-inset-right,0px)) 56px 112px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;gap:22px}
+.wrap > section{scroll-margin-top:16px}
+/* type */
+.label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--or-ink);display:flex;align-items:center;gap:6px}
+.label::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--or)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,6.6vw,88px);line-height:.95;margin:0;text-wrap:balance}
+h1 .o{color:var(--or)}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(24px,2.6vw,30px);line-height:1.05;margin:0}
+.lede{color:var(--muted);max-width:50ch;margin:0;font-size:15.5px}
+.note{font-size:13px;color:var(--muted)}
+.k1{color:var(--w1)} .k2{color:var(--w2)} .k3{color:var(--w3-ink)} .k4{color:var(--w4)}
+/* brand */
+.rail img.mark{width:44px;height:44px;border-radius:50%;padding:0;background:none;object-fit:cover;box-shadow:0 0 0 2px #2A2522}
+.brand img{width:44px;height:44px;border-radius:50%;display:block;box-shadow:0 6px 16px -6px rgba(10,40,120,.45)}
+.brand > span{display:grid;line-height:1}
+.brand b{font-size:18px;font-weight:700;letter-spacing:-.2px}
+.brand small{font-size:13px;font-weight:500;color:var(--muted);margin-top:4px}
+.mentor{display:flex;align-items:center;gap:16px}
+.mentor .ph{width:104px;height:104px;border-radius:50%;background:#FFD700;box-shadow:0 16px 34px -14px rgba(160,120,0,.55);flex:none;overflow:hidden}
+.mentor img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.mentor > div{display:grid;gap:2px;min-width:0}
+.mentor .who{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--or-ink)}
+.mentor b{font-size:20px;font-weight:700;letter-spacing:-.2px}
+.mentor q{font-size:14px;font-style:italic;color:var(--muted)}
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:15px;display:flex;align-items:center;gap:10px}
+.brand .mm{display:none;width:30px;height:30px;border-radius:9px;background:var(--or);color:#fff;font-family:var(--display);font-size:13px;place-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;box-shadow:var(--shadow)}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--or);box-shadow:0 0 0 4px var(--soft)}
+/* buttons */
+.btn{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:0;border-radius:999px;padding:13px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:transform .15s}
+.btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.btn-or{background:linear-gradient(180deg,var(--or-2),var(--or));color:#fff;box-shadow:0 10px 24px -8px rgba(255,90,20,.6)}
+.btn-or:hover{transform:translateY(-1px)}
+.btn-ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn:focus-visible,select:focus-visible,input:focus-visible,.tab:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:var(--shadow);min-width:0}
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;align-items:center}
+.hero-l{display:grid;gap:18px;align-content:center}
+.ctas{display:flex;gap:10px;flex-wrap:wrap}
+.picker{display:grid;gap:12px}
+.picker-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pick{display:grid;grid-template-columns:92px minmax(0,1fr);align-items:center;gap:6px 12px;background:var(--soft);border-radius:16px;padding:10px 12px}
+.pick label,.pick .lb{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;line-height:1.2}
+.pick label small,.pick .lb small{display:block;font-size:10.5px;font-weight:600;letter-spacing:.02em;text-transform:none;color:var(--muted);margin-top:2px}
+.pick select,.pick input{font:inherit;font-weight:700;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-width:0}
+.pick select{appearance:none;padding-right:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23FF5A14' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.pick.fourth{background:transparent;border:1.5px dashed var(--line)}
+.pick .val{font-weight:700;padding:10px 0}
+.pick.date{background:var(--dark);color:#fff}
+.pick.date small{color:var(--on-dark-mute)}
+.pick.date input{background:var(--dark-2);color:#fff;border-color:#3A332E;color-scheme:dark}
+/* journey */
+.journey{display:grid;gap:18px}
+.jh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.jh > div:first-child{display:grid;gap:6px}
+.kpis{display:flex;gap:10px;flex-wrap:wrap}
+.kpi{background:var(--soft);border-radius:16px;padding:10px 14px;display:grid;gap:2px;min-width:96px}
+.kpi b{font-family:var(--display);font-weight:400;font-size:28px;line-height:1}
+.kpi span{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kpi.dk{background:var(--dark);color:#fff}
+.kpi.dk span{color:var(--or-2)}
+.gantt{display:grid;grid-template-columns:118px minmax(0,1fr);row-gap:0}
+.gl{font-size:12px;font-weight:700;display:flex;flex-direction:column;justify-content:center;padding:6px 10px 6px 0;line-height:1.2;min-width:0}
+.gl small{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.gl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gt{position:relative;height:44px;border-left:1px solid var(--line)}
+.gt .wk{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.gt .bar{position:absolute;top:11px;height:22px;border-radius:7px;display:flex;align-items:center;padding:0 8px 0 12px;font-size:10.5px;font-weight:800;letter-spacing:.04em;white-space:nowrap;overflow:hidden;color:#fff}
+.gt .ms{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;background:var(--dark);border:2.5px solid var(--card);border-radius:4px;transform:rotate(45deg);box-shadow:0 0 0 1.5px var(--or);z-index:2}
+.gt .bar .sh{display:none}
+.gt .now{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--or);z-index:3}
+.gaxis{position:relative;height:22px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.gaxis span{position:absolute;top:4px;transform:translateX(-50%);white-space:nowrap}
+.gaxis span.nowl{color:#fff;background:var(--or);border-radius:999px;padding:1px 7px;top:2px;z-index:2}
+.miles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.miles li{border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;gap:3px;min-width:0;position:relative}
+.miles li .dt{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--or-ink)}
+.miles li b{font-size:14px;line-height:1.3}
+.miles li .sb{font-size:12.5px;color:var(--muted)}
+.miles li.done{opacity:.55}
+.miles li.next{background:var(--dark);color:#fff;border-color:transparent}
+.miles li.next .dt{color:var(--or-2)} .miles li.next .sb{color:var(--on-dark-mute)}
+.miles li.next::after{content:"Next";position:absolute;right:12px;top:10px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--or);color:#fff;border-radius:999px;padding:2px 8px}
+.warn{background:var(--soft);border-radius:14px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--or-ink)}
+/* gate */
+.gate{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center;border:2px solid var(--or);position:relative;z-index:2}
+.gate-l{display:grid;gap:10px}
+.gate-l h2{font-size:clamp(28px,3.4vw,40px)}
+.gate-l ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px;font-weight:600}
+.gate-l li::before{content:"✓";color:var(--or);font-weight:800;margin-right:8px}
+[hidden]{display:none!important}
+.gform{display:grid;gap:12px;background:var(--soft);border-radius:20px;padding:18px}
+.fld{display:grid;gap:6px}
+.fld label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.fld input,.fld select{font:inherit;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;width:100%;min-width:0}
+.fld input:focus-visible,.fld select:focus-visible{outline:3px solid var(--or);outline-offset:1px}
+.ph91{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.ph91 span{padding:0 4px 0 12px;font-weight:700;color:var(--muted)}
+.ph91 input{border:0;background:transparent}
+.otp{font-size:22px!important;letter-spacing:.4em;text-align:center}
+.ok{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted)}
+.ok input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--or);flex:none}
+.gerr{margin:0;font-size:13px;font-weight:700;color:#C62828}
+.gmsg{margin:0;font-size:13px;color:var(--muted)}
+.gform .btn{justify-content:center;width:100%}
+.gform .btn[disabled]{opacity:.6;cursor:wait}
+.linkbtn{background:none;border:0;padding:0;color:var(--or-ink);font-weight:700;font-size:13px;cursor:pointer;text-decoration:underline;justify-self:start}
+body.locked .gated{position:relative;max-height:720px;overflow:hidden;filter:blur(5px);pointer-events:none;user-select:none;
+  -webkit-mask-image:linear-gradient(#000 40%,transparent);mask-image:linear-gradient(#000 40%,transparent)}
+body:not(.locked) .gate{display:none}
+.gated{display:grid;gap:22px}
+.hi{color:var(--or)}
+.help{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+.help .btn{position:relative;z-index:1}
+/* stats */
+.stats{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px}
+.dark{background:var(--dark);color:var(--on-dark);border-color:transparent;position:relative;overflow:hidden}
+.dark::after{content:"";position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,30,.55),transparent 65%);pointer-events:none}
+.dark .label{color:var(--or-2)}
+.dark .t{font-size:22px;font-weight:700;line-height:1.2;margin:8px 0 4px;position:relative;z-index:1}
+.dark .s{font-size:13px;color:var(--on-dark-mute);position:relative;z-index:1}
+.dark .when{font-family:var(--display);font-size:52px;line-height:1;margin-top:16px;position:relative;z-index:1}
+.dark .when small{font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--or-2);margin-left:6px}
+.split{display:grid;gap:14px;align-content:start}
+.donut{display:grid;grid-template-columns:132px minmax(0,1fr);gap:18px;align-items:center}
+.donut svg{width:132px;height:132px;display:block}
+.donut .c1{font-family:var(--display);font-size:38px;fill:var(--ink)}
+.donut .c2{font-size:9px;font-weight:700;letter-spacing:.14em;fill:var(--muted)}
+.legend{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.legend li{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
+.legend .dot{width:10px;height:10px;border-radius:50%}
+.legend .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legend .nm small{display:block;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.legend .h{font-weight:800;font-variant-numeric:tabular-nums}
+/* sections */
+.sec{display:grid;gap:16px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.sec-h > div{display:grid;gap:6px}
+.targets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tg{display:grid;gap:10px;align-content:start}
+.tg .s{font-size:19px;font-weight:800}
+.tg .d{font-size:13.5px;color:var(--muted)}
+.pbar{display:grid;gap:6px;margin-top:4px}
+.pbar .r{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:700}
+.pbar .tr{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.pbar .tr i{display:block;height:100%;border-radius:3px}
+/* sheet */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:2px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:9px 14px;cursor:pointer;display:grid;gap:0;text-align:left;line-height:1.25}
+.tab b{font-size:12.5px;font-weight:800}
+.tab small{font-size:11px;color:var(--muted);font-weight:600}
+.tab[aria-selected="true"]{background:var(--dark);border-color:var(--dark);color:#fff}
+.tab[aria-selected="true"] small{color:var(--or-2)}
+.days{display:grid;gap:10px}
+.dh,.dr{display:grid;grid-template-columns:110px repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.dh{padding:0 22px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.dr{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 22px;box-shadow:var(--shadow)}
+.dn{display:grid;gap:4px}
+.dn .w{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.dn b{font-family:var(--display);font-weight:400;font-size:34px;line-height:1}
+.dn .dt{font-size:12.5px;font-weight:700;color:var(--or-ink)}
+.cell{display:grid;gap:4px;font-size:14px;min-width:0}
+.cell .tag{display:none;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.cell.wide{grid-column:span 3}
+.cell.wide .tag{display:block}
+.testpill{display:inline-flex;align-items:center;background:var(--or);color:#fff;font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;width:max-content;max-width:100%}
+.dr.today{box-shadow:0 0 0 2px var(--or),var(--shadow)}
+.dr.today .dn .w::after{content:" · Today";color:var(--or)}
+.dr.test{background:var(--dark);color:var(--on-dark);border-color:transparent;position:relative;overflow:hidden}
+.dr.test::after{content:"";position:absolute;right:-40px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,30,.35),transparent 65%);pointer-events:none}
+.dr.test .dn .w{color:var(--on-dark-mute)}
+.dr.test .dn .dt{color:var(--or-2)}
+.dr.test .k2{color:#fff}
+.dr.test .k3{color:var(--w3)}
+.dr.test .k4{color:var(--on-dark-mute)}
+.copied{min-height:1em}
+.copied textarea{width:100%;font:inherit;font-size:13px;border-radius:12px;border:1px solid var(--line);padding:10px;background:var(--card);color:var(--ink)}
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.rules li{padding:20px 18px 6px 0;display:grid;gap:8px;align-content:start;min-width:0}
+.rules .ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(180deg,var(--or-2),var(--or));display:grid;place-items:center;color:#fff;box-shadow:0 8px 18px -8px rgba(255,90,20,.7)}
+.rules .ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rules b{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.rules p{margin:0;font-size:13.5px;color:var(--muted)}
+footer{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-top:8px}
+@media (max-width:1040px){
+  .rules{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .miles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  .hero,.stats{grid-template-columns:1fr}
+  .targets{grid-template-columns:1fr}
+  .gate{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .rail{display:none}
+  .main{padding:18px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+  .mentor .ph{width:84px;height:84px}
+  .mentor b{font-size:16px}
+  .brand img{width:40px;height:40px}
+  .hero-l .lede{display:none}
+  .hero{gap:16px}
+  .wrap{gap:18px}
+  h1{font-size:clamp(44px,13vw,64px)}
+  .card{border-radius:22px;padding:16px}
+  .gantt{grid-template-columns:74px minmax(0,1fr)}
+  .gl span{font-size:11px}
+  .gt{height:38px}
+  .gt .bar{top:10px;height:18px;padding:0 5px;font-size:9.5px}
+  .gt .bar .lg{display:none}
+  .gt .bar .sh{display:inline}
+  .gaxis span.odd{display:none}
+  .miles{grid-template-columns:1fr}
+  .kpi{min-width:0;flex:1}
+  .donut{grid-template-columns:112px minmax(0,1fr);gap:14px}
+  .donut svg{width:112px;height:112px}
+  .dh{display:none}
+  .dr{grid-template-columns:1fr;gap:12px;padding:16px}
+  .dn{grid-template-columns:auto 1fr;align-items:baseline;column-gap:12px}
+  .dn .w{grid-column:1/-1}
+  .dn b{font-size:30px}
+  .cell .tag{display:block}
+  .cell.wide{grid-column:auto}
+  .rules{grid-template-columns:1fr}
+  .help{grid-template-columns:1fr}
+  .gated{gap:18px}
+  .rules li{grid-template-columns:42px minmax(0,1fr);column-gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .rules li .ic{grid-row:span 2}
+}
+@media (max-width:400px){
+  .pick{grid-template-columns:78px minmax(0,1fr);padding:10px}
+  .kpi b{font-size:24px}
+}
+</style>
+</head>
+<body class="locked">
+
+<nav class="rail" aria-label="Sections">
+  <img class="mark" src="ipa-logo.jpg" alt="IPA">
+  <button type="button" data-go="overview" class="on" aria-label="Your subjects" title="Your subjects"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></button>
+  <button type="button" data-go="journey" aria-label="Journey to 31 Dec" title="Journey to 31 Dec"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-8"/><path d="M14 8h6v6"/></svg></button>
+  <button type="button" data-go="targets" aria-label="Targets" title="Targets"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".5"/></svg></button>
+  <button type="button" data-go="sheet" aria-label="Day-by-day sheet" title="Day-by-day sheet"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button>
+  <button type="button" data-go="rules" aria-label="Rules" title="Rules"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></button>
+</nav>
+
+<main class="main">
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><img src="ipa-logo.jpg" alt=""><span><b>IPA Institute</b><small>CA Mahendra Shekhawat</small></span></div>
+    <span class="chip"><i></i>CA Foundation · Jan 2027</span>
+  </div>
+
+  <section class="hero" id="overview">
+    <div class="hero-l">
+      <div class="mentor"><span class="ph"><img src="mahendra-sir.jpg" width="104" height="104" alt="CA Mahendra Shekhawat"></span><div><span class="who">Your mentor · IPA Institute</span><b>CA Mahendra Shekhawat</b><q>Just one strategy. No confusion.</q></div></div>
+      <div class="label">5-5-2 strategy</div>
+      <h1>Your plan till <span class="o">31 December.</span></h1>
+      <p class="lede">Pick your 3 weakest subjects. W1 and W2 get 5 hours a day, W3 gets 2. Your strongest subject waits until Day 26, and the last days are for revision and mock tests.</p>
+      <div class="ctas">
+        <button type="button" class="btn btn-or" data-go="journey">See my journey <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button type="button" class="btn btn-ghost" data-go="sheet" data-today="1">Today's tasks</button>
+      </div>
+    </div>
+    <div class="card picker" aria-labelledby="pick-h">
+      <div class="picker-h"><div class="label" id="pick-h">Step 1 · Your subjects</div><span class="note">Weakest first</span></div>
+      <div class="pick"><label for="w1" class="k1">W1<small>5 hrs a day</small></label><select id="w1"></select></div>
+      <div class="pick"><label for="w2" class="k2">W2<small>5 hrs a day</small></label><select id="w2"></select></div>
+      <div class="pick"><label for="w3" class="k3">W3<small>2 hrs a day</small></label><select id="w3"></select></div>
+      <div class="pick fourth"><span class="lb k4">4th<small>Strongest</small></span><div class="val" id="w4"></div></div>
+      <div class="pick date"><label for="start">Day 1<small>Start date</small></label><input type="date" id="start"></div>
+    </div>
+  </section>
+
+  <section class="card gate" id="gate" aria-labelledby="gate-h">
+    <div class="gate-l">
+      <div class="label">Step 2 · Unlock your plan</div>
+      <h2 id="gate-h">Your dated plan is ready.</h2>
+      <p class="note">Verify your WhatsApp number to open it. Free, takes 30 seconds.</p>
+      <ul><li>Every test date, from today to 31 December</li><li>Day-by-day chapters for your 3 weakest subjects</li><li>Copy the plan to WhatsApp in one tap</li></ul>
+    </div>
+    <form class="gform" id="gform" novalidate>
+      <div id="gstep1" style="display:grid;gap:12px">
+        <div class="fld"><label for="gname">Your name</label><input id="gname" autocomplete="name" maxlength="60"></div>
+        <div class="fld"><label for="gphone">WhatsApp number</label><div class="ph91"><span>+91</span><input id="gphone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="16" placeholder="10-digit number"></div></div>
+        <div class="fld"><label for="gatt">Your attempt</label><select id="gatt"><option>Jan 2027</option><option>May 2027</option><option>Sep 2027</option></select></div>
+        <label class="ok"><input type="checkbox" id="gok"><span>Send me the OTP, my plan and study tips from CA Mahendra Shekhawat on WhatsApp.</span></label>
+      </div>
+      <div id="gstep2" style="display:grid;gap:10px" hidden>
+        <p class="gmsg" id="gsent"></p>
+        <div class="fld"><label for="gcode">6-digit code from WhatsApp</label><input id="gcode" class="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+        <p class="gmsg" id="gresend"></p>
+        <button type="button" class="linkbtn" id="gchange">Change number</button>
+      </div>
+      <p class="gerr" id="gerr" role="alert" hidden></p>
+      <button class="btn btn-or" type="submit" id="ggo">Send OTP on WhatsApp</button>
+    </form>
+  </section>
+
+  <div class="gated" id="gated">
+  <section class="card journey" id="journey" aria-labelledby="j-h">
+    <div class="jh">
+      <div><div class="label">Step 2 · Your journey</div><h2 id="j-h"><span class="hi" id="hi"></span>From <span id="jfrom"></span> to 31 December</h2></div>
+      <div class="kpis">
+        <div class="kpi dk"><b id="kday"></b><span>Today</span></div>
+        <div class="kpi"><b id="kleft"></b><span>Days left</span></div>
+        <div class="kpi"><b id="krev"></b><span>Revision days</span></div>
+      </div>
+    </div>
+    <div id="jwarn"></div>
+    <div>
+      <div class="gantt" id="gantt"></div>
+    </div>
+    <ul class="miles" id="miles"></ul>
+  </section>
+
+  <section class="stats" aria-label="Next test and daily hours">
+    <div class="card dark">
+      <div class="label">Next test</div>
+      <div class="t" id="nt"></div>
+      <div class="s" id="ns"></div>
+      <div class="when" id="nw"></div>
+    </div>
+    <div class="card split">
+      <div class="label">Your daily hours · Days 1–20</div>
+      <div class="donut">
+        <svg viewBox="0 0 120 120" role="img" aria-label="12 hours a day: 5 for W1, 5 for W2, 2 for W3">
+          <g transform="rotate(-90 60 60)" fill="none" stroke-width="14">
+            <circle cx="60" cy="60" r="48" stroke="var(--line)"/>
+            <circle cx="60" cy="60" r="48" stroke="var(--w1)" stroke-dasharray="122.66 178.93" stroke-dashoffset="-2"/>
+            <circle cx="60" cy="60" r="48" stroke="var(--w2)" stroke-dasharray="122.66 178.93" stroke-dashoffset="-127.66"/>
+            <circle cx="60" cy="60" r="48" stroke="var(--w3)" stroke-dasharray="46.27 255.32" stroke-dashoffset="-253.32"/>
+          </g>
+          <text x="60" y="64" text-anchor="middle" class="c1">12</text>
+          <text x="60" y="80" text-anchor="middle" class="c2">HRS A DAY</text>
+        </svg>
+        <ul class="legend" id="legend"></ul>
+      </div>
+      <div class="note">Can't do 12 hours? Keep the ratio 40 : 40 : 20.</div>
+    </div>
+  </section>
+
+  <section class="sec" id="targets" aria-labelledby="tg-h">
+    <div class="sec-h"><div><div class="label">Step 3</div><h2 id="tg-h">Target by the Day 10 / 11 test</h2></div></div>
+    <div class="targets" id="tgs"></div>
+  </section>
+
+  <section class="sec" id="sheet" aria-labelledby="sheet-h">
+    <div class="sec-h"><div><div class="label">Step 4</div><h2 id="sheet-h">Day-by-day sheet</h2></div>
+      <button class="btn btn-or" id="copy" type="button">Copy for WhatsApp <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Phases"></div>
+    <div class="copied note" id="copied" aria-live="polite"></div>
+    <div class="days">
+      <div class="dh" aria-hidden="true"><span>Day</span><span class="k1" id="h1"></span><span class="k2" id="h2"></span><span class="k3" id="h3"></span></div>
+      <div class="days" id="rows" role="tabpanel"></div>
+    </div>
+  </section>
+
+  </div>
+
+  <section class="sec" id="rules" aria-label="Rules">
+    <ul class="rules">
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg></span><b>Can't do 12 hours?</b><p>Keep the ratio 40 : 40 : 20. With 8 hours, that's about 3¼ hrs W1, 3¼ hrs W2 and 1½ hrs W3.</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span><b>Test, then analyse</b><p>After each test, spend at least 30 minutes on analysis: which topics you missed, and whether speed cost you marks.</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><b>Running behind?</b><p>Don't skip the test. Take it on what you've finished, and add an extra hour from W3's time.</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M4 4l16 16"/></svg></span><b>Phone in another room</b><p>During the 5-hour blocks, keep it out of the room. Check it only in breaks.</p></li>
+    </ul>
+  </section>
+
+  <section class="card dark help" aria-label="Ask on WhatsApp">
+    <div><div class="label">Stuck on your plan?</div><div class="t">Ask Mahendra Sir's team on WhatsApp</div><div class="s">Send your plan and ask about your subjects, hours or test dates.</div></div>
+    <a class="btn btn-or" id="wa" href="https://wa.me/919468767477" target="_blank" rel="noopener">Chat on WhatsApp <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </section>
+
+  <footer><span>© CA Mahendra Shekhawat · IPA Institute</span><span>@ca_mahendra_shekhawat</span><span>Chapter names follow the ICAI new-scheme study material</span></footer>
+</div>
+</main>
+
+<script>
+const S = {
+  ACC: {name:'Accounting', short:'Accounts',
+    t5:'Ch 1–8: Theory, Accounting Process, BRS, Inventories, Depreciation, Bills of Exchange, Final Accounts, Not-for-Profit Organisations',
+    t3:'Ch 1–5: Theory, Accounting Process, BRS, Inventories, Depreciation',
+    d5:['Ch 1 Theoretical Framework + Ch 2 Journal, Ledger, Trial Balance','Ch 2 Subsidiary Books, Cash Book, Rectification of Errors','Ch 2 Capital vs Revenue + Ch 3 Bank Reconciliation Statement','Ch 4 Inventories + Ch 5 Depreciation (concepts, SLM / WDV)','Ch 5 Depreciation questions + Ch 6 Bills of Exchange & Promissory Notes','Ch 7 Final Accounts of Sole Proprietors: format + adjustments','Ch 7 Final Accounts: full past-paper questions','Ch 8 Not-for-Profit Organisations: Receipts & Payments, Income & Expenditure','Revise Ch 1–8: MCQs + redo wrong questions'],
+    d2:['Ch 1 Theoretical Framework','Ch 2 Journal & Ledger','Ch 2 Trial Balance + Subsidiary Books','Ch 2 Cash Book + Rectification of Errors','Ch 2 Capital vs Revenue + practice','Ch 3 BRS concepts','Ch 3 BRS questions','Ch 4 Inventories','Ch 5 Depreciation','Ch 5 Depreciation questions + 30-min quiz on Ch 1–5']},
+  LAW: {name:'Business Laws', short:'Law',
+    t5:'Ch 1–3 + Ch 6: Indian Regulatory Framework, Contract Act (full), Sale of Goods Act, Companies Act. Partnership Act moves to after the test',
+    t3:'Ch 1 + Contract Act general part + Companies Act revision',
+    d5:['Ch 1 Indian Regulatory Framework + Contract: Nature of Contracts, Consideration','Contract: Other Essential Elements (capacity, free consent, legality, void agreements)','Contract: Performance + Breach & Remedies','Contract: Contingent & Quasi Contracts + Indemnity & Guarantee','Contract: Bailment & Pledge + Agency','Sale of Goods: Formation of Contract + Conditions & Warranties','Sale of Goods: Transfer of Ownership & Delivery + Unpaid Seller','Companies Act: revise what was taught in class + past-paper questions','Revise Ch 1, 2, 3, 6: write 5 past-paper answers in exam format'],
+    d2:['Ch 1 Indian Regulatory Framework','Contract: Nature of Contracts + Consideration','Contract: Capacity + Free Consent','Contract: Legality of Object + Void Agreements','Contract: Performance of Contract','Contract: Breach & Remedies','Contract: Contingent & Quasi Contracts','Contract: Indemnity & Guarantee','Companies Act: revise what was taught in class','Revise + write 3 answers in exam format']},
+  QA: {name:'Maths · LR · Stats', short:'Maths/Stats/LR',
+    t5:'Maths Ch 1–6 + all 4 LR chapters + Stats Ch 13–15 (Data & Sampling, Central Tendency & Dispersion, Probability)',
+    t3:'All 4 LR chapters + Ratio–Indices–Logs, Equations, Inequalities + Central Tendency & Dispersion',
+    d5:['Ratio & Proportion, Indices, Logarithms','Equations + Linear Inequalities','Mathematics of Finance: interest, annuity','Mathematics of Finance questions + Permutations & Combinations','Sequence & Series (AP, GP)','LR: Number Series, Coding-Decoding, Odd Man Out + Direction Tests','LR: Seating Arrangements + Blood Relations','Stats: Representation of Data, Sampling, Central Tendency & Dispersion','Stats: Probability + 60 mixed MCQs'],
+    d2:['LR: Number Series, Coding-Decoding, Odd Man Out','LR: Direction Tests','LR: Seating Arrangements','LR: Blood Relations','Ratio & Proportion, Indices','Logarithms','Equations + Linear Inequalities','Stats: Central Tendency','Stats: Dispersion','60 mixed MCQs on everything so far']},
+  ECO: {name:'Business Economics', short:'Eco',
+    t5:'Ch 1–6: Nature & Scope, Demand & Supply, Production & Cost, Price Determination, Business Cycles, National Income',
+    t3:'Ch 1–3: Nature & Scope, Demand & Supply, Production & Cost',
+    d5:['Ch 1 Nature & Scope + Ch 2 Law of Demand','Ch 2 Elasticity of Demand + Supply','Ch 2 Consumer Behaviour (utility, indifference curves)','Ch 3 Theory of Production','Ch 3 Theory of Cost','Ch 4 Perfect Competition + Monopoly','Ch 4 Monopolistic Competition, Oligopoly + Ch 5 Business Cycles','Ch 6 Determination of National Income','Revise Ch 1–6 + 100 MCQs, mark weak topics'],
+    d2:['Ch 1 Nature & Scope','Ch 2 Law of Demand','Ch 2 Elasticity of Demand','Ch 2 Consumer Behaviour','Ch 2 Supply','Ch 3 Theory of Production','Ch 3 Theory of Cost','Ch 3 Cost questions','100 MCQs on Ch 1–3','Revise + make a list of wrong MCQs']}
+};
+const KEYS = Object.keys(S);
+const $ = (id) => document.getElementById(id);
+const DAY = 86400000;
+const END = new Date(2026, 11, 31);
+const midnight = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const TODAY = midnight(new Date());
+const fmt = (d) => d.toLocaleDateString('en-GB', {day: 'numeric', month: 'short'});
+const wk = (d) => d.toLocaleDateString('en-GB', {weekday: 'short'});
+const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const fromIso = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+
+const sel = [$('w1'), $('w2'), $('w3')];
+sel.forEach((s) => { s.innerHTML = KEYS.map((k) => `<option value="${k}">${S[k].name}</option>`).join(''); });
+let pick = ['ACC', 'LAW', 'QA'];
+let start = TODAY > END ? END : TODAY;
+try { const p = JSON.parse(localStorage.getItem('f10pick') || 'null'); if (Array.isArray(p) && p.length === 3 && new Set(p).size === 3 && p.every((k) => S[k])) pick = p; } catch (e) {}
+try { const s = fromIso(localStorage.getItem('f10start')); if (s && s <= END) start = s; } catch (e) {}
+$('start').max = iso(END);
+
+let tab = null; // index of the open phase tab
+
+const dateOf = (d) => new Date(start.getTime() + (d - 1) * DAY);
+const span = () => Math.round((END - start) / DAY) + 1; // days from Day 1 to 31 Dec, inclusive
+const todayIdx = () => Math.floor((TODAY - start) / DAY) + 1;
+
+function subjects() {
+  const [a, b, c] = pick.map((k) => S[k]);
+  const f = S[KEYS.find((k) => !pick.includes(k))];
+  return {a, b, c, f};
+}
+// Each row: {d, test, cells:[{tag, cls, v}] (3 cells) or wide:{tag, cls, v}}
+function row(d) {
+  const {a, b, c, f} = subjects();
+  const T = (t, txt) => ({test: t, txt});
+  const three = (v1, v2, v3, test) => ({d, test: !!test, cells: [
+    {tag: 'W1 · ' + a.short, cls: 'k1', v: v1}, {tag: 'W2 · ' + b.short, cls: 'k2', v: v2}, {tag: 'W3 · ' + c.short, cls: 'k3', v: v3}]});
+  const wide = (tag, cls, v, test) => ({d, test: !!test, wide: {tag, cls, v}});
+  if (d <= 9) return three(a.d5[d - 1], b.d5[d - 1], c.d2[d - 1]);
+  if (d === 10) return three(T(`60% test: ${a.short}`, '3 hrs paper + analysis the same day'), 'Second revision of Days 1–9 + one past-paper section, timed', c.d2[9], 1);
+  if (d === 11) return three('Redo every wrong question from yesterday\'s test, then start the second half', T(`60% test: ${b.short}`, '3 hrs paper + analysis the same day'), 'Next chapter in book order', 1);
+  if (d <= 19) return three(`Second half of ${a.name}: next chapter in book order`, `Second half of ${b.name}: next chapter in book order`, 'Next chapter in book order');
+  if (d === 20) return three(T(`100% test: ${a.short}`, 'Full syllabus · 3 hrs paper + analysis the same day'), `Revise the full ${b.short} syllabus + one past-paper section, timed`, 'Next chapter in book order', 1);
+  if (d === 21) return three('Redo every wrong question from yesterday\'s full test', T(`100% test: ${b.short}`, 'Full syllabus · 3 hrs paper + analysis the same day'), 'Next chapter in book order', 1);
+  if (d <= 24) return wide('W3 · ' + c.name, 'k3', `Finish the rest of ${c.name}, then revise it`);
+  if (d === 25) return wide('W3 · ' + c.name, 'k3', T(`Full course test: ${c.short}`, 'Whole syllabus + analysis the same day'), 1);
+  if (d === 26) return wide('4th · ' + f.name, 'k4', `Start ${f.name}: chapters in book order`);
+  if (d <= 34) return wide('4th · ' + f.name, 'k4', `${f.name}: next chapters in book order`);
+  if (d === 35) return wide('4th · ' + f.name, 'k4', T(`Full test: ${f.short}`, 'Whole syllabus + analysis the same day'), 1);
+  return wide('All 4 subjects', 'k1', 'Revision + mock tests');
+}
+function phases() {
+  const N = span(), last = Math.max(N, 35);
+  const p = [
+    {from: 1, to: 11, name: '60% tests'}, {from: 12, to: 21, name: 'Full tests'},
+    {from: 22, to: 25, name: 'Finish W3'}, {from: 26, to: 35, name: '4th subject'}];
+  if (N >= 36) p.push({from: 36, to: N, name: 'Revision & mocks'});
+  return p.filter((x) => x.from <= last);
+}
+function milestones() {
+  const {a, b, c, f} = subjects(), N = span();
+  const m = [
+    {d: 10, t: `60% test · ${a.name}`, s: 'W1 · 3 hrs paper + analysis'},
+    {d: 11, t: `60% test · ${b.name}`, s: 'W2 · 3 hrs paper + analysis'},
+    {d: 20, t: `Full test · ${a.name}`, s: 'W1 · whole syllabus'},
+    {d: 21, t: `Full test · ${b.name}`, s: 'W2 · whole syllabus'},
+    {d: 25, t: `Full course test · ${c.name}`, s: 'W3 · whole syllabus'},
+    {d: 35, t: `Full test · ${f.name}`, s: '4th · whole syllabus'}];
+  if (N >= 36) m.push({d: 36, to: N, t: 'Revision + mock tests', s: `${N - 35} days · all 4 subjects`});
+  return m;
+}
+function cellHtml(c, wide) {
+  const v = c.v;
+  const body = typeof v === 'object' ? `<span class="testpill">${esc(v.test)}</span><span>${esc(v.txt)}</span>` : `<span>${esc(v)}</span>`;
+  return `<div class="cell${wide ? ' wide' : ''}"><span class="tag ${c.cls}">${esc(c.tag)}</span>${body}</div>`;
+}
+function renderGantt() {
+  const {a, b, c, f} = subjects(), N = span(), T = Math.max(N, 35), now = todayIdx();
+  const L = (d) => ((d - 1) / T * 100).toFixed(3) + '%';
+  const W = (d1, d2) => ((d2 - d1 + 1) / T * 100).toFixed(3) + '%';
+  const weeks = []; for (let d = 8; d <= T; d += 7) weeks.push(`<span class="wk" style="left:${L(d)}"></span>`);
+  const nowLine = now >= 1 && now <= T ? `<span class="now" style="left:${((now - .5) / T * 100).toFixed(3)}%"></span>` : '';
+  const lane = (tag, cls, name, bars, ms) => `<div class="gl"><small class="${cls}">${tag}</small><span>${esc(name)}</span></div><div class="gt">${weeks.join('')}${bars}${ms.map((d) => `<span class="ms" style="left:${((d - .5) / T * 100).toFixed(3)}%" title="Day ${d} · ${fmt(dateOf(d))}"></span>`).join('')}${nowLine}</div>`;
+  const bar = (d1, d2, bg, fg, txt) => `<span class="bar" style="left:${L(d1)};width:${W(d1, d2)};background:${bg};color:${fg}">${txt}</span>`;
+  let h = '';
+  h += lane('W1', 'k1', a.short, bar(1, 21, 'var(--w1)', '#fff', '<span class="lg">5 hrs a day</span><span class="sh">5 h</span>'), [10, 20]);
+  h += lane('W2', 'k2', b.short, bar(1, 21, 'var(--w2)', 'var(--bg)', '<span class="lg">5 hrs a day</span><span class="sh">5 h</span>'), [11, 21]);
+  h += lane('W3', 'k3', c.short, bar(1, 21, 'var(--w3)', '#5A2A05', '<span class="lg">2 hrs a day</span><span class="sh">2 h</span>') + bar(22, 25, 'var(--or-ink)', '#fff', ''), [25]);
+  h += lane('4th', 'k4', f.short, bar(26, 35, 'var(--w4)', '#fff', '<span class="lg">10 days</span>'), [35]);
+  h += lane('All', 'k1', 'Revision', N >= 36 ? bar(36, N, 'var(--rev)', 'var(--or-ink)', '<span class="lg">Revision + mocks</span>') : '', []);
+  const ax = []; for (let d = 1, k = 0; d <= T; d += 7, k++) ax.push(`<span class="${k % 2 ? 'odd' : ''}" style="left:${((d - .5) / T * 100).toFixed(3)}%">${fmt(dateOf(d))}</span>`);
+  h += `<div></div><div class="gaxis">${ax.join('')}</div>`;
+  $('gantt').innerHTML = h;
+}
+function render() {
+  sel.forEach((s, i) => { s.value = pick[i]; });
+  $('start').value = iso(start);
+  const {a, b, c, f} = subjects(), N = span(), now = todayIdx();
+  $('w4').textContent = f.name;
+  $('h1').textContent = `W1 · ${a.short} · 5 hrs`; $('h2').textContent = `W2 · ${b.short} · 5 hrs`; $('h3').textContent = `W3 · ${c.short} · 2 hrs`;
+  $('jfrom').textContent = fmt(start);
+  $('kday').textContent = now < 1 ? `in ${1 - now}d` : now > N ? 'Done' : `Day ${now}`;
+  $('kleft').textContent = Math.max(0, Math.round((END - TODAY) / DAY) + 1);
+  $('krev').textContent = Math.max(0, N - 35);
+  $('jwarn').innerHTML = N < 35 ? `<div class="warn">Only ${N} days from ${fmt(start)} to 31 Dec: the 35-day plan runs into January and there is no time left for revision. Start earlier if you can.</div>`
+    : N < 45 ? `<div class="warn">Only ${N - 35} days are left for revision and mock tests. Starting earlier gives you more.</div>` : '';
+  renderGantt();
+  const ms = milestones();
+  const nextI = ms.findIndex((m) => (m.to || m.d) >= now);
+  $('miles').innerHTML = ms.map((m, i) => {
+    const dt = m.to ? `${fmt(dateOf(m.d))} – ${fmt(dateOf(m.to))}` : `Day ${m.d} · ${wk(dateOf(m.d))} ${fmt(dateOf(m.d))}`;
+    return `<li class="${i === nextI ? 'next' : (m.to || m.d) < now ? 'done' : ''}"><span class="dt">${dt}</span><b>${esc(m.t)}</b><span class="sb">${esc(m.s)}</span></li>`;
+  }).join('');
+  const nt = ms.filter((m) => !m.to).find((m) => m.d >= now);
+  if (nt) {
+    const gap = nt.d - Math.max(now, 0);
+    $('nt').textContent = nt.t; $('ns').textContent = `Day ${nt.d} · ${wk(dateOf(nt.d))}, ${fmt(dateOf(nt.d))} · take it on what you've finished.`;
+    $('nw').innerHTML = now < 1 ? `${nt.d - now}<small>days away</small>` : gap === 0 ? 'Today' : `${gap}<small>${gap === 1 ? 'day' : 'days'} to go</small>`;
+  } else {
+    $('nt').textContent = 'Revision + mock tests'; $('ns').textContent = 'All 4 subjects done. Keep testing until 31 Dec.'; $('nw').textContent = '';
+  }
+  $('legend').innerHTML = [['--w1', 'W1', a, 5], ['--w2', 'W2', b, 5], ['--w3', 'W3', c, 2]]
+    .map(([v, l, s, h]) => `<li><span class="dot" style="background:var(${v})"></span><span class="nm"><small>${l}</small>${s.short}</span><span class="h">${h} h</span></li>`).join('');
+  $('tgs').innerHTML = [
+    ['k1', '--w1', `W1 · test ${fmt(dateOf(10))}`, a, a.t5, '60% of syllabus'], ['k2', '--w2', `W2 · test ${fmt(dateOf(11))}`, b, b.t5, '60% of syllabus'], ['k3', '--w3', `W3 · by ${fmt(dateOf(10))}`, c, c.t3, '']
+  ].map(([k, v, l, s, t, goal]) => `<div class="card tg"><div class="label"><span class="${k}">${l}</span></div><span class="s">${s.name}</span><span class="d">${t}</span>${goal
+    ? `<div class="pbar"><div class="r"><span>Target</span><span>${goal}</span></div><div class="tr"><i style="width:60%;background:var(${v})"></i></div></div>`
+    : `<div class="pbar"><div class="r"><span>Pace</span><span>Book order · full test ${fmt(dateOf(25))}</span></div></div>`}</div>`).join('');
+  renderSheet();
+  try { localStorage.setItem('f10pick', JSON.stringify(pick)); localStorage.setItem('f10start', iso(start)); } catch (e) {}
+}
+function todayTab() {
+  const ps = phases(), now = todayIdx();
+  const i = ps.findIndex((p) => now >= p.from && now <= p.to);
+  return i === -1 ? (now > 0 && now > ps[ps.length - 1].to ? ps.length - 1 : 0) : i;
+}
+function renderSheet() {
+  const ps = phases(), now = todayIdx();
+  if (tab === null || tab >= ps.length) tab = todayTab();
+  $('tabs').innerHTML = ps.map((p, i) => `<button type="button" class="tab" role="tab" aria-selected="${i === tab}" data-t="${i}"><b>Day ${p.from}–${p.to} · ${p.name}</b><small>${fmt(dateOf(p.from))} – ${fmt(dateOf(p.to))}</small></button>`).join('');
+  const p = ps[tab], out = [];
+  for (let d = p.from; d <= p.to; d++) {
+    const r = row(d), dt = dateOf(d);
+    out.push(`<div class="dr${r.test ? ' test' : ''}${d === now ? ' today' : ''}" id="day-${d}"><div class="dn"><span class="w">${wk(dt)}</span><b>Day ${d}</b><span class="dt">${fmt(dt)}</span></div>${r.wide ? cellHtml(r.wide, true) : r.cells.map((c) => cellHtml(c)).join('')}</div>`);
+  }
+  $('rows').innerHTML = out.join('');
+  $('h1').parentElement.style.display = p.from >= 22 ? 'none' : '';
+}
+sel.forEach((s, i) => s.addEventListener('change', () => {
+  const v = s.value, j = pick.indexOf(v);
+  if (j !== -1 && j !== i) pick[j] = pick[i];
+  pick[i] = v; render();
+}));
+$('start').addEventListener('change', () => {
+  const d = fromIso($('start').value);
+  if (d && d <= END) { start = d; tab = null; }
+  render();
+});
+$('tabs').addEventListener('click', (e) => {
+  const t = e.target.closest('.tab'); if (!t) return;
+  tab = +t.dataset.t; renderSheet();
+});
+function go(id, todayRow) {
+  if (todayRow) { tab = todayTab(); renderSheet(); }
+  const el = (todayRow && $('day-' + todayIdx())) || $(id);
+  if (el) el.scrollIntoView({behavior: 'smooth', block: todayRow ? 'center' : 'start'});
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-go]'); if (!b) return;
+  e.preventDefault(); go(b.dataset.go, b.dataset.today === '1');
+});
+$('copy').addEventListener('click', () => {
+  const {a, b, c, f} = subjects();
+  const ps = phases(), p = ps[tab];
+  const txt = (v) => typeof v === 'object' ? `${v.test} (${v.txt})` : v;
+  const lines = [`*My 5-5-2 plan till 31 Dec*`, `W1 ${a.name} 5 hrs · W2 ${b.name} 5 hrs · W3 ${c.name} 2 hrs · 4th ${f.name} from Day 26`, `Day 1: ${fmt(start)}`, '', '*Tests*'];
+  milestones().forEach((m) => lines.push(m.to ? `${fmt(dateOf(m.d))}–${fmt(dateOf(m.to))}: ${m.t}` : `Day ${m.d} (${fmt(dateOf(m.d))}): ${m.t}`));
+  lines.push('', `*Day ${p.from}–${p.to}*`);
+  for (let d = p.from; d <= p.to; d++) {
+    const r = row(d);
+    lines.push(`*Day ${d} · ${wk(dateOf(d))} ${fmt(dateOf(d))}*`);
+    if (r.wide) lines.push(`${r.wide.tag}: ${txt(r.wide.v)}`);
+    else r.cells.forEach((x, i) => lines.push(`W${i + 1}: ${txt(x.v)}`));
+    lines.push('');
+  }
+  lines.push('Never move ahead without a test and its analysis.');
+  const t = lines.join('\n');
+  const done = (m) => { $('copied').textContent = m; };
+  try {
+    navigator.clipboard.writeText(t).then(() => done('Copied. Paste it into WhatsApp.'), () => fallback());
+  } catch (e) { fallback(); }
+  function fallback() {
+    const ta = document.createElement('textarea'); ta.value = t; ta.rows = 8; ta.readOnly = true;
+    $('copied').replaceChildren(ta); ta.select();
+  }
+});
+// rail: highlight the section in view
+const rail = [...document.querySelectorAll('.rail [data-go]')];
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) rail.forEach((l) => l.classList.toggle('on', l.dataset.go === e.target.id)); });
+  }, {rootMargin: '-40% 0px -55% 0px'});
+  ['overview', 'journey', 'targets', 'sheet', 'rules'].forEach((id) => { const el = $(id); if (el) io.observe(el); });
+}
+// ---- Lead gate: WhatsApp OTP through the Study Audit backend (auditOtp sends the code, auditSave checks it and writes the row
+// to the "Free Audit Leads" sheet). Off the live site the page runs a preview: nothing is sent and the code is 123456.
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmz8Zgg_uPL3sYrkm49ZRWFEZ7Ab3UR9TfKfzZJmyamJQW9rsg2rWxp2f0rAFZ8xNY/exec';
+const LIVE = /(^|\.)camahendrashekhawat\.com$/.test(location.hostname);
+const MOCK = {
+  auditConfig: () => ({otp: true}),
+  auditOtp: () => ({ok: true, resendIn: 30}),
+  auditSave: (a) => { if (a.code !== '123456') throw new Error('Wrong code. Please check WhatsApp and try again.'); return {ok: true}; }
+};
+function api(name, args) {
+  if (!LIVE) return new Promise((res, rej) => setTimeout(() => { try { res(MOCK[name](args)); } catch (e) { rej(e); } }, 400));
+  return fetch(API_URL, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({name, args}), redirect: 'follow', credentials: 'omit'})
+    .catch(() => { throw new Error('No internet. Check your network and try again.'); })
+    .then((r) => r.json()).then((j) => { if (j.error) throw new Error(String(j.error).split(' / ')[0]); return j.result; });
+}
+const track = (n, p) => { try { if (window.cmsTrack) window.cmsTrack(n, p || {}); } catch (e) {} };
+const TAG = () => { try { return window.cmsTag ? window.cmsTag('PLAN') : '[PLAN]'; } catch (e) { return '[PLAN]'; } };
+let lead = null;
+try { lead = JSON.parse(localStorage.getItem('f10lead') || 'null'); } catch (e) {}
+
+function unlock() {
+  document.body.classList.remove('locked');
+  $('gated').removeAttribute('aria-hidden'); $('gated').inert = false;
+  $('hi').textContent = lead && lead.name ? `${lead.name.split(' ')[0]}, your plan: ` : '';
+}
+function lock() { $('gated').setAttribute('aria-hidden', 'true'); $('gated').inert = true; }
+
+// While locked, every "go to my plan" button leads to the form.
+const goPlan = go;
+go = function (id, todayRow) {
+  if (document.body.classList.contains('locked') && id !== 'overview' && id !== 'rules') {
+    $('gate').scrollIntoView({behavior: 'smooth', block: 'start'});
+    setTimeout(() => { const f = $('gstep2').hidden ? $('gname') : $('gcode'); try { f.focus({preventScroll: true}); } catch (e) {} }, 500);
+    return;
+  }
+  goPlan(id, todayRow);
+};
+
+(function gate() {
+  const err = $('gerr'), btn = $('ggo');
+  const fail = (m) => { err.textContent = m; err.hidden = false; };
+  let pending = null, sent = false, otpOn = true, timer = 0;
+  $('gphone').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').replace(/^(91|0)(?=\d{10}$)/, '').slice(0, 10); });
+  $('gcode').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); });
+  const source = () => {
+    const {a, b, c} = subjects(), u = window.cmsUtmString ? window.cmsUtmString() : '';
+    return `${TAG()} W1 ${a.short}, W2 ${b.short}, W3 ${c.short}; Day 1 ${fmt(start)}${u ? ' ' + u : ''}`.slice(0, 200);
+  };
+  const resendTick = (s) => {
+    clearTimeout(timer);
+    const el = $('gresend');
+    if (s > 0) { el.textContent = `No code yet? You can ask again in ${s} seconds.`; timer = setTimeout(() => resendTick(s - 1), 1000); }
+    else { el.innerHTML = '<button type="button" class="linkbtn" id="gagain">Send the code again</button>'; $('gagain').onclick = () => sendCode(); }
+  };
+  function sendCode() {
+    err.hidden = true; btn.disabled = true; btn.textContent = 'Sending code…';
+    return api('auditConfig', {}).then((c) => {
+      otpOn = !!(c && c.otp);
+      if (!otpOn) return save('');
+      return api('auditOtp', {phone: pending.phone}).then((r) => {
+        sent = true;
+        $('gstep1').hidden = true; $('gstep2').hidden = false;
+        $('gsent').textContent = `We sent a 6-digit code on WhatsApp to +91 ${pending.phone}.`;
+        btn.disabled = false; btn.textContent = 'Verify and show my plan';
+        resendTick((r && r.resendIn) || 30);
+        try { $('gcode').focus(); } catch (e) {}
+      });
+    }).catch((x) => { btn.disabled = false; btn.textContent = sent ? 'Verify and show my plan' : 'Send OTP on WhatsApp'; fail(x.message); });
+  }
+  function save(code) {
+    btn.disabled = true; btn.textContent = 'Opening your plan…';
+    const answers = {name: pending.name, phone: pending.phone, courseLabel: '5-5-2 Plan · CA Foundation', attempt: pending.attempt, consent: true, utm: source()};
+    return api('auditSave', {code, answers, summary: {}}).then(() => {
+      lead = {name: pending.name, at: Date.now()};
+      try { localStorage.setItem('f10lead', JSON.stringify(lead)); } catch (e) {}
+      track('generate_lead', {page: 'plan', content_name: '5-5-2 plan'});
+      clearTimeout(timer);
+      unlock();
+      setTimeout(() => $('journey').scrollIntoView({behavior: 'smooth', block: 'start'}), 50);
+    }).catch((x) => { btn.disabled = false; btn.textContent = 'Verify and show my plan'; fail(x.message); });
+  }
+  $('gform').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (btn.disabled) return;
+    if (!sent) {
+      const name = $('gname').value.trim(), phone = $('gphone').value, attempt = $('gatt').value;
+      if (!name) { fail('Please write your name.'); $('gname').focus(); return; }
+      if (!/^[6-9]\d{9}$/.test(phone)) { fail('Enter a valid 10-digit WhatsApp number.'); $('gphone').focus(); return; }
+      if (!$('gok').checked) { fail('Tick the box so we can send the OTP on WhatsApp.'); return; }
+      pending = {name, phone, attempt};
+      sendCode();
+      return;
+    }
+    const code = $('gcode').value;
+    if (code.length !== 6) { fail('Enter the 6-digit code from WhatsApp.'); return; }
+    err.hidden = true; save(code);
+  });
+  $('gchange').addEventListener('click', () => {
+    sent = false; clearTimeout(timer); err.hidden = true;
+    $('gstep2').hidden = true; $('gstep1').hidden = false;
+    btn.textContent = 'Send OTP on WhatsApp'; btn.disabled = false; $('gphone').focus();
+  });
+})();
+
+// WhatsApp help button carries the student's plan and the source tag.
+function waLink() {
+  const {a, b, c, f} = subjects();
+  const msg = `Hi Sir, I made my 5-5-2 plan.\nW1 ${a.name}, W2 ${b.name}, W3 ${c.name}, 4th ${f.name}.\nDay 1: ${fmt(start)}.\nI have a question:\n\n${TAG()}`;
+  $('wa').href = 'https://wa.me/919468767477?text=' + encodeURIComponent(msg);
+}
+document.addEventListener('change', waLink);
+
+render();
+waLink();
+if (lead) unlock(); else lock();
+</script>
+</body>
+</html>
