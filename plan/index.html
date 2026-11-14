@@ -191,9 +191,16 @@ body.locked .gated{position:relative;max-height:720px;overflow:hidden;filter:blu
 #pdfroot .pb{flex:1;min-height:0;overflow:hidden;padding-top:12px;display:flex;flex-direction:column}
 #pdfroot .pf{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#8A817B;border-top:1px solid #E7DFD9;padding-top:8px}
 #pdfroot .in{display:grid;gap:9px;padding-bottom:12px;flex:none}
-#pdfroot .it{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+#pdfroot .it{display:flex;justify-content:space-between;align-items:center;gap:12px}
 #pdfroot .lab{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#C2410C}
 #pdfroot h1{font-family:"Anton",Impact,sans-serif;font-weight:400;font-size:28px;line-height:1.05;margin:3px 0 0}
+#pdfroot .ph .yp{width:26px;height:26px;border-radius:50%;background:#FFD700;margin-left:8px}
+#pdfroot .me{display:flex;align-items:center;gap:10px;flex:none}
+#pdfroot .me img{width:68px;height:68px;border-radius:50%;background:#FFD700;box-shadow:0 6px 14px -6px rgba(160,120,0,.6)}
+#pdfroot .me div{display:grid;line-height:1.25}
+#pdfroot .me span{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#C2410C}
+#pdfroot .me b{font-size:12.5px}
+#pdfroot .me em{font-style:normal;font-size:10px;color:#6B6460;margin-top:2px}
 #pdfroot .ck{font-size:10.5px;font-weight:700;color:#6B6460;border:1px dashed #CFC6C0;border-radius:8px;padding:5px 9px;white-space:nowrap}
 #pdfroot .sj{display:flex;flex-wrap:wrap;gap:6px}
 #pdfroot .sj span{font-size:11px;border-radius:999px;padding:4px 10px;font-weight:600}
@@ -566,6 +573,7 @@ Object.assign(S.ECO, {
   f4: ['Ch 1 Nature & Scope + Ch 2 Law of Demand', 'Ch 2 Elasticity, Consumer Behaviour, Supply', 'Ch 3 Theory of Production & Cost', 'Ch 4 Price Determination in Different Markets',
     'Ch 5 Business Cycles + Ch 6 National Income', 'Ch 7 Public Finance', 'Ch 8 Money Market', 'Ch 9 International Trade + Ch 10 Indian Economy', '150 MCQs on all chapters + revise wrong ones']
 });
+S.ACC.hrs = 3; S.LAW.hrs = 3; S.QA.hrs = 2; S.ECO.hrs = 2; // exam paper length
 const KEYS = Object.keys(S);
 const $ = (id) => document.getElementById(id);
 const DAY = 86400000;
@@ -605,21 +613,21 @@ function row(d) {
     {tag: 'W1 · ' + a.short, cls: 'k1', v: v1}, {tag: 'W2 · ' + b.short, cls: 'k2', v: v2}, {tag: 'W3 · ' + c.short, cls: 'k3', v: v3}]});
   const wide = (tag, cls, v, test) => ({d, test: !!test, wide: {tag, cls, v}});
   if (d <= 9) return three(a.d5[d - 1], b.d5[d - 1], c.d2[d - 1]);
-  if (d === 10) return three(T(`60% test: ${a.short}`, '3 hrs paper + analysis the same day'), 'Second revision of Days 1–9 + one past-paper section, timed', c.d2[9], 1);
-  if (d === 11) return three('Redo every wrong question from yesterday\'s test, then start the second half', T(`60% test: ${b.short}`, '3 hrs paper + analysis the same day'), c.w3b[0], 1);
+  if (d === 10) return three(T(`60% test: ${a.short}`, `${a.hrs} hrs paper + analysis the same day`), 'Second revision of Days 1–9 + one past-paper section, timed', c.d2[9], 1);
+  if (d === 11) return three('Redo every wrong question from yesterday\'s test, then start the second half', T(`60% test: ${b.short}`, `${b.hrs} hrs paper + analysis the same day`), c.w3b[0], 1);
   if (d <= 19) return three(a.d5b[d - 12], b.d5b[d - 12], c.w3b[d - 11]);
-  if (d === 20) return three(T(`100% test: ${a.short}`, 'Full syllabus · 3 hrs paper + analysis the same day'), `Revise the full ${b.short} syllabus + one past-paper section, timed`, c.w3b[9], 1);
-  if (d === 21) return three('Redo every wrong question from yesterday\'s full test', T(`100% test: ${b.short}`, 'Full syllabus · 3 hrs paper + analysis the same day'), c.w3b[10], 1);
+  if (d === 20) return three(T(`100% test: ${a.short}`, `Full syllabus · ${a.hrs} hrs paper + analysis the same day`), `Revise the full ${b.short} syllabus + one past-paper section, timed`, c.w3b[9], 1);
+  if (d === 21) return three('Redo every wrong question from yesterday\'s full test', T(`100% test: ${b.short}`, `Full syllabus · ${b.hrs} hrs paper + analysis the same day`), c.w3b[10], 1);
   if (d <= 24) return wide('W3 · ' + c.name, 'k3', c.w3c[d - 22]);
-  if (d === 25) return wide('W3 · ' + c.name, 'k3', T(`Full course test: ${c.short}`, 'Whole syllabus + analysis the same day'), 1);
+  if (d === 25) return wide('W3 · ' + c.name, 'k3', T(`Full course test: ${c.short}`, `Whole syllabus · ${c.hrs} hrs paper + analysis the same day`), 1);
   if (d <= 34) return wide('4th · ' + f.name, 'k4', f.f4[d - 26]);
-  if (d === 35) return wide('4th · ' + f.name, 'k4', T(`Full test: ${f.short}`, 'Whole syllabus + analysis the same day'), 1);
+  if (d === 35) return wide('4th · ' + f.name, 'k4', T(`Full test: ${f.short}`, `Whole syllabus · ${f.hrs} hrs paper + analysis the same day`), 1);
   // Revision: a mock test of one subject, then a day on its weak topics; W1, W2, W3, 4th in turn. Last day: light revision.
   const N = span();
   if (d >= N && N > 36) return wide('All 4 subjects', 'k1', 'Light revision of all 4 subjects: formulas, sections, wrong-MCQ notes');
   const i = d - 36, sub = [a, b, c, f][Math.floor(i / 2) % 4];
   return i % 2 === 0
-    ? wide('Revision · ' + sub.name, 'k1', T(`Mock test: ${sub.short}`, '3 hrs, exam timing + analysis the same day'), 1)
+    ? wide('Revision · ' + sub.name, 'k1', T(`Mock test: ${sub.short}`, `${sub.hrs} hrs, exam timing + analysis the same day`), 1)
     : wide('Revision · ' + sub.name, 'k1', `Revise the weak topics from yesterday's ${sub.short} mock + redo wrong questions`);
 }
 function phases() {
@@ -633,12 +641,12 @@ function phases() {
 function milestones() {
   const {a, b, c, f} = subjects(), N = span();
   const m = [
-    {d: 10, t: `60% test · ${a.name}`, s: 'W1 · 3 hrs paper + analysis'},
-    {d: 11, t: `60% test · ${b.name}`, s: 'W2 · 3 hrs paper + analysis'},
-    {d: 20, t: `Full test · ${a.name}`, s: 'W1 · whole syllabus'},
-    {d: 21, t: `Full test · ${b.name}`, s: 'W2 · whole syllabus'},
-    {d: 25, t: `Full course test · ${c.name}`, s: 'W3 · whole syllabus'},
-    {d: 35, t: `Full test · ${f.name}`, s: '4th · whole syllabus'}];
+    {d: 10, t: `60% test · ${a.name}`, s: `W1 · ${a.hrs} hrs paper + analysis`},
+    {d: 11, t: `60% test · ${b.name}`, s: `W2 · ${b.hrs} hrs paper + analysis`},
+    {d: 20, t: `Full test · ${a.name}`, s: `W1 · whole syllabus · ${a.hrs} hrs`},
+    {d: 21, t: `Full test · ${b.name}`, s: `W2 · whole syllabus · ${b.hrs} hrs`},
+    {d: 25, t: `Full course test · ${c.name}`, s: `W3 · whole syllabus · ${c.hrs} hrs`},
+    {d: 35, t: `Full test · ${f.name}`, s: `4th · whole syllabus · ${f.hrs} hrs`}];
   if (N >= 36) m.push({d: 36, to: N, t: 'Revision + mock tests', s: `${N - 35} days · all 4 subjects`});
   return m;
 }
@@ -913,7 +921,7 @@ $('pdflabel').textContent = canShareFile() ? 'Send my plan PDF on WhatsApp' : 'D
 
 function pdfPage() {
   const pg = document.createElement('div'); pg.className = 'pg';
-  pg.innerHTML = `<div class="ph"><img src="ipa-logo.jpg" alt=""><b>IPA Institute</b><span>CA Mahendra Shekhawat</span><em>camahendrashekhawat.com/plan</em></div><div class="pb"></div>
+  pg.innerHTML = `<div class="ph"><img src="ipa-logo.jpg" alt=""><b>IPA Institute</b><img class="yp" src="mahendra-sir.jpg" alt=""><span>CA Mahendra Shekhawat</span><em>camahendrashekhawat.com/plan</em></div><div class="pb"></div>
     <div class="pf"><span>“Never move ahead without a test and its analysis.” – CA Mahendra Shekhawat</span><span class="pn"></span></div>`;
   return pg;
 }
@@ -936,7 +944,7 @@ function pdfSheet(root) {
   body.insertAdjacentHTML('beforeend', `<div class="in">
     <div class="it"><div><span class="lab">5-5-2 Plan · CA Foundation${lead && lead.attempt ? ' ' + esc(lead.attempt) : ''}</span>
       <h1>${nm ? esc(nm) + '’s plan' : 'My plan'}: ${fmt(start)} → 31 Dec</h1></div>
-      <div class="ck">Tick ✓ each day you finish</div></div>
+      <div class="me"><img src="mahendra-sir.jpg" alt=""><div><span>Your mentor</span><b>CA Mahendra Shekhawat</b><em>Tick ✓ each day you finish</em></div></div></div>
     <div class="sj"><span class="s1">W1 <b>${esc(a.name)}</b> 5 h/day</span><span class="s2">W2 <b>${esc(b.name)}</b> 5 h/day</span><span class="s3">W3 <b>${esc(c.name)}</b> 2 h/day</span><span class="s4">4th <b>${esc(f.name)}</b> from Day 26</span></div>
     <div class="ts"><em>Test dates</em>${tests}${N >= 36 ? `<span><b>${fmt(dateOf(36))}–31 Dec</b> Revision + mock tests</span>` : ''}</div>
   </div>`);
